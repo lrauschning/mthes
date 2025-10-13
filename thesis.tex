@@ -40,6 +40,7 @@
         \renewcommand{\thefigure}{S\arabic{figure}}%
      }
 
+\title{$k$-mer-based Reconstruction of Haplotypes using a Pangenomic Reference}
 \author{Leon Rauschning\thanks{\href{mailto:leon.rauschning@tum.de}{leon.rauschning@tum.de}}}
 
 \begin{document}
@@ -56,11 +57,11 @@
 Bioinformatics Programme\\[0.5cm]
 Technical University of Munich\\[0.5cm]
 Ludwig-Maximilians-Universität München\\[2cm]
-Bachelor's Thesis in Bioinformatics\\[1.5cm]
+Master's Thesis in Bioinformatics\\[1.5cm]
 
 
 \HRule \\[0.6cm]
-{ \LARGE \bfseries Multigenomic Structural Variant Calling}\\[0.4cm]
+{ \LARGE \bfseries \thetitle}\\[0.4cm]
 
 \HRule \\[2.5cm]
 
@@ -79,19 +80,19 @@ Leon Rauschning\\[2.5cm]
 Bioinformatics Programme\\[0.5cm]
 Technical University of Munich\\[0.5cm]
 Ludwig-Maximilians-Universität München\\[2cm]
-Bachelor's Thesis in Bioinformatics\\[2cm]
+Master's Thesis in Bioinformatics\\[2cm]
 {\Large\bfseries
-Multigenomic Structural Variant Calling\\[2cm]
-Multigenomische Identifikation von Strukturvarianten\\[3cm]
+\thetitle\\[2cm]
+$k$-mer-basierte Haplotyprekonstruktion anhand einer pangenomischen Referenz\\[3cm]
 }
 
 \large
 \begin{tabular}{ll}
  Author:& \theauthor\\
- Supervisor: &  Dr.\ Manish Goel\\
- Advisor:        &  Prof.\ Korbinian Schneeberger, Institute of Genetics, LMU\\
- & Prof.\ Julien Gagneur, School of Computation, TUM\\
- Submitted:     &  15.11.2022
+ Supervisor: &  Dr.\ Craig Dent\\
+ Advisor:        &  Prof.\ Korbinian Schneeberger, Faculty of Biology, LMU\\
+ & Prof.\ Mathias Wilhelm, School of Life Sciences, TUM\\
+ Submitted:     &  15/04/2026
 \end{tabular}
 \end{titlepage}
 
@@ -101,10 +102,10 @@ Multigenomische Identifikation von Strukturvarianten\\[3cm]
 \vfill
 \begin{minipage}{.6\textwidth}
 \centering
-I confirm that this Bachelor's thesis is my own work and that I have documented all sources and materials used.
+I confirm that this Master's thesis is my own work and that I have documented all sources and materials used.
 \\[2cm]
 \rule{7cm}{1pt}\\
-15th of Novembre 2022, Munich
+15th of April 2026, Munich
 \end{minipage}
 \vfill
 \hspace{0pt}
@@ -118,13 +119,13 @@ I confirm that this Bachelor's thesis is my own work and that I have documented 
 
 \pagestyle{fancy}
 \fancyhead{}
-\fancyhead[C]{Multigenomic Structural Variant Calling}
+\fancyhead[C]{\thetitle}
 \fancyhead[RE,LO]{Leon Rauschning}
 \fancyfoot{} % clear all footer fields
 \fancyfoot[LE,RO]{\thepage}
 
 
-\chapter*{Multigenomic Structural Variant Calling}
+\chapter*{\thetitle}
 \section*{Introduction}
 \input{introduction}
 \newpage
