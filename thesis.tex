@@ -113,19 +113,6 @@ I confirm that this Bachelor's thesis is my own work and that I have documented 
 
 %\thispagestyle{empty}
 \chapter*{Abstract}
-Structural variants (SVs) are differences between genomes that extend for more than \qty{50}{\bp}.
-SVs commonly occur in many species; in humans, SVs cause a larger proportion of genetic variation than single-nucleotide variants as measured by the total number of bases affected.
-SVs can cause drastic changes in phenotype and suppress allelic recombination near their locus; for these reasons, they have been postulated to play a major role in driving evolutionary processes.\\
-SV calling has advanced in recent years with the increasing accessibility of long-read sequencing platforms and highly contiguous assemblies.
-SyRI is a SV calling algorithm that works by first identifying synteny between two genomes from whole-genome alignment, and only then annotating the remaining variation.
-By doing this, the relatively hard discovery process is bypassed, as every non-syntenic region is known by definition to contain a SV\@; the remaining regions can then be annotated by further steps as the appropriate type of SV\@.
-Using this strategy, SyRI outperforms other SV calling algorithms on chromosome-scale assemblies.\\
-Like almost all other SV calling algorithms, SyRI is limited to only comparing two genomes at a time, missing population-level information when calling SVs in a larger set of genomes.
-In this thesis, a definition of multigenomic synteny is proposed and an algorithm for automatically annotating multisynteny in a set of genomes is developed and implemented as a Python library and command-line tool called PanSyRI.\\
-This forms a basis for extending the SyRI algorithm to multigenomic SV calling.
-Additionally, the identified multisynteny was used to develop a tool for automatically ordering a set of genomes for plotting the genomic structure between them.
-Other than for SV calling, this proposed concept of multisynteny could be applied to phylogeny reconstruction and the investigation of recombination dynamics.\\
-The PanSyRI codebase is currently maintained as a private repository on GitHub at \url{https://github.com/schneebergerlab/pansyri}, with plans to release it publicly once PanSyRI is capable of calling SVs.
 
 
 
@@ -141,16 +128,16 @@ The PanSyRI codebase is currently maintained as a private repository on GitHub a
 \section*{Introduction}
 \input{introduction}
 \newpage
-\section*{Main}
-\input{main}
+%\section*{Main}
+%\input{main}
 %\section*{Methods}
 %\input{methods}
 %\newpage
 %\section*{Results} % maybe merge into common main block?
 %\input{results}
-\newpage
-\section*{Discussion}
-\input{discussion}
+%\newpage
+%\section*{Discussion}
+%\input{discussion}
 
 \pagestyle{plain}
 {\small
