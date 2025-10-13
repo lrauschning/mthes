@@ -1,0 +1,168 @@
+\documentclass[12pt, twoside, a4paper]{report}
+
+\usepackage[bottom=1 cm, top=1 cm, left=1.8 cm, right=1.8 cm, includehead, includefoot]{geometry}
+\usepackage{titling}
+\usepackage{fontspec}
+%\setmainfont{Liberation Sans}
+\setmainfont{Linux Biolinum}
+%\setmonofont{Fira Code}
+\setmonofont{Nimbus Mono PS}
+\usepackage{array}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usepackage{xcolor}
+
+\usepackage{comment}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{bbold}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{siunitx} % probably not worth it actually
+\DeclareSIUnit\bp{bp} % bp defined
+
+\usepackage{xcolor}
+\definecolor{lb}{RGB}{44, 139, 183}
+\newcommand\cl[2]{\textcolor{#1}{#2}}
+\newcommand\bcl[2]{\textcolor{#1}{{\fontseries{b}\selectfont #2}}}
+
+\usepackage[colorlinks=true, breaklinks=true]{hyperref}
+\hypersetup{colorlinks, breaklinks, urlcolor=[rgb]{0,0.4,0.7}, citecolor=black, linkcolor=black!75}
+
+\newcommand{\HRule}{\rule{.8\linewidth}{0.5mm}}
+
+\newcommand{\beginsupplement}{%
+        \setcounter{table}{0}
+        \renewcommand{\thetable}{S\arabic{table}}%
+        \setcounter{figure}{0}
+        \renewcommand{\thefigure}{S\arabic{figure}}%
+     }
+
+\author{Leon Rauschning\thanks{\href{mailto:leon.rauschning@tum.de}{leon.rauschning@tum.de}}}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+% Oberer Teil der Titelseite:
+\includegraphics[width=0.3\textwidth]{img/logo2.jpg}
+\hfill
+\includegraphics[width=0.4\textwidth]{img/logo1.jpg}  
+\\[5cm]
+
+\Large
+Bioinformatics Programme\\[0.5cm]
+Technical University of Munich\\[0.5cm]
+Ludwig-Maximilians-Universität München\\[2cm]
+Bachelor's Thesis in Bioinformatics\\[1.5cm]
+
+
+\HRule \\[0.6cm]
+{ \LARGE \bfseries Multigenomic Structural Variant Calling}\\[0.4cm]
+
+\HRule \\[2.5cm]
+
+Leon Rauschning\\[2.5cm]
+
+\vfill
+\end{titlepage}
+
+\begin{titlepage}
+\centering
+\includegraphics[width=0.3\textwidth]{img/logo2.jpg}
+\hfill
+\includegraphics[width=0.4\textwidth]{img/logo1.jpg}  
+\\[3cm]  
+\large
+Bioinformatics Programme\\[0.5cm]
+Technical University of Munich\\[0.5cm]
+Ludwig-Maximilians-Universität München\\[2cm]
+Bachelor's Thesis in Bioinformatics\\[2cm]
+{\Large\bfseries
+Multigenomic Structural Variant Calling\\[2cm]
+Multigenomische Identifikation von Strukturvarianten\\[3cm]
+}
+
+\large
+\begin{tabular}{ll}
+ Author:& \theauthor\\
+ Supervisor: &  Dr.\ Manish Goel\\
+ Advisor:        &  Prof.\ Korbinian Schneeberger, Institute of Genetics, LMU\\
+ & Prof.\ Julien Gagneur, School of Computation, TUM\\
+ Submitted:     &  15.11.2022
+\end{tabular}
+\end{titlepage}
+
+\begin{titlepage}
+\centering
+\hspace{0pt}
+\vfill
+\begin{minipage}{.6\textwidth}
+\centering
+I confirm that this Bachelor's thesis is my own work and that I have documented all sources and materials used.
+\\[2cm]
+\rule{7cm}{1pt}\\
+15th of Novembre 2022, Munich
+\end{minipage}
+\vfill
+\hspace{0pt}
+\end{titlepage}
+
+
+%\thispagestyle{empty}
+\chapter*{Abstract}
+Structural variants (SVs) are differences between genomes that extend for more than \qty{50}{\bp}.
+SVs commonly occur in many species; in humans, SVs cause a larger proportion of genetic variation than single-nucleotide variants as measured by the total number of bases affected.
+SVs can cause drastic changes in phenotype and suppress allelic recombination near their locus; for these reasons, they have been postulated to play a major role in driving evolutionary processes.\\
+SV calling has advanced in recent years with the increasing accessibility of long-read sequencing platforms and highly contiguous assemblies.
+SyRI is a SV calling algorithm that works by first identifying synteny between two genomes from whole-genome alignment, and only then annotating the remaining variation.
+By doing this, the relatively hard discovery process is bypassed, as every non-syntenic region is known by definition to contain a SV\@; the remaining regions can then be annotated by further steps as the appropriate type of SV\@.
+Using this strategy, SyRI outperforms other SV calling algorithms on chromosome-scale assemblies.\\
+Like almost all other SV calling algorithms, SyRI is limited to only comparing two genomes at a time, missing population-level information when calling SVs in a larger set of genomes.
+In this thesis, a definition of multigenomic synteny is proposed and an algorithm for automatically annotating multisynteny in a set of genomes is developed and implemented as a Python library and command-line tool called PanSyRI.\\
+This forms a basis for extending the SyRI algorithm to multigenomic SV calling.
+Additionally, the identified multisynteny was used to develop a tool for automatically ordering a set of genomes for plotting the genomic structure between them.
+Other than for SV calling, this proposed concept of multisynteny could be applied to phylogeny reconstruction and the investigation of recombination dynamics.\\
+The PanSyRI codebase is currently maintained as a private repository on GitHub at \url{https://github.com/schneebergerlab/pansyri}, with plans to release it publicly once PanSyRI is capable of calling SVs.
+
+
+
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[C]{Multigenomic Structural Variant Calling}
+\fancyhead[RE,LO]{Leon Rauschning}
+\fancyfoot{} % clear all footer fields
+\fancyfoot[LE,RO]{\thepage}
+
+
+\chapter*{Multigenomic Structural Variant Calling}
+\section*{Introduction}
+\input{introduction}
+\newpage
+\section*{Main}
+\input{main}
+%\section*{Methods}
+%\input{methods}
+%\newpage
+%\section*{Results} % maybe merge into common main block?
+%\input{results}
+\newpage
+\section*{Discussion}
+\input{discussion}
+
+\pagestyle{plain}
+{\small
+\twocolumn
+\bibliographystyle{unsrt}
+%\bibliographystyle{nature}
+\bibliography{bibliography.bib}
+}
+
+\onecolumn
+\beginsupplement
+\newpage
+\section*{Supplement}
+\input{supplement}
+\end{document}
