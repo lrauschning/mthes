@@ -1,0 +1,37 @@
+
+
+
+\section*{Phaseability}
+
+% define min. read len as fn of heterozygosity
+% => handle polyploids: multiply heterozygous vars?
+% => account for pop structure/IBD afterwards
+% consrtuct single probability output, then solve for read len or heterozygosity
+
+
+
+
+
+
+\section*{Proof of Non-Circularity}
+\newcommand{\aln}{\mathcal{A}}
+
+We consider two multisyntenic regions $M$ and $M'$ that are both upstream and downstream of each other in genomes $q$ and $q'$, forming a circle in the graph representation.
+Because downstream/upstreamness is transitive, this case covers all possible circles in the graph.
+Formally, we can express this as $\exists q, q': M[q] < M'[q] \wedge M'[q'] < M[q']$.
+Consider the alignment $\aln_{q \to q'}$.
+If this hasn't explicitly been constructed, we can induce it from two alignments to a common reference $r$: $\forall i \aln_{q \to q'}:= \aln^{-1}_{q' \to r}[\aln_{q \to r}[i]]$.
+Such an $r$ must exist, and be either the reference used during the realignment leading to $M$ or $M'$.
+We can quickly see the two parts of the statement leading to a contradiction when we consider that multisyntenic regions are defined to be aligning on all organisms they cover:% at $\aln_{q \to q'}$ , we can see a contradiction emerge quickly to our :
+
+\begin{eqnarray*}
+M[q] &< M'[q] &\\
+\aln_{q\to q'}[M[q]] &< \aln_{q \to q'}[M'[q]] &\mathrm{Alignments are monotonic}\\
+M[q'] &< M'[q'] &\mathrm{but} M'[q'] < M'[q]\mathrm{!}
+\end{eqnarray*}
+
+%There are a few assumptions underlying this proof, some of which may be violated in practice.
+Note that this argument assumes that our realignment finds monotonic and correct alignments.
+\texttt{minimap2}'s fast approximative minimizer-based algorithm is used for computing alignments, which may in practice sometimes violate these conditions.
+An additional source of alignment ambiguity is the stitching together of leftover non-multisyntenic sequence during the realignment step.\\
+This proof does thus not guarantee that an msyd run may not produce output inducing a circular graph representation in certain edgecases, but instead serve to justify its pruning as making an approximative component of the algorithm match the mathematical guarantees of an exact algorithm.
