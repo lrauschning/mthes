@@ -24,7 +24,7 @@ Note that, contrary to genome assembly, repetitive sequences are not inherently 
 We can thus derive a simple minimal requirement for reconstructing the phasing of a genome, given in theorem \label{theo-phase-simple}
 
 \begin{theorem}
-	Given a set of reads $\mathcal{R}$ and a set of haplotypes $\mathcal{H}$, each modelled as consisting of an ordered set of sequences unique to it $\mathcal{H}_i := (u^i_0, u^i_1, \dots u^i_n)$, it is possible to construct a Phasing iff for every adjacent pair of haplo-unique sequences $u_j, u_{j+1}$ there is a read covering both: $\forall (u_j, u_{j+1}) \in \mathcal{R}$.
+	Given a set of reads $\mathcal{R}$ and a set of haplotypes $\mathcal{H}$, each modelled as consisting of an ordered set of sequences unique to it $\mathcal{H}_i := (u^i_0, u^i_1, \dots u^i_n)$, it is possible to construct a Phasing iff for every adjacent pair of haplo-unique sequences $u_j, u_{j+1}$ there is a read covering both: $\forall (u_j, u_{j+1}) \exists x \in \mathcal{R}: (u_j, u_{j+1}) \in x$.
 
 \label{theo-phase-simple}
 \end{theorem}
