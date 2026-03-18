@@ -14,9 +14,9 @@ In the cells of a given biological organism, there are often multiple copies of 
 Because of standing variation or spontaneous mutational processes, these so-called haplotypes may differ between another in minor or major ways.
 Variation on the same haplotype is inherited together, unless recombination breaks it up; haplotypes are thus also referred to as the units of heredity.
 We term a position at which a haplotype is different from all others a haplo-unique site; they may correspond to single small variants, (parts of) larger variants, or clusters of multiple nearby variants.
-A Phasing of a genome refers to a map taking two alleles corresponding to different haplo-unique sites, and telling us whether they are found on the same haplotype or not.
-How do we construct such a Phasing?
-We will mainly concern ourselves with the minimal requirements for constructing a Phasing from a set of genomic sequencing reads, but it should be noted that HiC sequencing, a mapping population or parental sequencing may also serve to accomplish this goal, though less economically. % justify why only deriving minimal estimates/can assemblers reach this?
+A phasing of a genome refers to a map taking two different haplo-unique sites, and telling us whether they are found on the same haplotype or not.
+How do we construct such a phasing?
+We will mainly concern ourselves with the minimal requirements for constructing a phasing from a set of genomic sequencing reads, but it should be noted that HiC sequencing, a mapping population or parental sequencing may also serve to accomplish this goal, though less economically. % justify why only deriving minimal estimates/can assemblers reach this?
 When encountering a read, we know all of its sequence to be derived from a single physical piece of DNA corresponding to a fragment of a single haplotype\footnote{With the possible exception of PCR artefacts.}.
 If two haplo-unique sequences $u_0, u_1$ are found on the same read $(u_0, u_1)$, we can assign them to the same haplotype; this construction can be transitively extended, if we have two reads $(u_0, u_1), (u_1, u_2)$, we can use the shared haplo-unique sequence $u_1$ to assign $u_0, u_2$ to the same haplotype.
 Note that, contrary to genome assembly, repetitive sequences are not inherently problematic; so long as the sequence contains sufficient haplo-unique sequences, it can be easy to phase but difficult to assemble; vice versa, a perfectly nonrepetitive sequence may be difficult or impossible to phase but easy to assemble if it contains large stretches shared by all haplotypes.
@@ -24,12 +24,15 @@ Note that, contrary to genome assembly, repetitive sequences are not inherently 
 We can thus derive a simple minimal requirement for reconstructing the phasing of a genome, given in theorem \label{theo-phase-simple}
 
 \begin{theorem}
-	Given a set of reads $\mathcal{R}$ and a set of haplotypes $\mathcal{H}$, each modelled as consisting of an ordered set of sequences unique to it $\mathcal{H}_i := (u^i_0, u^i_1, \dots u^i_n)$, it is possible to construct a Phasing iff for every adjacent pair of haplo-unique sequences $u_j, u_{j+1}$ there is a read covering both: $\forall (u_j, u_{j+1}) \exists x \in \mathcal{R}: (u_j, u_{j+1}) \in x$.
+	Given a set of reads $\mathcal{R}$ and a set of haplotypes $\mathcal{H}$, each modelled as consisting of an ordered set of sequences unique to it $\mathcal{H}_i := (u^i_0, u^i_1, \dots u^i_n)$, it is possible to construct a phasing $\mathcal{P}$ iff for every adjacent pair of haplo-unique sequences $u_j, u_{j+1}$ there is a read covering both: $\forall (u_j, u_{j+1}) \exists x \in \mathcal{R}: (u_j, u_{j+1}) \in x$.
 
 \label{theo-phase-simple}
 \end{theorem}
 
 %TODO proof
+A proof is simple to construct: if two haplo-unique sites $u_i, u_j$ with $i < j$ are on the same haplotype, a chain of neighbouring haplo-unique sequences $u_i, u_{i+1}, \dots, u_{j-1}, u_{j}$ can be found and thus $\mathcal{P}(u_i, u_j)$ evaluates to true.
+If we know all neighbouring haplo-unique sequences to be covered, the absence of such a chain implies that $u_i$ and $u_j$ do not share a haplotype, and thus $\matcal{P}(u_i, u_j)$ can safely evaluate to false. 
+Conversely, if there exists a pair of haplounique sequences $u_i, u_{i+1}$ on the same haplotype that are not covered by any read, we will not be able to resolve them unambiguously to recover their phasing.
 
 %TODO statmodelling
 
