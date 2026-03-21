@@ -45,6 +45,20 @@ In particular, this means that
 \end{enumerate}
 We can model each of these requirements in turn, allowing us to derive a sequencing coverage estimate.
 
+To model the first requirement, if we consider a given position along the genome, every read mapping there will be drawn from all possible haplotypes with equal probability.
+Sampling is with replacement, if we assume our sequencing library to have sufficient size.
+Asking how many samples need to be drawn to cover every haplotype with confidence is equivalent to the Coupon Collector Problem, for which multiple approximations have been previously derived. % find original citation, derive
+
+The second requirement hearkens back to the early days of estimating sequencing requirements for whole-genome shotgun sequences -- except instead of ensuring every position is covered at least once, we need every position to be covered in sufficient depth to make sure the first requirement is met.
+If we model observed coverage along the genome given a specified mean coverage using a Poisson distribution, we can derive a requirement for the mean coverage by solving for the quantile of the Poisson distribution.
+This corresponds exactly to the inverse of the upper $\Gamma$ function, a numeric approximation of which is available in the \texttt{zipfR} package.
+
+Finally, not all reads covering a certain position may be informative, if they happen to cover just one of the haplo-unique sequences.
+We can compute the fraction of informative reads spanning both haplo-unique sequences from the fraction of valid starting positions, given that every read is uniquely specified by its starting position.
+A starting position is valid if a read of length $\ell$ starting from it spans both haplo-unique sequences; all valid starting positions therefore have to be before the first haplo-unique sequences, and there will be $\ell-d$ many, with $d$ giving the distance between the two haplo-unique sequences.
+As every read has a single starting position, a mean sequencing coverage of $X$ coverage corresponds to $X/\ell$ reads starting at every position along the genome in expectation.
+We thus expect $(\ell-d)\frac{X}{\ell}=\frac{\ell-d}{\ell}X$ reads to fulfil this criterion.
+As we assume reads to be Poisson distributed, we can simply multiply our coverage estimate derived in step 2 with this factor.
 
 % incorporate after notion of msyd graph construction
 
