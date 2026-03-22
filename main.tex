@@ -3,6 +3,22 @@
 
 \section*{Phaseability}
 
+\begin{figure*}[ht]
+	\centering
+	\includesvg[width=0.8\textwidth]{img/covcalc.svg}
+	\caption{
+	\textbf{Minimum coverage requirements for genome phasing.}\\
+	\textbf{Step 1}, every haplotype needs to be covered by a read.
+	Because they are sampled randomly with replacement, more reads than haplotypes need to be drawn to be certain that all haplotypes are covered.\\
+	\textbf{Step 2}, the average coverage has to be adjusted as to be sufficient to fulfil step 1's requirement even in regions that randomly have lower coverage than average.
+	\textbf{Step 3}, not every read is informative for phasing.
+	In this illustration, $R_2$ and $R_3$ do not contain any information as they cover only a single haplotype.
+	$R_1$, in contrast, can be used for phasing as it covers both $u_1$ and $u_2$.\\
+	For more information on the derivation, see the main text.
+	}
+	\label{fig:covcalc}
+\end{figure*}
+
 % define min. read len as fn of heterozygosity
 % => handle polyploids: multiply heterozygous vars?
 % => account for pop structure/IBD afterwards
