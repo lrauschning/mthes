@@ -31,7 +31,7 @@ We can thus derive a simple minimal requirement for reconstructing the phasing o
 
 %TODO proof
 A proof is simple to construct: if two haplo-unique sites $u_i, u_j$ with $i < j$ are on the same haplotype, a chain of neighbouring haplo-unique sequences $u_i, u_{i+1}, \dots, u_{j-1}, u_{j}$ can be found and thus $\mathcal{P}(u_i, u_j)$ evaluates to true.
-If we know all neighbouring haplo-unique sequences to be covered, the absence of such a chain implies that $u_i$ and $u_j$ do not share a haplotype, and thus $\matcal{P}(u_i, u_j)$ can safely evaluate to false. 
+If we know all neighbouring haplo-unique sequences to be covered, the absence of such a chain implies that $u_i$ and $u_j$ do not share a haplotype, and thus $\mathcal{P}(u_i, u_j)$ can safely evaluate to false. 
 Conversely, if there exists a pair of haplounique sequences $u_i, u_{i+1}$ on the same haplotype that are not covered by any read, we will not be able to resolve them unambiguously to recover their phasing.
 
 If all but one haplotypes have been successfully phased out at a location, it is in principle possible to infer the phasing of all non-assigned haplo-unique sequences to the missing haplotype.

@@ -6,6 +6,9 @@ thesis.pdf: thesis.tex #thesis.aux
 
 .PHONY = full clean
 
+images: img/*
+	lualatex --shell-escape thesis.tex
+
 full: thesis.tex bibliography.bib
 	lualatex thesis.tex
 	bibtex thesis
