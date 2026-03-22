@@ -34,6 +34,11 @@ A proof is simple to construct: if two haplo-unique sites $u_i, u_j$ with $i < j
 If we know all neighbouring haplo-unique sequences to be covered, the absence of such a chain implies that $u_i$ and $u_j$ do not share a haplotype, and thus $\matcal{P}(u_i, u_j)$ can safely evaluate to false. 
 Conversely, if there exists a pair of haplounique sequences $u_i, u_{i+1}$ on the same haplotype that are not covered by any read, we will not be able to resolve them unambiguously to recover their phasing.
 
+If all but one haplotypes have been successfully phased out at a location, it is in principle possible to infer the phasing of all non-assigned haplo-unique sequences to the missing haplotype.
+This can be seen most clearly in the case of a haploid genome present in only a single copy; in this case, clearly no information at all is required for assigning phase, as there is \textit{a priori} only a single haplotype any sequence could be derived from.
+If we accept this argument, the requirement for a read covering all adjacent haplo-unique sequences on all haplotypes can be lowered to all except one of the haplotypes.
+However, considering practical limitations, having positive evidence for every haplotype may be preferable.
+
 %TODO statmodelling
 Using some statistical modelling, we can turn this simple minimal requirement into an estimate of the sequencing coverage required to confidently resolve the phasing of a genome.
 To ensure full phasing, the requirement of theorem \ref{theo-phase-simple} has to be met everywhere along the genome.
