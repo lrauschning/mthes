@@ -30,5 +30,33 @@ The matter of how to represent today's genome assembly datasets is absolutely cr
 While for previous resequencing datasets the VCF format has emerged as a de facto standard -- despite significant limitations especially regarding storage efficiency --, there is still considerable disagreement about how to represent modern datasets of genome assemblies. 
 Below, a brief outline of how genomes have historically been represented -- both on analog or digital media and in theoretical discussions -- is given, to provide some perspective on the contemporary discussion.
 
-Historically, genomes were first represented as combinations of upper/lowercase letters indicating different alleles of a gene by Mendel
+The first recognition of the genome as a coherent concept dates to Gregor Mendels work in peas.
+He represented the genome of his peas as combinations of upper/lowercase letters indicating different alleles.
+Given the lack of any genomic technologies, the genetic identity of a given pea could only be determined by its phenotype or the phenotypes of its offspring in a controlled cross.
+Mendel's genomes also lacked any internal structure; gametes were viewed as produced by of independently assorted components of the parental genotypes.
+The genome as such was a passive container of alleles, and not conceptualized beyond this.\\
+After the rediscovery of Mendel's work in the early 20th century, the discovery of chromosomes as the bearer of heredity information and further crossing experiments performed among others by Thomas Hunt Morgan's laboratory at Columbia University in \textit{Drosophila melanogaster} revealed the genome to have a linear structure.
+Through careful crossing, chromosomes were mapped, again determining the genotype solely from the phenotype of the organism and its offspring.
+These genetic maps revealed chromosomes to have a linear structure, and to be shuffled by a process of recombination by discrete crossover events, happening with a determinable likelyhood between genes segregating for certain phenotypes.\\
+The genome had evolved from a few letters to a set of linear maps, whose cellular component (if not molecular identity) was known.
+Like Mendel, however, genes along the genome were thought of and named for their observable, segregating phenotypes, and the absence of any genomic technologies made genotyping a slow and labourious process.\\
+Later, microscopy of chromosomes revealed a banded structure, which work in maize by Barbara McClintock and in \textit{Drosophila spp.} by Theodosius Dobzhansky showed to sometimes vary across individuals, initially without giving rise to observable macroscopic phenotypes.
+The discovery of this so-called »cryptic polymorphisms« was the first time a genotype had been determined by other means than phenotypic observation.
+Cytogenetics can thus be termed the first genomic technology; in fact, through careful observation of the band structure, these polymorphisms could be identified as inverted or copy-pasted segments along the chromosomes, hinting at the mechanism of their formation -- later giving rise to McClintock's discovery of transposable elements.\\
+Around the same time, the synthesis of Mendel's rediscovered works and contemporary evolutionary biology, as well as contacts with ecology led to the emergence of an early theory of population genetics, a first way to systematically think about the behaviour of genomic variation in a population.
+Applying this new population genetic theory to the observed allele frequency of inversions in captive \textit{D. pseudoobscura} populations, these »cryptic polymorphisms« were revealed to have an effect on observed fitness, in particular in heterozygotes, a phenomenon that was then termed heterosis.
+% expand on this?
+Increasingly, the study of the genome became emancipated from the reliance of clearly segregating phenotypes for every genetic polymorphism, and the discovery of rearrangements revealed that a genetic or cytogenetic map could vary between different individuals of a population.
+Genotyping technology allowed population genetic studies for the first time, though these studied a limited amount of polymorphisms at a time.
 
+The discovery first of DNA as the molecule carrying genetic information and later of its 3D structure in the 1940s and 1950s by Avery and Franklin, Crick and Watson provided for the first time a vision to understand the genome on a molecular level.
+More molecular studies followed like the discovery of transcription, replication and the decoding of the genetic code, providing some understanding on a basepair level.
+This opened the door to a radically different way of conceptualizing the genome -- not as an ordered map of segregating phenotypes or bands under a microscope, but as a string of bases along a phosphate backbone.
+As DNA became accessible by cloning, PCR and eventually early sequencing methods, databases of DNA sequences started to emerge.
+These would contain small fragments of the genome, often genes of particular interest, promotor or plasmid sequences.
+The sequences would be stored as letters, but unlike Mendel's early use of letters to indicate alleles, the letters now indicated the bases \texttt{A}denine, \texttt{C}ytosine, \texttt{G}uanine and \texttt{T}hymine and had a well-defined ordering.
+Early databases were still printed on paper and distributed by mail as books, but soon started shifting to early computers available at universities.
+Databases used a variety of file formats, but for nucleic acid databases the format supported by the fast-All programme, colloquially known as FASTA format, soon took the lead.
+This format was analogous to the printed book format, containing the sequence in an ACGT/ACGU-encoding with nonsignificant linebreaks every 80 characters to fit on early computer screens, but added a header line for each sequence containing the sequence name and additional metadata, if present. 
+It is still in common use today for a variety of purposes.
+In particular, FASTA has become the de facto standard for representing reference genome assemblies after being chosen by the Human Genome Project and other early genome sequencing collaborations to publish its genomes.
