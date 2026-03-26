@@ -142,6 +142,27 @@ All changes made to SyRI were upstreamed, and incorporated into a new release.
 % maybe separate by section? this section only old stuff, new stuff in graph?
 % more detail than syri, but try to focus on new things
 
+Using SyRI, structurally conserved and variable regions between a sample and reference assembly can be found in a straightforward and efficient manner.
+In my Bachelor's Thesis supervised by Manish Goel, I developed a tool to merge SyRI's synteny calls across multiple samples compared to a common reference.
+Later, I worked on extending this tool with a realignment step to recover structural features not present on the reference, and named it the multisynteny detector (msyd).
+As msyd's structural similarity calls form the baseline for the synteny-centred graph representation of a pangenome described in this thesis, I will give an outline of msyd's core concepts and the alterations made to it in this section.
+For more details on the msyd algorithm, the interested reader is referred to my Bachelor's Thesis and msyd's documentation, available in the GitHub repository.
+
+% core vs merasynteny
+The central concept of msyd is that of multisynteny.
+A multisyntenic region is defined as a set of intervals on multiple samples such that any two intervals are annotated as syntenic to each other in a comparison of the two samples.
+If a multisyntenic region encompasses all samples in a population/dataset, we term it to be core syntenic; otherwise we call it merasyntenic (from ancient greek μερiκως, meaning partial).
+% briefly, synteny intersection + realignment
+Synteny is transitive; that is, if region $a$ on sample $A$ is syntenic to regions $b, c$ on samples $B, C$, $b$ also has to be syntenic to $c$, and vice versa, as synteny is also symmetric.
+This allows the efficient identification of all core syntenic regions: if we choose any sample as a reference to compare all other samples to, we can intersect the synteny calls on the common reference sample to obtain all core synteny with only $\mathcal{O}(n)$ required whole-genome alignments and SyRI runs.
+This will also identify any merasynteny that includes the chosen reference sample, but miss any for which this is not the case.\\
+In order to recover these missing annotations, msyd includes a realignment procedure that iteratively repeats the intersection procedure with different references until all sequences are annotated.
+This is performed separately for each sequence between two coresyntenic region\footnote{As they cover all samples, there cannot be a multisyntenic region that crosses a coresyntenic region}, avoiding expensive whole-genome alignments at this step.
+
+% changes: parallelization, move away from pandas datastructures
+
+
+
 
 \section*{Datasets}
 
