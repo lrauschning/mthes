@@ -100,7 +100,7 @@ As we assume reads to be Poisson distributed, we can simply multiply our coverag
 
 % incorporate after notion of msyd graph construction
 
-\section*{SyRI}
+\section*{The Synteny and Rearrangement Identifier (SyRI)}
 
 SyRI is a tool written by Manish Goel to compare the genome structure between a reference and query sequence\cite{goel19}.
 Its core insight is that finding \emph{syntenic}, that is structurally conserved, segments is far easier than finding rearrangements, and after all syntenic regions have been found all that is left to do is to annotate the remaining sequence as the right type of structural rearrangement.\\
@@ -118,7 +118,13 @@ This required a partial rewrite of SyRI's internal datastructures and the way th
 Along the way, some of SyRI's error handling was modernized, particularly to always give a non-zero return value on failure and avoid silent errors.\\
 All changes made to SyRI were upstreamed, and incorporated into a new release.
 
-\section*{Proof of Non-Circularity}
+
+\section*{The Multisynteny Detector (msyd)}
+
+
+\section*{A multisynteny graph}
+
+\subsection*{Proof of Non-Circularity}
 \newcommand{\aln}{\mathcal{A}}
 
 We consider two multisyntenic regions $M$ and $M'$ that are both upstream and downstream of each other in genomes $q$ and $q'$, forming a circle in the graph representation.
@@ -140,4 +146,6 @@ Note that this argument assumes that our realignment finds monotonic and correct
 \texttt{minimap2}'s fast approximative minimizer-based algorithm is used for computing alignments, which may in practice sometimes violate these conditions.
 An additional source of alignment ambiguity is the stitching together of leftover non-multisyntenic sequence during the realignment step.\\
 This proof does thus not guarantee that an msyd run may not produce output inducing a circular graph representation in certain edgecases, but instead serve to justify its pruning as making an approximative component of the algorithm match the mathematical guarantees of an exact algorithm.
+
+\section*{Pangenomic Coordinates}
 
