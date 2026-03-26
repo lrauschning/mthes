@@ -112,6 +112,12 @@ After that, remaining gaps are filled with inconsistent alignments annotated as 
 Secondary inconsistent alignments of syntenic regions are annotated likewise as duplications.
 In a final step, cross-chromosomal translocations are identified and regions without any alignment (syntenic or otherwise) are annotated as highly diverged.
 
+SyRI's syntenic calls are used as the base for msyd's identification of shared genomic structure (described below), so SyRI forms our most central dependency.
+To maintain it in a usable state for msyd and more generally, SyRI was updated to use the 3.x version of \texttt{pandas}, and run in versions of python newer than 3.11.
+This required a partial rewrite of SyRI's internal datastructures and the way they are accessed using Cython's TypedMemoryView interface to account for pandas' change to copy-on-write behaviour.
+Along the way, some of SyRI's error handling was modernized, particularly to always give a non-zero return value on failure and avoid silent errors.\\
+All changes made to SyRI were upstreamed, and incorporated into a new release.
+
 \section*{Proof of Non-Circularity}
 \newcommand{\aln}{\mathcal{A}}
 
