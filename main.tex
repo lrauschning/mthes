@@ -110,7 +110,8 @@ As we assume reads to be Poisson distributed, we can simply multiply our coverag
 		\textbf{Top}, in the first step, SyRI identifies a syntenic backbone of conserved genome structure between the reference and query.
 		\textbf{Bottom}, after identifying syntenic regions, leftover regions are known to be structurally variable, and are annotated appropriately in a multi-step process (see main text).
 		Finding conserved structure first both makes the algorithmic problem tractable, and helps to avoid calling spurious distal similarities as structural variation.
-		This is illustrated in the purple translocation with a dashed outline, in which case the large, syntenic alignment is a more parsimonious annotation than the secondary alignment indicating a translocation.
+		This is illustrated in the purple translocation with a dashed outline, in which case the large, syntenic alignment is a more parsimonious annotation than the secondary alignment indicating a translocation.\\
+		Figure inspired by \cite{goel19}.
 	}
 	\label{fig:syri}
 \end{figure*}
@@ -136,6 +137,15 @@ All changes made to SyRI were upstreamed, and incorporated into a new release.
 
 
 \section*{The Multisynteny Detector (msyd)}
+
+% how to balance with bsc thesis?
+% maybe separate by section? this section only old stuff, new stuff in graph?
+% more detail than syri, but try to focus on new things
+
+
+\section*{Datasets}
+
+% describe nextflow pipeline
 
 
 \section*{A multisynteny graph}
