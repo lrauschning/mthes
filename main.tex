@@ -101,6 +101,19 @@ As we assume reads to be Poisson distributed, we can simply multiply our coverag
 % incorporate after notion of msyd graph construction
 
 \section*{The Synteny and Rearrangement Identifier (SyRI)}
+\begin{figure*}[ht]
+	\centering
+	\includesvg[width=0.8\textwidth]{img/syn.svg}\\[2\baselineskip]
+	\includesvg[width=0.8\textwidth]{img/synsvs.svg}
+	\caption{
+		\textbf{Illustration of the SyRI algorithm.}\\
+		\textbf{Top}, in the first step, SyRI identifies a syntenic backbone of conserved genome structure between the reference and query.
+		\textbf{Bottom}, after identifying syntenic regions, leftover regions are known to be structurally variable, and are annotated appropriately in a multi-step process (see main text).
+		Finding conserved structure first both makes the algorithmic problem tractable, and helps to avoid calling spurious distal similarities as structural variation.
+		This is illustrated in the purple translocation with a dashed outline, in which case the large, syntenic alignment is a more parsimonious annotation than the secondary alignment indicating a translocation.
+	}
+	\label{fig:syri}
+\end{figure*}
 
 SyRI is a tool written by Manish Goel to compare the genome structure between a reference and query sequence\cite{goel19}.
 Its core insight is that finding \emph{syntenic}, that is structurally conserved, segments is far easier than finding rearrangements, and after all syntenic regions have been found all that is left to do is to annotate the remaining sequence as the right type of structural rearrangement.\\
@@ -110,7 +123,10 @@ Two alignments are considered consistent if the regions they align occur in the 
 Second, inverted alignments are added to cover gaps in the path, finding inversions.
 After that, remaining gaps are filled with inconsistent alignments annotated as translocations, if available.
 Secondary inconsistent alignments of syntenic regions are annotated likewise as duplications.
-In a final step, cross-chromosomal translocations are identified and regions without any alignment (syntenic or otherwise) are annotated as highly diverged.
+In a final step, cross-chromosomal translocations are identified and regions without any alignment (syntenic or otherwise) are annotated as highly diverged.\\
+After annotating genome structure, SyRI goes back to the raw alignment to identify small variants between the reference and sample.
+Both small and large variants are reported in a custom output format; small variants are also reported as a VCF file.
+SyRI's output can be visualized using the plotsr utility\cite{goel22}.
 
 SyRI's syntenic calls are used as the base for msyd's identification of shared genomic structure (described below), so SyRI forms our most central dependency.
 To maintain it in a usable state for msyd and more generally, SyRI was updated to use the 3.x version of \texttt{pandas}, and run in versions of python newer than 3.11.
