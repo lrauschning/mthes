@@ -133,11 +133,11 @@ TODO
 \fancyfoot[LE,RO]{\thepage}
 
 
-\chapter*{\thetitle}
-\section*{Introduction}
+%\chapter*{\thetitle}
+\chapter*{Introduction}
 \input{introduction}
 \newpage
-\section*{Main}
+\chapter*{Main}
 \input{main}
 %\section*{Methods}
 %\input{methods}
@@ -145,8 +145,8 @@ TODO
 %\section*{Results} % maybe merge into common main block?
 %\input{results}
 %\newpage
-%\section*{Discussion}
-%\input{discussion}
+\chapter*{Discussion}
+\input{discussion}
 
 \pagestyle{plain}
 {\small
@@ -159,6 +159,6 @@ TODO
 \onecolumn
 \beginsupplement
 \newpage
-\section*{Supplement}
+\chapter*{Supplement}
 \input{supplement}
 \end{document}
