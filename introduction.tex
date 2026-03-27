@@ -65,7 +65,30 @@ Additional metadata could also be added to the header line.%for each sequence co
 FASTA's format and variants based on it are still in common use today for a variety of purposes.
 In particular, it has become the de facto standard for representing reference genome assemblies after being chosen by the Human Genome Project and other early genome sequencing collaborations.%, and FASTQ format 
 
-% shift over to VCF format, 1000 GP
+% whole genome assembly projects
+Increasing throughput of Sanger sequencing opened up the possibility of obtaining the base sequence of entire genomes.
+After early success in viral and bacterial genomes in the early 1990s, this culminated in large, well-funded global consortia preparing reference genomes for a number of eukaryotic species in the late 90s and early 00s, most notably \textit{A. thaliana}, mouse and human\cite{athal00, chinwalla02, lander01, venter01}.
+% revive genetic map
+The ambition to sequence not just individual genes of interest, but the entire genome can be viewed as a revival of Hunt Morgan's concept of a per-species genetic map.
+The genome would not just be a scientific outcome in and of itself, but serve also as a community resource, along with technology and standards developed by the project along the way.
+% gaps as novel concept, contiguity metrics
+
+
+With the reference genome deciphered for some common model species, genomicists were now able to compare samples to the reference genome -- both conceptually, and by using the reference to develop cost-efficient microarrays.
+This powered the HapMap project immediately after the human reference had been assembled, aided by the long linkage blocks and low overall variation in the human genome\cite{altshuler05}.
+% short read sequencing useful + cheap
+Later, sequencing costs declined sharply with the advent of early next-generation sequencing technologies.
+Especially in the beginning, these produced very short and error-prone untargeted reads that were not directly useful on their own.
+However, algorithms capable of mapping reads to their genomic origin were developed based on earlier approaches for searching for genes in reference genomes and databases\cite{li08, kent02}.
+Using these aligned reads, statistical models could be utilized to find differences between the sequenced sample and reference genome\cite{li08, mckenna10}.
+A key advantage over microarrays was the ability for \textit{de novo} variant discovery and to avoid the need for labourious microarray design and manufacturing.
+At least for single-nucleotide variants or small indels in non-repetitive regions, next-generation sequencing allowed scalable comprehensive genotyping.
+This drove a wave of projects sequencing ever larger samples, such as the 1000 Genome Project in human and the 1001 Genomes Project in \textit{A. thaliana}\cite{weigel09, durbin10}.
+The motivation for these projects was increasingly shifting away from a technology development and community resource perspective towards association studies and medical applications (in humans).
+% shift over to VCF format, 1000 GP/human genome diversity
+
+
+
 
 \section*{Assembling Genomes}
 
