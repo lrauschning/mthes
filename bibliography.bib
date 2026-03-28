@@ -2770,5 +2770,210 @@ url={https://doi.org/10.1186/gb-2009-10-5-107}
     eprint = {https://academic.oup.com/bioinformatics/article-pdf/28/10/1353/48866250/bioinformatics_28_10_1353.pdf},
 }
 
+@article{wong23,
+author={Wong, Johnathan
+and Coombe, Lauren
+and Nikoli{\'{c}}, Vladimir
+and Zhang, Emily
+and Nip, Ka Ming
+and Sidhu, Puneet
+and Warren, Ren{\'e} L.
+and Birol, Inan{\c{c}}},
+title={Linear time complexity de novo long read genome assembly with GoldRush},
+journal={Nature Communications},
+year={2023},
+month={May},
+day={22},
+volume={14},
+number={1},
+pages={2906},
+abstract={Current state-of-the-art de novo long read genome assemblers follow the Overlap-Layout-Consensus paradigm. While read-to-read overlap -- its most costly step -- was improved in modern long read genome assemblers, these tools still often require excessive RAM when assembling a typical human dataset. Our work departs from this paradigm, foregoing all-vs-all sequence alignments in favor of a dynamic data structure implemented in GoldRush, a de novo long read genome assembly algorithm with linear time complexity. We tested GoldRush on Oxford Nanopore Technologies long sequencing read datasets with different base error profiles sourced from three human cell lines, rice, and tomato. Here, we show that GoldRush achieves assembly scaffold NGA50 lengths of 18.3-22.2, 0.3 and 2.6 Mbp, for the genomes of human, rice, and tomato, respectively, and assembles each genome within a day, using at most 54.5 GB of random-access memory, demonstrating the scalability of our genome assembly paradigm and its implementation.},
+issn={2041-1723},
+doi={10.1038/s41467-023-38716-x},
+url={https://doi.org/10.1038/s41467-023-38716-x}
+}
 
+@article{kent01,
+  title    = "Assembly of the working draft of the human genome with
+              {GigAssembler}",
+  author   = "Kent, W J and Haussler, D",
+  abstract = "The data for the public working draft of the human genome
+              contains roughly 400,000 initial sequence contigs in
+              approximately 30,000 large insert clones. Many of these initial
+              sequence contigs overlap. A program, GigAssembler, was built to
+              merge them and to order and orient the resulting larger sequence
+              contigs based on mRNA, paired plasmid ends, EST, BAC end pairs,
+              and other information. This program produced the first publicly
+              available assembly of the human genome, a working draft
+              containing roughly 2.7 billion base pairs and covering an
+              estimated 88\% of the genome that has been used for several
+              recent studies of the genome. Here we describe the algorithm used
+              by GigAssembler.",
+  journal  = "Genome Res",
+  volume   =  11,
+  number   =  9,
+  pages    = "1541--1548",
+  month    =  sep,
+  year     =  2001,
+  address  = "United States",
+  language = "en"
+}
+
+@article{green96,
+	title = "PHRAP documentation",
+	author = "Phil Green",
+	journal = "Unpublished",
+	url={http://bozeman.mbt.washington.edu/phrap.docs/phrap.html}
+}
+
+@article{whales,
+	title = ""
+	author = "Oxford Nanopore",
+	journal = "ONT Blog",
+	url={https://nanoporetech.com/blog/news-blog-kilobases-whales-short-history-ultra-long-reads-and-high-throughput-genome}
+}
+
+@article{fleischmann95,
+author = {Robert D. Fleischmann  and Mark D. Adams  and Owen White  and Rebecca A. Clayton  and Ewen F. Kirkness  and Anthony R. Kerlavage  and Carol J. Bult  and Jean-Francois Tomb  and Brian A. Dougherty  and Joseph M. Merrick  and Keith McKenney  and Granger Sutton  and Will FitzHugh,  and Chris Fields  and Jeannine D. Gocayne  and John Scott  and Robert Shirley  and Li-lng Liu  and Anna Glodek  and Jenny M. Kelley  and Janice F. Weidman  and Cheryl A. Phillips  and Tracy Spriggs  and Eva Hedblom  and Matthew D. Cotton  and Teresa R. Utterback  and Michael C. Hanna  and David T. Nguyen  and Deborah M. Saudek  and Rhonda C. Brandon  and Leah D. Fine  and Janice L. Fritchman  and Joyce L. Fuhrmann  and N. S. M. Geoghagen  and Cheryl L. Gnehm  and Lisa A. McDonald  and Keith V. Small  and Claire M. Fraser  and Hamilton O. Smith  and J. Craig Venter },
+title = {Whole-Genome Random Sequencing and Assembly of <i>Haemophilus influenzae</i> Rd},
+journal = {Science},
+volume = {269},
+number = {5223},
+pages = {496-512},
+year = {1995},
+doi = {10.1126/science.7542800},
+URL = {https://www.science.org/doi/abs/10.1126/science.7542800},
+eprint = {https://www.science.org/doi/pdf/10.1126/science.7542800},
+abstract = {An approach for genome analysis based on sequencing and assembly of unselected pieces of DNA from the whole chromosome has been applied to obtain the complete nucleotide sequence (1,830,137 base pairs) of the genome from the bacterium Haemophilus influenzae Rd. This approach eliminates the need for initial mapping efforts and is therefore applicable to the vast array of microbial species for which genome maps are unavailable. The H. influenzae Rd genome sequence (Genome Sequence DataBase accession number L42023) represents the only complete genome sequence from a free-living organism.}}
+
+
+@article{pevzner01,
+author = {Pavel A. Pevzner  and Haixu Tang  and Michael S. Waterman },
+title = {An Eulerian path approach to DNA fragment assembly},
+journal = {Proceedings of the National Academy of Sciences},
+volume = {98},
+number = {17},
+pages = {9748-9753},
+year = {2001},
+doi = {10.1073/pnas.171285098},
+URL = {https://www.pnas.org/doi/abs/10.1073/pnas.171285098},
+eprint = {https://www.pnas.org/doi/pdf/10.1073/pnas.171285098},
+abstract = {For the last 20 years, fragment assembly in DNA sequencing
+ followed the “overlap–layout–consensus” paradigm that is used
+ in all currently available assembly tools. Although this approach
+ proved useful in assembling clones, it faces difficulties in genomic
+ shotgun assembly. We abandon the classical
+ “overlap–layout–consensus” approach in favor of a new
+ euler algorithm that, for the first time, resolves the
+ 20-year-old “repeat problem” in fragment assembly. Our main
+ result is the reduction of the fragment assembly to a variation of the
+ classical Eulerian path problem that allows one to generate accurate
+ solutions of large-scale sequencing problems. euler, in
+ contrast to the celera assembler, does not mask such
+ repeats but uses them instead as a powerful fragment assembly tool.}}
+
+
+
+@article{huang99,
+  title    = "{CAP3}: A {DNA} sequence assembly program",
+  author   = "Huang, X and Madan, A",
+  abstract = "We describe the third generation of the CAP sequence assembly
+              program. The CAP3 program includes a number of improvements and
+              new features. The program has a capability to clip 5' and 3'
+              low-quality regions of reads. It uses base quality values in
+              computation of overlaps between reads, construction of multiple
+              sequence alignments of reads, and generation of consensus
+              sequences. The program also uses forward-reverse constraints to
+              correct assembly errors and link contigs. Results of CAP3 on four
+              BAC data sets are presented. The performance of CAP3 was compared
+              with that of PHRAP on a number of BAC data sets. PHRAP often
+              produces longer contigs than CAP3 whereas CAP3 often produces
+              fewer errors in consensus sequences than PHRAP. It is easier to
+              construct scaffolds with CAP3 than with PHRAP on low-pass data
+              with forward-reverse constraints.",
+  journal  = "Genome Res",
+  volume   =  9,
+  number   =  9,
+  pages    = "868--877",
+  month    =  sep,
+  year     =  1999,
+  address  = "United States",
+  language = "en"
+}
+
+@Article{kececioglu95,
+author={Kececioglu, J. D.
+and Myers, E. W.},
+title={Combinatorial algorithms for DNA sequence assembly},
+journal={Algorithmica},
+year={1995},
+month={Feb},
+day={01},
+volume={13},
+number={1},
+pages={7-51},
+abstract={The trend toward very large DNA sequencing projects, such as those being undertaken as part of the Human Genome Program, necessitates the development of efficient and precise algorithms for assembling a long DNA sequence from the fragments obtained by shotgun sequencing or other methods. The sequence reconstruction problem that we take as our formulation of DNA sequence assembly is a variation of the shortest common superstring problem, complicated by the presence of sequencing errors and reverse complements of fragments. Since the simpler superstring problem is NP-hard, any efficient reconstruction procedure must resort to heuristics. In this paper, however, a four-phase approach based on rigorous design criteria is presented, and has been found to be very accurate in practice. Our method is robust in the sense that it can accommodate high sequencing error rates, and list a series of alternate solutions in the event that several appear equally good. Moreover, it uses a limited form of multiple sequence alignment to detect, and often correct, errors in the data. Our combined algorithm has successfully reconstructed nonrepetitive sequences of length 50,000 sampled at error rates of as high as 10{\%}.},
+issn={1432-0541},
+doi={10.1007/BF01188580},
+url={https://doi.org/10.1007/BF01188580}
+}
+
+@article{pop02,
+  author={Pop, M. and Salzberg, S.L. and Shumway, M.},
+  journal={Computer}, 
+  title={Genome sequence assembly: algorithms and issues}, 
+  year={2002},
+  volume={35},
+  number={7},
+  pages={47-54},
+  keywords={Genomics;Bioinformatics;Assembly;DNA;Sequences;Decoding;Finishing;Automation;Chemicals;Humans},
+  doi={10.1109/MC.2002.1016901}}
+
+@Article{compeau11,
+author={Compeau, Phillip E. C.
+and Pevzner, Pavel A.
+and Tesler, Glenn},
+title={How to apply de Bruijn graphs to genome assembly},
+journal={Nature Biotechnology},
+year={2011},
+month={Nov},
+day={01},
+volume={29},
+number={11},
+pages={987-991},
+abstract={A mathematical concept known as a de Bruijn graph turns the formidable challenge of assembling a contiguous genome from billions of short sequencing reads into a tractable computational problem.},
+issn={1546-1696},
+doi={10.1038/nbt.2023},
+url={https://doi.org/10.1038/nbt.2023}
+}
+
+@article{huang92,
+  title    = "A contig assembly program based on sensitive detection of
+              fragment overlaps",
+  author   = "Huang, X",
+  abstract = "An effective computer program for assembling DNA fragments, the
+              contig assembly program (CAP), has been developed. In the CAP
+              program, a filter is used to eliminate quickly fragment pairs
+              that could not possibly overlap, a dynamic programming algorithm
+              is applied to compute the maximal-scoring overlapping alignment
+              between each remaining pair of fragments, and a simple greedy
+              approach is employed to assemble fragments in order of alignment
+              scores. To identify the true fragment overlaps, the dynamic
+              programming algorithm uses specially chosen sets of alignment
+              parameters to tolerate sequencing errors and to penalize
+              ``mutational'' changes between different copies of a repetitive
+              sequence. The performance tests of the program on fragment data
+              from genomic sequencing projects produced satisfactory results.
+              The CAP program is efficient in computer time and memory; it took
+              about 4 h to assemble a set of 1015 fragments into long contigs
+              on a Sun workstation.",
+  journal  = "Genomics",
+  volume   =  14,
+  number   =  1,
+  pages    = "18--25",
+  month    =  sep,
+  year     =  1992,
+  address  = "United States",
+  language = "en"
+}
 
