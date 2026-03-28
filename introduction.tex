@@ -109,12 +109,22 @@ The results of association studies
 \section*{Assembling Genomes}
 
 In this section, I will give an introduction into current state of the art approaches for genomic studies.
-In particular, I will focus on long read-based \textit{de novo} phased assembly, as this offers the most complete characterization of the genome and has recently become economically possible in larger samples, including in species with a more complex genome.
-
-% start from resequencing in previous section
+In particular, I will focus on long read-based \textit{de novo} phased assembly, as this offers the most complete characterization of the genome and has recently become economically possible in larger samples, including in species with moderately complex genomes.
 
 % assembly now within reach
 % go into assembly algos
+As the genome is far too large to be sequenced in one go, it is fragmented and some of these fragments sequenced; these sequenced fragments are known as reads.
+The problem of reconstructing the sequence of the entire genome from the sequence of the sampled reads is known as genome assembly, and is often compared to assembling a puzzle from its pieces.
+However, there are a few key differences between genome assembly and puzzle reconstruction; chiefly, sequencing reads vary in length and sometimes contain sequencing errors or artifacts of the biochemical processes required to sequence DNA.
+Also, unlike puzzle pieces, reads are typically sampled randomly from the genome, known for historical reasons as shotgun sequencing.\\
+We can already see two properties required for a sequencing dataset to be used to successfully assemble a genome; there need to be reads covering the entire genome and enough overlapping reads to correct any sequencing errors present in individual reads, lest they be propagated to the final genome assembly.
+Both of these problems can be avoided by sampling more reads, so are in practice a minor problem in datasets of sufficient size -- but they still need to be accounted for during genome assembly.\\
+A more stubborn problem is presented by repetitive or low-complexity regions.
+Similarly to a puzzle, these make reconstruction challenging by causing spurious similarity between unrelated reads -- think of the blue sky or dense foliage in a puzzle.\\
+As sequencing datasets are far too large for humans to process, computer programs have been a core element of genome assembly from the very beginning
+
+If the sequence of two reads overlaps at their ends, that may be an indication that they are sampled from the
+
 % read len, cov requirements
 
 \section*{Contemporary Genome Representations}
