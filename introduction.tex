@@ -27,8 +27,15 @@ Genome assemblies are a large and heterogeneous kind of data.
 Making the information contained within them accessible is far from trivial, and requires computational approaches scaling to efficiently utilize large computational resources.
 
 The matter of how to represent today's genome assembly datasets is absolutely crucial to any attempt at analyzing them, both in allowing efficient algorithms to be constructed and in limiting, enabling or focusing the questions that we ask a dataset.
-While for previous resequencing datasets the VCF format has emerged as a de facto standard -- despite significant limitations especially regarding storage efficiency --, there is still considerable disagreement about how to represent modern datasets of genome assemblies. 
-To inform this discussion and provide background to the approach proposed in this thesis, the two sections below give a history of how genomics got to where it is now and the current state of the art for obtaining a genome from a sample.
+Despite several recent proposals and a slowly maturing software ecosystem, I will argue that the representation of today's genome datasets is an unsolved question still requiring considerable conceptual contributions.
+%While for previous resequencing datasets the VCF format has emerged as a de facto standard -- despite significant limitations especially regarding storage efficiency --, there is still considerable disagreement about how to represent modern datasets of genome assemblies. 
+To inform this discussion and provide background to the approach proposed in this thesis, the two sections below give a history of how genomics got to where it is now and what kind of datasets are possible given the current state of the art.
+In the following section, I will introduce recent proposals for pangenome representations with a focus on their conceptual underbellies and limitations.
+To close the introduction, I will introduce the core concepts of two softwares used in the genome representation proposed in this thesis.
+It is my hope that this introduction structure provide context and a motivation for working on genome representations, particularly for readers that consider themselves more as users than developers of genomic technology -- these are not »just« some file formats, but core elements of the field, and ambiguity on unclearness have tremendous downstream impacts that are hard to change.
+
+%This structure is intended to set the stage for the contribution 
+%This will inform a discussion of current proposals 
 %Below, a brief outline of how genomes have historically been represented -- both on analog or digital media and in theoretical discussions -- is given, to provide some perspective on the contemporary discussion.
 
 \section*{Historical Background to Modern Genomics}
@@ -96,7 +103,13 @@ The results of association studies
 
 % go into gwas peaks + genome annotations?
 
+% emergence of long reads
+% briefly state of the art: long-read based de novo assembly
+
 \section*{Assembling Genomes}
+
+In this section, I will give an introduction into current state of the art approaches for genomic studies.
+In particular, I will focus on long read-based \textit{de novo} phased assembly, as this offers the most complete characterization of the genome and has recently become economically possible in larger samples, including in species with a more complex genome.
 
 % start from resequencing in previous section
 
@@ -113,3 +126,5 @@ The results of association studies
 % separate section for msyd/syri?
 
 % lead in to questions for this thesis
+
+\section*{SyRI and msyd}
