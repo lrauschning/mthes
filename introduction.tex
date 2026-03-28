@@ -85,10 +85,16 @@ A key advantage over microarrays was the ability for \textit{de novo} variant di
 At least for single-nucleotide variants or small indels in non-repetitive regions, next-generation sequencing allowed scalable comprehensive genotyping.
 This drove a wave of projects sequencing ever larger samples, such as the 1000 Genome Project in human and the 1001 Genomes Project in \textit{A. thaliana}\cite{weigel09, durbin10}.
 The motivation for these projects was increasingly shifting away from a technology development and community resource perspective towards association studies and medical applications (in humans).
+
 % shift over to VCF format, 1000 GP/human genome diversity
+In order to efficiently compute associations between genotype and phenotype, genotypes of multiple samples have to be aggregated into a single, numerical matrix representation\cite{shabalin12}.
+To store the genotypes collected in large-scale sequencing efforts, the Variant Call Format was developed by the 1000 Genomes Project\cite{durbin10}.
+VCF closely follows this matrix representations, and while updates over the years have added ways to encode larger variations into the standard, its representation remains centred on cataloguing single-nucleotide polymorphisms in multiple samples.\\
+In a way, this represented a step backwards in genome representations, going from the deciphering of the exact if not complete base sequence to a list of genotypes at segregating sites, analogous to Mendel's genotypes but at much higher scale.
+This representation also makes it impossible to describe a sample's genotype without referring to the reference; and combining samples using different reference genomes (or different versions/subsets of the same genomes) is challenging, often requiring reprocessing of the raw sequencing data.
+The results of association studies
 
-
-
+% go into gwas peaks + genome annotations?
 
 \section*{Assembling Genomes}
 
