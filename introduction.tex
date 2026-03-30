@@ -108,21 +108,29 @@ The results of association studies
 
 \section*{Assembling Genomes}
 
-In this section, I will give an introduction into current state of the art approaches for genomic studies.
-In particular, I will focus on long read-based \textit{de novo} phased assembly, as this offers the most complete characterization of the genome and has recently become economically possible in larger samples, including in species with moderately complex genomes.
+In this section, I will give a brief introduction into the process used to assemble a genome, highlighting the current state of the art.
+In particular, I will focus on long read-based \textit{de novo} phased assembly, as this offers the most complete characterization of the genome and has recently become economically possible in larger samples, including in species with fairly complex genomes.
 
 % assembly now within reach
 % go into assembly algos
 As the genome is far too large to be sequenced in one go, it is fragmented and some of these fragments sequenced; these sequenced fragments are known as reads.
-The problem of reconstructing the sequence of the entire genome from the sequence of the sampled reads is known as genome assembly, and is often compared to assembling a puzzle from its pieces.
-However, there are a few key differences between genome assembly and puzzle reconstruction; chiefly, sequencing reads vary in length and sometimes contain sequencing errors or artifacts of the biochemical processes required to sequence DNA.
-Also, unlike puzzle pieces, reads are typically sampled randomly from the genome, known for historical reasons as shotgun sequencing.\\
+The problem of reconstructing the sequence of the entire genome from the sequence of the sampled reads is known as genome assembly, and is often compared to assembling a jigsaw puzzle from its pieces.
+However, there are a few key differences between genome assembly and solving a puzzle; chiefly, sequencing reads vary in length and sometimes contain sequencing errors or artifacts of the biochemical processes required to prepare DNA for sequencing.
+Also, unlike puzzle pieces, reads are typically sampled randomly from the genome, an approach known for historical reasons as shotgun sequencing.\\
 We can already see two properties required for a sequencing dataset to be used to successfully assemble a genome; there need to be reads covering the entire genome and enough overlapping reads to correct any sequencing errors present in individual reads, lest they be propagated to the final genome assembly.
 Both of these problems can be avoided by sampling more reads, so are in practice a minor problem in datasets of sufficient size -- but they still need to be accounted for during genome assembly.\\
 A more stubborn problem is presented by repetitive or low-complexity regions.
-Similarly to a puzzle, these make reconstruction challenging by causing spurious similarity between unrelated reads -- think of the blue sky or dense foliage in a puzzle.
-Recent developments in sequencing technology have made progress toward resolving these regions, in particular the impressive read lengths achievable with ONT-Ultralong protocols and their decreasing error rate.% of ONT reads improving read length and  long read sequencing
-Megabase-scale reads are now regularly observed in mammalian genomes using ultralong protocols, with the longest reported read announced by Oxford Nanopore to be 4.3 Mbp, or more than twice the size of the \textit{Haemophilus influenzae} genome, the first genome of a living organism ever assembled\cite{whales, fleischmann95}.
+These make reconstruction challenging by causing spurious similarity between reads, obscuring the real similarity signal -- in the puzzle analogy, this is analogous to the blue sky or dense foliage being the most challenging regions.\\
+Recent developments in sequencing technology have made progress toward resolving these regions, in particular the impressive read lengths achievable with ONT-ultralong protocols and their decreasing error rate.% of ONT reads improving read length and  long read sequencing
+Longer reads can help resolve repetitive sequences in two ways.
+First, a sufficiently long read can span the entire repetitive element.
+Second, most repetitive regions are not exact repeats; like other regions in the genome, they accumulate point mutations in the course of evolution.
+%These imperfections may be sufficient to 
+As a read gets longer, it can cover more of these imperfect repeats that can be used to resolve the repetitive region if the sequencing error rate is low enough.% longer read can cover more 
+%if the read is long enough, to span the entire repetitive region, If a long read covers an entire repet covering an 
+\\
+While traditional PacBio or ONT long reads are usually less than \qty{50}{\kilo\bp}, the development of ultralong library preparation protocols have made it possible to sequence longer and longer reads with ONT.
+Megabase-scale reads are now regularly observed in mammalian genomes, with the longest reported read announced by Oxford Nanopore to be \qty{4.3}{\mega\bp}, or more than twice the size of the \textit{Haemophilus influenzae} genome, the first non-viral genome ever assembled\cite{whales, fleischmann95}.
 % extend into advantages of modern 
 
 As sequencing datasets are far too large for humans to process, computer programs have been a core element of genome assembly from the very beginning.
@@ -130,24 +138,24 @@ Genome assembly is a complex computational problem
 % footnote or main text?
 \footnote{Most formulations fall within the complexity class of $\mathcal{NP}$-complete problems, with the notable exception of certain Eulerian path approaches that are polynomially bounded by the number of k-mers in a genome\cite{pop02, compeau11}.},
 meaning that heuristic algorithms are required to make the problem tractable in practice.
-Early approaches used simple greedy heuristics joining maximally overlapping reads, but these struggled with high memory requirements compared to the hardware of the time and misjoining different sequences containing the same transposable elements\cite{huang92, huang99, green96}.
-Almost all later assembly softwares used one of two algorithmic paradigms, both based on a graph representation of the sequencing reads
+Early approaches used simple greedy heuristics joining maximally overlapping reads, but these often caused misjoins between different sequences containing the same transposable elements\cite{huang92, huang99, green96}.
+Almost all later assembly softwares use one of two algorithmic paradigms, both based on a graph representation of the sequencing reads
 \footnote{One recently developed linear-time algorithm presents a notable exception, see \cite{wong23}}.\\
 De Bruijn-graph based assemblers split reads into overlapping fragments, termed $k$-mers.
 These are represented in a graph as edges, connecting the two $k-1$-mers obtained by removing the first/last letter of the original $k$-mer\cite{pevzner01, compeau11}.
 The genome has to contain all $k$-mers found in the reads; as such, it corresponds to a path traversing all edges in the graph, also known as an Eulerian path.
-The Eulerian path in a graph can be found efficiently, but exact repeats of size greater than $k$ will be collapsed, and sequencing errors need to be accounted for.
+The Eulerian path in a graph can be found efficiently, but exact repeats of size greater than $k$ will be collapsed, and sequencing errors need to be identified and corrected prior to graph construction.
 Most de Bruijn-graph based assemblers include additional heuristics to address these limitations.\\
 The other approach is referred to as Overlap-Layout-Consensus (OLC)\cite{kececioglu95}.
 In the graph representation used, entire reads are represented as nodes.
 An edge is added between reads with overlapping sequence at their ends -- this is known as the overlap step.
-This initial representation (known as an overlap graph) is then processed in a variety of ways, most notably by compressing unbranching paths into a single node, removing transitive edges and reads entirely contained within another read.
-From this simplified graph representation, the genome is reconstructed in the layout step by searching for an optimal path covering all nodes (equivalent to finding a linear layout of the graph, hence the name).
-Finally, reads are aligned back to the path to find correct sequencing errors in the final consensus step.
-In particular the layout step is a very hard algorithmic problem, requiring aggressive processing of the graph representation in order to be tractable.
-Finding all read overlaps is also a computationally demanding step, although it can be parallelized extensively.
+This initial representation, also referred to as an overlap graph, is processed in a variety of ways, notably by compressing unbranching paths, removing transitive edges and reads entirely contained within another read.
+From this simplified graph representation, known as a contig graph, the genome is reconstructed in the layout step by searching for an optimal path covering all nodes (equivalent to finding a linear layout of the graph, hence the name).
+Finally, reads are aligned back to the path to correct sequencing errors in the final consensus step.
+Particularly the layout step is a very hard algorithmic problem, requiring aggressive processing of the graph representation and heuristic approaches in order to be tractable.
+Finding all read overlaps is also a computationally demanding step, although it can be parallelized efficiently.
 
-Remarkably, both of these approaches have been adjusted to successive generations of sequencing technologies, and neither has proven to definitely outperform the other as of now.
+Remarkably, both of these approaches have been adjusted to successive generations of sequencing technologies over the years, and neither has proven to definitely outperform the other as of now.
 Currently, two assemblers are used for state of the art assembly.
 Verkko is based on a de Bruijn graph approach, and hifiasm uses the OLC paradigm\cite{verkko2, hifiasm}.
 
