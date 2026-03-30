@@ -24,6 +24,10 @@
 \usepackage{siunitx} % probably not worth it actually
 \DeclareSIUnit\bp{bp} % bp defined
 
+% configure biblatex, more styles
+%\usepackage{biblatex} %Imports biblatex package
+%\addbibresource{bibliography.bib} %Import the bibliography file
+
 \usepackage{xcolor}
 \definecolor{lb}{RGB}{44, 139, 183}
 \newcommand\cl[2]{\textcolor{#1}{#2}}
@@ -151,9 +155,11 @@ TODO
 \pagestyle{plain}
 {\small
 \twocolumn
+%\bibliographystyle{nejm}
 \bibliographystyle{unsrt}
 %\bibliographystyle{nature}
 \bibliography{bibliography.bib}
+%\printbibliography
 }
 
 \onecolumn
