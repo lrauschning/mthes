@@ -15,7 +15,33 @@
 	url={https://doi.org/10.1038/171737a0}
 }
 
-@article{verkko2,
+@article{rautiainen23,
+author={Rautiainen, Mikko
+and Nurk, Sergey
+and Walenz, Brian P.
+and Logsdon, Glennis A.
+and Porubsky, David
+and Rhie, Arang
+and Eichler, Evan E.
+and Phillippy, Adam M.
+and Koren, Sergey},
+title={Telomere-to-telomere assembly of diploid chromosomes with Verkko},
+journal={Nature Biotechnology},
+year={2023},
+month={Oct},
+day={01},
+volume={41},
+number={10},
+pages={1474-1482},
+abstract={The Telomere-to-Telomere consortium recently assembled the first truly complete sequence of a human genome. To resolve the most complex repeats, this project relied on manual integration of ultra-long Oxford Nanopore sequencing reads with a high-resolution assembly graph built from long, accurate PacBio high-fidelity reads. We have improved and automated this strategy in Verkko, an iterative, graph-based pipeline for assembling complete, diploid genomes. Verkko begins with a multiplex de Bruijn graph built from long, accurate reads and progressively simplifies this graph by integrating ultra-long reads and haplotype-specific markers. The result is a phased, diploid assembly of both haplotypes, with many chromosomes automatically assembled from telomere to telomere. Running Verkko on the HG002 human genome resulted in 20 of 46 diploid chromosomes assembled without gaps at 99.9997{\%} accuracy. The complete assembly of diploid genomes is a critical step towards the construction of comprehensive pangenome databases and chromosome-scale comparative genomics.},
+issn={1546-1696},
+doi={10.1038/s41587-023-01662-6},
+url={https://doi.org/10.1038/s41587-023-01662-6}
+}
+
+
+
+@article{antipov25,
   title    = "Verkko2 integrates proximity-ligation data with long-read De
               Bruijn graphs for efficient telomere-to-telomere genome assembly,
               phasing, and scaffolding",
@@ -1104,7 +1130,51 @@ doi={10.1038/ng.1028},
 url={https://doi.org/10.1038/ng.1028}
 }
 
-@Article{hifiasm,
+@article{cheng24,
+author={Cheng, Haoyu
+and Asri, Mobin
+and Lucas, Julian
+and Koren, Sergey
+and Li, Heng},
+title={Scalable telomere-to-telomere assembly for diploid and polyploid genomes with double graph},
+journal={Nature Methods},
+year={2024},
+month={Jun},
+day={01},
+volume={21},
+number={6},
+pages={967-970},
+abstract={Despite advances in long-read sequencing technologies, constructing a near telomere-to-telomere assembly is still computationally demanding. Here we present hifiasm (UL), an efficient de novo assembly algorithm combining multiple sequencing technologies to scale up population-wide near telomere-to-telomere assemblies. Applied to 22 human and two plant genomes, our algorithm produces better diploid assemblies at a cost of an order of magnitude lower than existing methods, and it also works with polyploid genomes.},
+issn={1548-7105},
+doi={10.1038/s41592-024-02269-8},
+url={https://doi.org/10.1038/s41592-024-02269-8}
+}
+
+@Article{cheng22,
+author={Cheng, Haoyu
+and Jarvis, Erich D.
+and Fedrigo, Olivier
+and Koepfli, Klaus-Peter
+and Urban, Lara
+and Gemmell, Neil J.
+and Li, Heng},
+title={Haplotype-resolved assembly of diploid genomes without parental data},
+journal={Nature Biotechnology},
+year={2022},
+month={Sep},
+day={01},
+volume={40},
+number={9},
+pages={1332-1335},
+abstract={Routine haplotype-resolved genome assembly from single samples remains an unresolved problem. Here we describe an algorithm that combines PacBio HiFi reads and Hi-C chromatin interaction data to produce a haplotype-resolved assembly without the sequencing of parents. Applied to human and other vertebrate samples, our algorithm consistently outperforms existing single-sample assembly pipelines and generates assemblies of similar quality to the best pedigree-based assemblies.},
+issn={1546-1696},
+doi={10.1038/s41587-022-01261-x},
+url={https://doi.org/10.1038/s41587-022-01261-x}
+}
+
+
+
+@article{cheng21,
 author={Cheng, Haoyu
 and Concepcion, Gregory T.
 and Feng, Xiaowen
@@ -2860,21 +2930,139 @@ url={https://doi.org/10.1038/s41467-023-38716-x}
   language = "en"
 }
 
-@article{green96,
+@article{sanderson23,
+   author = "Sanderson, Nicholas D. and Kapel, Natalia and Rodger, Gillian and Webster, Hermione and Lipworth, Samuel and Street, Teresa L. and Peto, Timothy and Crook, Derrick and Stoesser, Nicole",
+   title = "Comparison of R9.4.1/Kit10 and R10/Kit12 Oxford Nanopore flowcells and chemistries in bacterial genome reconstruction", 
+   journal= "Microbial Genomics",
+   year = "2023",
+   volume = "9",
+   number = "1",
+   pages = "",
+   doi = "https://doi.org/10.1099/mgen.0.000910",
+   url = "https://www.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000910",
+   publisher = "Microbiology Society",
+   issn = "2057-5858",
+   type = "Journal Article",
+   keywords = "hybrid assembly",
+   keywords = "Genome sequencing",
+   keywords = "long-read assembly",
+    eid = "000910",
+   abstract = "Complete, accurate, cost-effective, and high-throughput reconstruction of bacterial genomes for large-scale genomic epidemiological studies is currently only possible with hybrid assembly, combining long- (typically using nanopore sequencing) and short-read (Illumina) datasets. Being able to use nanopore-only data would be a significant advance. Oxford Nanopore Technologies (ONT) have recently released a new flowcell (R10.4) and chemistry (Kit12), which reportedly generate per-read accuracies rivalling those of Illumina data. To evaluate this, we sequenced DNA extracts from four commonly studied bacterial pathogens, namely &#160;&#160;Escherichia coli&#160;&#160;, &#160;&#160;Klebsiella pneumoniae&#160;&#160;, &#160;&#160;Pseudomonas aeruginosa&#160;&#160; and &#160;&#160;Staphylococcus aureus&#160;&#160;, using Illumina and ONT’s R9.4.1/Kit10, R10.3/Kit12, R10.4/Kit12 flowcells/chemistries. We compared raw read accuracy and assembly accuracy for each modality, considering the impact of different nanopore basecalling models, commonly used assemblers, sequencing depth, and the use of duplex versus simplex reads. ‘Super accuracy’ (sup) basecalled R10.4 reads - in particular duplex reads - have high per-read accuracies and could be used to robustly reconstruct bacterial genomes without the use of Illumina data. However, the per-run yield of duplex reads generated in our hands with standard sequencing protocols was low (typically &lt;10 %), with substantial implications for cost and throughput if relying on nanopore data only to enable bacterial genome reconstruction. In addition, recovery of small plasmids with the best-performing long-read assembler (Flye) was inconsistent. R10.4/Kit12 combined with sup basecalling holds promise as a singular sequencing technology in the reconstruction of commonly studied bacterial genomes, but hybrid assembly (Illumina+R9.4.1 hac) currently remains the highest throughput, most robust, and cost-effective approach to fully reconstruct these bacterial genomes.",
+  }
+
+
+@online{ebpseqrecs,
+	title = "Earth Biogenome Sequencing Recommendations",
+	author = "Earth Biogenome Project",
+	year = 2026,
+	url={https://www.earthbiogenome.org/report-on-assembly-recommendations},
+}
+
+@online{doradorelease,
+	title = "Dorado release notes",
+	author = "Oxford Nanopore Technologies",
+	year = 2022,
+	url={https://github.com/nanoporetech/dorado/releases/tag/v0.0.1},
+}
+
+@online{pbhifi,
+	title = "Highly Accurate Single-Molecule Long Reads",
+	author = "Pacific Biosciences Inc",
+	year = 2018,
+	url={https://www.pacb.com/press_releases/pacific-biosciences-announces-a-new-paradigm-in-dna-sequencing-highly-accurate-single-molecule-long-reads/}
+}
+
+@online{r10.3release,
+	title = "R10.3: the newest nanopore for high accuracy nanopore sequencing",
+	author = "Oxford Nanopore Technologies",
+	year = 2020,
+	url={https://nanoporetech.com/news/news-r103-newest-nanopore-high-accuracy-nanopore-sequencing-now-available-store}
+}
+
+
+@online{pbrevio25,
+	title = "PacBio Announces Major Advances for Revio and Vega to Lower Genome Cost and Expand Multiomic Capabilities",
+	author = "Pacific Biosciences Inc",
+	year = 2025,
+	url={https://www.pacb.com/press_releases/pacbio-announces-major-advances-for-revio-and-vega-to-lower-genome-cost-and-expand-multiomic-capabilities/}
+}
+
+@online{pbrevio23,
+	title = "PacBio To Begin Commercial Shipment of Revio Systems",
+	author = "Pacific Biosciences Inc",
+	year = 2023,
+	url={https://www.pacb.com/press_releases/pacbio-to-begin-commercial-shipment-of-revio-systems/}
+}
+
+@online{green96,
 	title = "PHRAP documentation",
 	year=1996,
 	author = "Phil Green",
-	journal = "Unpublished",
 	url={http://bozeman.mbt.washington.edu/phrap.docs/phrap.html}
 }
 
-@article{whales,
+@online{whales,
 	title = {From kilobases to "whales": a short history of ultra-long reads and high-throughput genome sequencing},
 	year=2021,
 	author = "Oxford Nanopore",
 	journal = "ONT Blog",
 	url={https://nanoporetech.com/blog/news-blog-kilobases-whales-short-history-ultra-long-reads-and-high-throughput-genome}
 }
+@article {Stanojevic24,
+	author = {Stanojevi{\'c}, Dominik and Lin, Dehui and Florez de Sessions, Paola and {\v S}iki{\'c}, Mile},
+	title = {Telomere-to-telomere phased genome assembly using error-corrected Simplex nanopore reads},
+	elocation-id = {2024.05.18.594796},
+	year = {2024},
+	doi = {10.1101/2024.05.18.594796},
+	publisher = {Cold Spring Harbor Laboratory},
+	abstract = {Telomere-to-telomere phased assemblies are standard expectations. To achieve these for diploid and even polyploid genomes, the contemporary approach involves at least two long-read sequencing technologies: high-accuracy HiFi or Duplex nanopore long reads and ultra-long noisy nanopore reads. Using two different technologies increases the cost and the required amount of genomic DNA. Here, we show that comparable results are possible using error correction of nanopore Simplex ultra-long reads and then assembling them using existing state-of-the-art de novo assembly methods. We have developed the HERRO model based on deep learning, which corrects Simplex nanopore reads longer than 10kbp and with a quality value higher than 10. Taking into account informative positions that vary between haplotypes or segments in duplications, HERRO achieves an increase of accuracy of up to 100-fold. Combing HERRO with Verkko assembler, we achieve high contiguity on human genomes by reconstructing many chromosomes telomere-to-telomere, including chromosomes X and Y. We show that HERRO generalises well to other species and it supports both R9.4.1. and R10.4.1 nanopore Simplex reads. These results offer an opportunity to decrease the genome sequencing cost and apply corrected reads to more complex genomes with different levels of ploidy or even aneuploidy.Competing Interest StatementOxford Nanopore Technologies and AI Singapore jointly funded the AI-driven De Novo Diploid Assembler project, which resulted in this manuscript. M.S. has received travel funds to speak at events hosted by Oxford Nanopore Technologies. P. F. S. is an employee of Oxford Nanopore Technologies.},
+	URL = {https://www.biorxiv.org/content/early/2024/05/21/2024.05.18.594796},
+	eprint = {https://www.biorxiv.org/content/early/2024/05/21/2024.05.18.594796.full.pdf},
+	journal = {bioRxiv}
+}
+
+@Article{jain18,
+author={Jain, Miten
+and Koren, Sergey
+and Miga, Karen H.
+and Quick, Josh
+and Rand, Arthur C.
+and Sasani, Thomas A.
+and Tyson, John R.
+and Beggs, Andrew D.
+and Dilthey, Alexander T.
+and Fiddes, Ian T.
+and Malla, Sunir
+and Marriott, Hannah
+and Nieto, Tom
+and O'Grady, Justin
+and Olsen, Hugh E.
+and Pedersen, Brent S.
+and Rhie, Arang
+and Richardson, Hollian
+and Quinlan, Aaron R.
+and Snutch, Terrance P.
+and Tee, Louise
+and Paten, Benedict
+and Phillippy, Adam M.
+and Simpson, Jared T.
+and Loman, Nicholas J.
+and Loose, Matthew},
+title={Nanopore sequencing and assembly of a human genome with ultra-long reads},
+journal={Nature Biotechnology},
+year={2018},
+month={Apr},
+day={01},
+volume={36},
+number={4},
+pages={338-345},
+abstract={A human genome is sequenced and assembled de novo using a pocket-sized nanopore device.},
+issn={1546-1696},
+doi={10.1038/nbt.4060},
+url={https://doi.org/10.1038/nbt.4060}
+}
+
+
 
 @article{fleischmann95,
 author = {Robert D. Fleischmann  and Mark D. Adams  and Owen White  and Rebecca A. Clayton  and Ewen F. Kirkness  and Anthony R. Kerlavage  and Carol J. Bult  and Jean-Francois Tomb  and Brian A. Dougherty  and Joseph M. Merrick  and Keith McKenney  and Granger Sutton  and Will FitzHugh  and Chris Fields  and Jeannine D. Gocayne  and John Scott  and Robert Shirley  and Li-lng Liu  and Anna Glodek  and Jenny M. Kelley  and Janice F. Weidman  and Cheryl A. Phillips  and Tracy Spriggs  and Eva Hedblom  and Matthew D. Cotton  and Teresa R. Utterback  and Michael C. Hanna  and David T. Nguyen  and Deborah M. Saudek  and Rhonda C. Brandon  and Leah D. Fine  and Janice L. Fritchman  and Joyce L. Fuhrmann  and N. S. M. Geoghagen  and Cheryl L. Gnehm  and Lisa A. McDonald  and Keith V. Small  and Claire M. Fraser  and Hamilton O. Smith  and J. Craig Venter },
@@ -2914,6 +3102,26 @@ abstract = {For the last 20 years, fragment assembly in DNA sequencing
  solutions of large-scale sequencing problems. euler, in
  contrast to the celera assembler, does not mask such
  repeats but uses them instead as a powerful fragment assembly tool.}}
+
+@article{sarashetti24,
+author={Sarashetti, Prasad
+and Lipovac, Josipa
+and Tomas, Filip
+and {\v{S}}iki{\'{c}}, Mile
+and Liu, Jianjun},
+title={Evaluating data requirements for high-quality haplotype-resolved genomes for creating robust pangenome references},
+journal={Genome Biology},
+year={2024},
+month={Dec},
+day={18},
+volume={25},
+number={1},
+pages={312},
+abstract={Long-read technologies from Pacific Biosciences (PacBio) and Oxford Nanopore Technologies (ONT) have transformed genomics research by providing diverse data types like HiFi, Duplex, and ultra-long ONT. Despite recent strides in achieving haplotype-phased gapless genome assemblies using long-read technologies, concerns persist regarding the representation of genetic diversity, prompting the development of pangenome references. However, pangenome studies face challenges related to data types, volumes, and cost considerations for each assembled genome, while striving to maintain sensitivity. The absence of comprehensive guidance on optimal data selection exacerbates these challenges.},
+issn={1474-760X},
+doi={10.1186/s13059-024-03452-y},
+url={https://doi.org/10.1186/s13059-024-03452-y}
+}
 
 
 
