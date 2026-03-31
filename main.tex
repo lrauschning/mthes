@@ -131,10 +131,12 @@ M[q'] &< M'[q'] &\mathrm{but} M'[q'] < M'[q]\mathrm{!}
 \end{eqnarray*}
 
 %There are a few assumptions underlying this proof, some of which may be violated in practice.
-Note that this argument assumes that our realignment finds monotonic and correct alignments.
-\texttt{minimap2}'s fast approximative minimizer-based algorithm is used for computing alignments, which may in practice sometimes violate these conditions.
-An additional source of alignment ambiguity is the stitching together of leftover non-multisyntenic sequence during the realignment step.\\
-This proof does thus not guarantee that an msyd run may not produce output inducing a circular graph representation in certain edgecases, but instead serve to justify its pruning as making an approximative component of the algorithm match the mathematical guarantees of an exact algorithm.
+Note that msyd's implementation of the realignment step uses \texttt{minimap2} to compute alignments.
+Its fast minimizer-based approximative algorithm is not guaranteed to find the optimal alignment and may not always be monotonic, particularly in highly diverged or repetitive regions. % suboptimal alignments.% these conditions.
+%An additional source of alignment ambiguity is the stitching together of leftover non-multisyntenic sequence during the realignment step.\\
+The following SyRI step is also heuristic, but should be guaranteed to return a set of monotonic syntenic alignments, upholding the conditions for the above argument despite two heuristic steps.
+If either of the steps misses or wrongly filters a genuine alignment as suboptimal, however, the representation may be under-collapsed, falsely reporting haplotypes as distinct when they are not.
+%This proof does thus not guarantee that an msyd run may not produce output inducing a circular graph representation in certain edgecases, but instead serve to justify its pruning as making an approximative component of the algorithm match the mathematical guarantees of an exact algorithm.
 
 \section*{Pangenomic Coordinates}
 
