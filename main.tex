@@ -98,13 +98,6 @@ As every read has a single starting position, a mean sequencing coverage of $X$ 
 We thus expect $(\ell-d)\frac{X}{\ell}=\frac{\ell-d}{\ell}X$ reads to fulfil this criterion.
 As we assume reads to be Poisson distributed, we can simply multiply our coverage estimate derived in step 2 with this factor.
 
-% incorporate after notion of msyd graph construction
-\section*{Datasets}
-
-% describe nextflow pipeline
-
-% provide rationale? not sure
-
 
 \section*{A multisynteny graph}
 
@@ -119,10 +112,6 @@ As we assume reads to be Poisson distributed, we can simply multiply our coverag
 % => respect global properties, avoid collapsing repetitive regions
 % link to SV allele discussion + panco
 
-
-\subsection*{Software benchmarks}
-%TODO benchmark
-% runtime + mem + storage
 
 \subsection*{Proof of Non-Circularity}
 \newcommand{\aln}{\mathcal{A}}
@@ -148,4 +137,15 @@ An additional source of alignment ambiguity is the stitching together of leftove
 This proof does thus not guarantee that an msyd run may not produce output inducing a circular graph representation in certain edgecases, but instead serve to justify its pruning as making an approximative component of the algorithm match the mathematical guarantees of an exact algorithm.
 
 \section*{Pangenomic Coordinates}
+
+% incorporate after notion of msyd graph construction
+\section*{Datasets}
+
+% describe nextflow pipeline
+
+% provide rationale? not sure
+
+\subsection*{Software benchmarks}
+%TODO benchmark
+% runtime + mem + storage
 
