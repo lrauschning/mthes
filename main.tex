@@ -129,17 +129,31 @@ The same consideration makes it impossible for one multisyntenic region to conta
 A situation that could give rise to such an overlap would instead be annotated by msyd as separate, adjacent multisyntenic regions.% for the, along with the non-overlapping regions $a \setminus b$ and $b \setminus a$.% . containing forbidden by the 
 Knowing that multisyntenic regions cannot overlap, we can define directed sample-adjacency.
 $A$ and $B$ are $i$-adjacent, if there does not exist a multisyntenic region $C$ such that $A_i < C_i < B_i$.
-Directed sample-adjacency is an asymmetric relation.
+Directed sample-adjacency is an asymmetric relation, and any multisyntenic region can only ever be predecessor and successor to at most one other region per sample.
 We can further observe that it is impossible for $A$ and $B$ to »cross« each other, that is for the order of $A$ and $B$'s representative intervals to contradict each other on any two samples both $A$ and $B$ are present on, as this would violate the condition that both $A$ and $B$ be part of a syntenic whole-genome alignment.
 Formally, this requirement can be expressed as $A_i < B_i \implies \forall j \in S(A) \cap S(B): A_j < B_j$.
 We can use this property to derive a sample-independent definition of directed adjacency: $A < B \iff \exists i \in S(A) \cap S(B): A_i < B_i$.
-This relation behaves similar to sample-adjacency, but is undefined if $A$ and $B$ do not share a sample.\\
+This relation is similar to sample-adjacency, but is undefined if $A$ and $B$ do not share a sample.
 
 % similarity to assembly graph? => genomes as paths
 % => circle-free
+Using our definition of adjacency, we can now construct a multisynteny graph.
+We can initialize the graph with the node set corresponding to the set of all multisyntenic regions, and connect two nodes with a directed edge if they are directedly adjacent.
+The sequence assigned to the nodes corresponds to the sequence found at the sample used as reference during the identification of the multisyntenic regions; it could also be defined to be a consensus sequence derived from the alignments, though computing this would require an MSA, which may become prohibitively expensive as the number of samples grows larger.
+To include private regions in our representation, we can substitute an adjacency edge with a significant gap with a node containing the gap's sequence, and connect the target/source nodes to the new node instead.% in between representing private sequences between two adjacent nodes containing a significant gap.
+We call these private nodes, and other nodes multisynteny nodes, among which we can further differentiate core and merasyntenic nodes.\\
+%As msyd's internal representation 
+With this addition, the multisynteny graph becomes a pangenome graph; that is, for every sample there is an ordered set of nodes connected by directed edges such that the sequence obtained by walking along the path aligns well to the sample's genome, though small variants are not represented.
+For the multisynteny graph, this ordered set is guaranteed to be an acyclic path, as any node is either part of a syntenic alignment to another genome for multisyntenic nodes or has only a single incoming and outgoing edge for private nodes; in fact, we will be able to prove later that the multisynteny graph is acyclic.
+Using the features added in version 1.1 of the GFA standard, we can add the sample paths to the GFA output as W-lines.
+Further, we can use node labels to annotate each node with its used reference, corresponding interval and all samples passing through it.
+
+% graph construction algo, briefly explained
+% linear runtime, maybe mention sorting uses panco?
 
 
 % go into properties, linearized structure, coresyn bounds
+% necessary branching after node
 % motivate here after the fact?
 % => respect global properties, avoid collapsing repetitive regions
 % link to SV allele discussion + panco
