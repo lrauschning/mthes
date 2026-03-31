@@ -105,9 +105,24 @@ As we assume reads to be Poisson distributed, we can simply multiply our coverag
 
 % start: GFA file format, integrate with tooling
 % => make msyd output more useful
+Using msyd, it is possible to comprehensively characterize multisynteny in a dataset of genome assemblies.
+Msyd reports its output in Population Synteny Format (PSF), a custom file format inspired by VCF
+\footnote{Msyd also supports exporting to VCF format using symbolic allele annotations to store synteny calls alongside small variants, but symbolic alleles are not straightforward to parse and cannot adequately represent all information present in msyd output.}.
+A PSF record contains one mulitsyntenic region on one line, and starts with a BED-like position on the reference it has been aligned to, allowing tabix indexing.
+Following this, the position the multisyntenic region each sample and the alignment to the genomic region of the reference is given, with each sample separated by a TAB character and samples the multisyntenic region is not present in annotated as \texttt{.}, analogous to how small variants are reported in VCF format.
+\\
+While this format is amenable to indexing and easy for users to parse in custom scripts, a significant downside to any custom file format is lacking integration with other tools.
+In the last two years, version 1 of the GFA format and its rGFA subset, originally developed to store intermediary representations of genome assembly, has increasingly become the standard for representing pangenomic datasets, while its .
+It is now supported by read-based genotypers, read and graph aligners as well as multiple visualization suites\cite{lotsofstuff}.
+Both \texttt{vg} and \texttt{gfatools} provide utilities for the file format\cite{githubs?}.\\
+Given this developing software ecosystem and GFA's graph-based nature allowing greater flexibility than VCF format, finding a way to represent msyd's multisynteny calls in GFA1 format is desirable.
+In this section, I outline how multisynteny can be represented as a graph, how this was implemented efficiently in the multisynteny detector, and derive some properties of this representation that make it attractive compared to other graphical representations of pangenomic datasets.
+See the following section for how this representation can be used to define a pangenomic coordinate system, and the Discussion for its broader implications in the context of modern pangenomics and population genomics.% further development forward-looking implications 
 
 % explain construction, relation to realignment
 % figure: illustration from iggsy, bandage screenshots?
+
+
 
 % go into properties, linearized structure, coresyn bounds
 % motivate here after the fact?
