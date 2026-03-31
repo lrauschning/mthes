@@ -137,8 +137,8 @@ This relation is similar to sample-adjacency, but is undefined if $A$ and $B$ do
 
 % similarity to assembly graph? => genomes as paths
 % => circle-free
-Using our definition of adjacency, we can now construct a multisynteny graph.
-We can initialize the graph with the node set corresponding to the set of all multisyntenic regions, and connect two nodes with a directed edge if they are directedly adjacent.
+Using our definition of adjacency, we can now define a multisynteny graph.
+We first consider with the set of all multisyntenic regions as the node set, and connect two nodes with a directed edge if they are directedly adjacent.
 The sequence assigned to the nodes corresponds to the sequence found at the sample used as reference during the identification of the multisyntenic regions; it could also be defined to be a consensus sequence derived from the alignments, though computing this would require an MSA, which may become prohibitively expensive as the number of samples grows larger.
 To include private regions in our representation, we can substitute an adjacency edge with a significant gap with a node containing the gap's sequence, and connect the target/source nodes to the new node instead.% in between representing private sequences between two adjacent nodes containing a significant gap.
 We call these private nodes, and other nodes multisynteny nodes, among which we can further differentiate core and merasyntenic nodes.\\
@@ -150,6 +150,27 @@ Further, we can use node labels to annotate each node with its used reference, c
 
 % graph construction algo, briefly explained
 % linear runtime, maybe mention sorting uses panco?
+Internally, the graph is represented as a sorted list of nodes, with each node containing an adjacency list of its predecessors and successors, labelled by the sample on which they are directedly adjacent.
+This allows efficient forward and backward traversal, but avoids excessive pointer chasing and fragmented memory allocation.
+Private nodes are encoded implicitly in the genomic coordinates associated with each multisyntenic node.
+The graph is divided by chromosome, allowing all algorithms to be parallelized by chromosomes.\\
+Since every node in the multisynteny graph has at most as many successors as there are samples, and the path of each sample through the graph is acyclic and mutually compatible, we can construct this graph representation using a simple linear scan through the multisyntenic regions.
+During the scan, we store a reference to the node indicating the current position on each sample.
+When encountering a new multisyntenic region, a new node is initialized containing predecessor-links to the current node on all samples the region contains.
+The successor-lists of these nodes are then updated to contain the newly initialized node, and it is added to the node list.
+This graph construction procedure avoids both lookahead and lookback by exploiting the nature of the multisynteny graph as union of a finite set of non-branching paths; to work successfully, it requires nodes to be scanned in an order compatible with the partial ordering derived from the directed adjacency relation.
+This can be ensured by simply sorting the multisynteny regions according to this relation prior to scanning.\\
+As msyd's intersection algorithm ensures sorting, only switches to different realignment targets can introduce breaks in this sorting.
+This does not happen often in practice, so the appropriate output sorting can be ensured in linear time in the average-case.%performed in expectation in linear time in expectation.
+The graph construction algorithm itself is also linear, requiring a single scan through the multisyntenic regions.
+Memory-wise, the graph requires two references per sample and multisyntenic region beyond the base multisynteny representation, with only a constant single reference per sample additionally required during construction.
+
+GFA export is performed by traversing the graph using the same order as during graph construction
+\footnote{at no additional computational cost, as the sorting has already been done at this point},
+though in the worst case as many private regions as samples need to be annotated in every traversal step.
+Annotating sample paths as W-lines requires one graph traversal per sample, although only the nodes contained in the sample need to be visited at this stage.
+In practice, this stage of the algorithm does however have the highest memory requirements, as the genomes of all organisms need to be available for annotating nodes in the GFA file with their respective sequences.
+Using \texttt{pysam}'s FASTA class for dynamically reading from the genome files as required helped minimize required memory, though in the worst case all genomes are still required to be in memory simultaneously.
 
 
 % go into properties, linearized structure, coresyn bounds
