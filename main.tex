@@ -121,7 +121,17 @@ See the following section for how this representation can be used to define a pa
 
 % explain construction, relation to realignment
 % figure: illustration from iggsy, bandage screenshots?
+To see how to construct a graph representation of multisynteny, let us first consider how two multisyntenic regions $A, B$ can relate to each other.
+In the following, we use $S(A)$ to refer to the set of samples $A$ is present on, and $A_i$ to refer to the interval representing $A$ in sample $i$.
+$A_i$ is undefined if $i \notin S(A)$.\\
+First, no two regions can overlap each other on any organism unless $A=B$, as any overlap of two regions containing different samples would imply the overlapping region to be multisyntenic between all samples in $S(A) \cup S(B)$, violating the maximality condition.
+The same consideration makes it impossible for one multisyntenic region to contain another.
+A situation that could give rise to such an overlap would instead be annotated by msyd as separate, adjacent multisyntenic regions.% for the, along with the non-overlapping regions $a \setminus b$ and $b \setminus a$.% . containing forbidden by the 
+It is also impossible for $A$ and $B$ to »cross« each other, that is for the order of $A$ and $B$'s representative intervals to contradict each other on any two samples both $A$ and $B$ are present on. % better to put this after non-circularity or into panco section?
+Formally, this can be expressed as $A_i < B_i \implies \forall j \in S(A) \cap S(B): A_j < B_j$.
 
+% similarity to assembly graph? => genomes as paths
+% => circle-free
 
 
 % go into properties, linearized structure, coresyn bounds
