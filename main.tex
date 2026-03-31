@@ -127,8 +127,13 @@ $A_i$ is undefined if $i \notin S(A)$.\\
 First, no two regions can overlap each other on any organism unless $A=B$, as any overlap of two regions containing different samples would imply the overlapping region to be multisyntenic between all samples in $S(A) \cup S(B)$, violating the maximality condition.
 The same consideration makes it impossible for one multisyntenic region to contain another.
 A situation that could give rise to such an overlap would instead be annotated by msyd as separate, adjacent multisyntenic regions.% for the, along with the non-overlapping regions $a \setminus b$ and $b \setminus a$.% . containing forbidden by the 
-It is also impossible for $A$ and $B$ to »cross« each other, that is for the order of $A$ and $B$'s representative intervals to contradict each other on any two samples both $A$ and $B$ are present on. % better to put this after non-circularity or into panco section?
-Formally, this can be expressed as $A_i < B_i \implies \forall j \in S(A) \cap S(B): A_j < B_j$.
+Knowing that multisyntenic regions cannot overlap, we can define directed sample-adjacency.
+$A$ and $B$ are $i$-adjacent, if there does not exist a multisyntenic region $C$ such that $A_i < C_i < B_i$.
+Directed sample-adjacency is an asymmetric relation.
+We can further observe that it is impossible for $A$ and $B$ to »cross« each other, that is for the order of $A$ and $B$'s representative intervals to contradict each other on any two samples both $A$ and $B$ are present on, as this would violate the condition that both $A$ and $B$ be part of a syntenic whole-genome alignment.
+Formally, this requirement can be expressed as $A_i < B_i \implies \forall j \in S(A) \cap S(B): A_j < B_j$.
+We can use this property to derive a sample-independent definition of directed adjacency: $A < B \iff \exists i \in S(A) \cap S(B): A_i < B_i$.
+This relation behaves similar to sample-adjacency, but is undefined if $A$ and $B$ do not share a sample.\\
 
 % similarity to assembly graph? => genomes as paths
 % => circle-free
