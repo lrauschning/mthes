@@ -251,7 +251,10 @@ For more details on the msyd algorithm, the interested reader is referred to my 
 
 % core vs merasynteny
 The central concept of msyd is that of multisynteny.
-A multisyntenic region is defined as a set of intervals on multiple samples such that any two intervals are annotated as syntenic to each other in a comparison of the two samples.
+A multisyntenic region is defined as a set of intervals on multiple, pairwise different samples such that any two intervals align to each other as part of SyRI's syntenic backbone when comparing the two samples.
+We further require multisyntenic regions to be maximal, defined as requiring that neither the multisyntenic region itself nor any set of subintervals can be extended to larger intervals or additional samples without violating the mutual synteny requirement.
+%that is there cannot be any other interval  that can be added to the multisyntenic region or a set constructed from subintervals of the multisyntenic region while still fulfilling the requirements given above.
+While a definition without requiring maximality would be consistent, it would allow multiple multisynteny annotations of the same dataset as well as overlapping multisyntenic regions.
 If a multisyntenic region encompasses all samples in a population/dataset, we term it to be core syntenic; otherwise we call it merasyntenic (from ancient greek μερiκως, meaning partial).
 % briefly, synteny intersection + realignment
 Synteny is transitive; that is, if region $a$ on sample $A$ is syntenic to regions $b, c$ on samples $B, C$, $b$ also has to be syntenic to $c$, and vice versa, as synteny is also symmetric.
