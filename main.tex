@@ -128,11 +128,12 @@ First, no two regions can overlap each other on any organism unless $A=B$, as an
 The same consideration makes it impossible for one multisyntenic region to contain another.
 A situation that could give rise to such an overlap would instead be annotated by msyd as separate, adjacent multisyntenic regions.% for the, along with the non-overlapping regions $a \setminus b$ and $b \setminus a$.% . containing forbidden by the 
 Knowing that multisyntenic regions cannot overlap, we can define directed sample-adjacency.
-$A$ and $B$ are $i$-adjacent, if there does not exist a multisyntenic region $C$ such that $A_i < C_i < B_i$.
+$A$ and $B$ are directedly $i$-adjacent, if there does not exist a multisyntenic region $C$ such that $A_i < C_i < B_i$.
+To write $i$-adjacency, we use $A \prec_i B$.
 Directed sample-adjacency is an asymmetric relation, and any multisyntenic region can only ever be predecessor and successor to at most one other region per sample.
 We can further observe that it is impossible for $A$ and $B$ to »cross« each other, that is for the order of $A$ and $B$'s representative intervals to contradict each other on any two samples both $A$ and $B$ are present on, as this would violate the condition that both $A$ and $B$ be part of a syntenic whole-genome alignment.
 Formally, this requirement can be expressed as $A_i < B_i \implies \forall j \in S(A) \cap S(B): A_j < B_j$.
-We can use this property to derive a sample-independent definition of directed adjacency: $A < B \iff \exists i \in S(A) \cap S(B): A_i < B_i$.
+We can use this property to derive a sample-independent definition of directed adjacency: $A \prec B \iff \exists i \in S(A) \cap S(B): \nexists C: A_i < C_i < B_i$.
 This relation is similar to sample-adjacency, but is undefined if $A$ and $B$ do not share a sample.
 
 % similarity to assembly graph? => genomes as paths
@@ -166,7 +167,7 @@ The graph construction algorithm itself is also linear, requiring a single scan 
 Memory-wise, the graph requires two references per sample and multisyntenic region beyond the base multisynteny representation, with only a constant single reference per sample additionally required during construction.
 
 GFA export is performed by traversing the graph using the same order as during graph construction
-\footnote{at no additional computational cost, as the sorting has already been done at this point},
+\footnote{At no additional computational cost, as the sorting is retained in the node list.},
 though in the worst case as many private regions as samples need to be annotated in every traversal step.\\
 The GFA export supports using the W-line feature added in version 1.1 of the GFA standard to explicitly annotate all or a selection of sample's paths through the MPG.% , we can add the sample paths to the GFA output as W-lines.
 Further, the origin and samples present in a node are added to each node using the annotations defined in the rGFA extension of the GFA1 standard.
@@ -179,6 +180,8 @@ This derives from the need to access genomes from many samples to obtain the nod
 Using \texttt{pysam}'s FASTA class for dynamically reading from the genome files as required helped reduce required memory, but demand can still be substantial in datasets with many samples and large genomes.%though in the worst case all genomes are still required to be in memory simultaneously.
 See Table \ref{table:benchmarks} for concrete benchmarking results on two datasets.
 
+\subsection*{Properties of the multisynteny graph}
+%\newcommand{\aln}{\mathcal{A}}
 % go into properties, linearized structure, coresyn bounds
 % necessary branching after node
 % motivate here after the fact?
@@ -186,10 +189,21 @@ See Table \ref{table:benchmarks} for concrete benchmarking results on two datase
 % compare explicitly to pure sequence/variation graph?
 % link to SV allele discussion + panco
 
-\subsection*{Properties of the multisynteny graph}
-%\newcommand{\aln}{\mathcal{A}}
+After having defined and introduced the multisyntenic pangenome graph, we can now investigate some of its properties in more detail.
+First, we can see that the MPG is acyclic.
+Again consider two nodes in the graph $A, B$.
+Without loss of generality, we can assume both to be multisyntenic nodes, as any private node can only connect two multisyntenic nodes.
+Let $a, b$ be the samples used as a reference when aligning $A, B$, and $S(X)$ and $X_i$ describe the samples $X \in \{A, B\}$ is present on and its representative interval on sample $i$, respectively.%hen we can refer to the samples used as a reference for $A, B$ as $a, b$
+We assume $A$ and $B$ to induce a cycle, that is for there to be both a path $A\to\dots\to C\to\dots\to B$ and $B\to\dots\to C'\to\dots\to A$.
+Private nodes along this path can be ignored, as they are essentially extended edges between multisyntenic nodes.
+By the construction of the multisynteny graph, these paths imply that $A\prec\dots\prec C\prec\dots\prec B\prec C'\prec\dots\prec A$.
+Consider the samples used at each of these steps.
+It cannot be a single sample $i$, as that would directly imply the contradiction $A_i < A_i$.
+% not two either, crossing aln => 3 things
+% argue contradiction from transitive aln, has to be subset of identity A -> A
+Therefore, there have to be at least 
 
-After having defined and introduced the multisyntenic pangenome graph, we can now 
+
 We consider two multisyntenic regions $M$ and $M'$ that are both upstream and downstream of each other in genomes $q$ and $q'$, forming a circle in the graph representation.
 Because downstream/upstreamness is transitive, this case covers all possible circles in the graph.
 Formally, we can express this as $\exists q, q': M[q] < M'[q] \wedge M'[q'] < M[q']$.
@@ -204,7 +218,7 @@ M[q] &< M'[q] &\\
 M[q'] &< M'[q'] &\mathrm{but} M'[q'] < M'[q]\mathrm{!}
 \end{eqnarray*}
 
-%There are a few assumptions underlying this proof, some of which may be violated in practice.
+There are a few assumptions underlying this proof, some of which may be violated in practice.
 Note that msyd's implementation of the realignment step uses \texttt{minimap2} to compute alignments.
 Its fast minimizer-based approximative algorithm is not guaranteed to find the optimal alignment and may not always be monotonic, particularly in highly diverged or repetitive regions. % suboptimal alignments.% these conditions.
 %An additional source of alignment ambiguity is the stitching together of leftover non-multisyntenic sequence during the realignment step.\\
