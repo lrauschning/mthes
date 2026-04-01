@@ -107,7 +107,7 @@ As we assume reads to be Poisson distributed, we can simply multiply our coverag
 % => make msyd output more useful
 Using msyd, it is possible to comprehensively characterize multisynteny in a dataset of genome assemblies.
 Msyd reports its output in Population Synteny Format (PSF), a custom file format inspired by VCF
-\footnote{Msyd also supports exporting to VCF format using symbolic allele annotations to store synteny calls alongside small variants, but symbolic alleles are not straightforward to parse and cannot adequately represent all information present in msyd output.}.
+\footnote{Msyd also supports exporting to VCF format using symbolic allele annotations to store synteny calls alongside small variants, but symbolic alleles are not straightforward to parse and cannot represent all information present in msyd output, particularly alignments and non-reference multisyntenic regions.}.
 A PSF record contains one mulitsyntenic region on one line, and starts with a BED-like position on the reference it has been aligned to, allowing tabix indexing.
 Following this, the position the multisyntenic region each sample and the alignment to the genomic region of the reference is given, with each sample separated by a TAB character and samples the multisyntenic region is not present in annotated as \texttt{.}, analogous to how small variants are reported in VCF format.
 \\
@@ -144,9 +144,8 @@ To include private regions in our representation, we can substitute an adjacency
 We call these private nodes, and other nodes multisynteny nodes, among which we can further differentiate core and merasyntenic nodes.\\
 %As msyd's internal representation 
 With this addition, the multisynteny graph becomes a pangenome graph; that is, for every sample there is an ordered set of nodes connected by directed edges such that the sequence obtained by walking along the path aligns well to the sample's genome, though small variants are not represented.
-For the multisynteny graph, this ordered set is guaranteed to be an acyclic path, as any node is either part of a syntenic alignment to another genome for multisyntenic nodes or has only a single incoming and outgoing edge for private nodes; in fact, we will be able to prove later that the multisynteny graph is acyclic.
-Using the features added in version 1.1 of the GFA standard, we can add the sample paths to the GFA output as W-lines.
-Further, we can use node labels to annotate each node with its used reference, corresponding interval and all samples passing through it.
+In fact, this ordered set is guaranteed to be an acyclic path, as any node is either a multisyntenic node and thus part of a syntenic alignment to another genome or a private node with only a single incoming and outgoing edge.\\%; in fact, we will be able to prove later that this graph is acyclic.\\
+Reflecting that the addition of private regions allows the graph to represent the sequence of the pangenome along with multisynteny calles, we term it \emph{Multisyntenic Pangenome Graph (MPG)}.
 
 \subsection*{Constructing a Multisynteny Graph}
 % graph construction algo, briefly explained
@@ -155,12 +154,12 @@ Internally, the graph is represented as a sorted list of nodes, with each node c
 This allows efficient forward and backward traversal, but avoids excessive pointer chasing and fragmented memory allocation.
 Private nodes are encoded implicitly in the genomic coordinates associated with each multisyntenic node.
 The graph is divided by chromosome, allowing all algorithms to be parallelized by chromosomes.\\
-Since every node in the multisynteny graph has at most as many successors as there are samples, and the path of each sample through the graph is acyclic and mutually compatible, we can construct this graph representation using a simple linear scan through the multisyntenic regions.
+Since every node in the MPG has at most as many successors as there are samples, and the path of each sample through the graph is acyclic and mutually compatible, we can construct this graph representation using a simple linear scan through the multisyntenic regions.
 During the scan, we store a reference to the node indicating the current position on each sample.
 When encountering a new multisyntenic region, a new node is initialized containing predecessor-links to the current node on all samples the region contains.
 The successor-lists of these nodes are then updated to contain the newly initialized node, and it is added to the node list.
-This graph construction procedure avoids both lookahead and lookback by exploiting the nature of the multisynteny graph as union of a finite set of non-branching paths; to work successfully, it requires nodes to be scanned in an order compatible with the partial ordering derived from the directed adjacency relation.
-This can be ensured by simply sorting the multisynteny regions according to this relation prior to scanning.\\
+This graph construction procedure avoids both lookahead and lookback by exploiting the nature of the MPG as union of a finite set of non-branching paths; to work successfully, it requires nodes to be scanned in an order compatible with the partial ordering derived from the directed adjacency relation.
+This can be ensured by simply sorting the multisynteny calls according to this relation prior to scanning.\\
 As msyd's intersection algorithm ensures sorting, only switches to different realignment targets can introduce breaks in this sorting.
 This does not happen often in practice, so the appropriate output sorting is expected to take linear time in the average-case.%performed in expectation in linear time in expectation.
 The graph construction algorithm itself is also linear, requiring a single scan through the multisyntenic regions.
@@ -168,23 +167,29 @@ Memory-wise, the graph requires two references per sample and multisyntenic regi
 
 GFA export is performed by traversing the graph using the same order as during graph construction
 \footnote{at no additional computational cost, as the sorting has already been done at this point},
-though in the worst case as many private regions as samples need to be annotated in every traversal step.
-Annotating sample paths as W-lines requires one graph traversal per sample, although only the nodes contained in the sample need to be visited at this stage.
-In practice, this stage of the algorithm does however have the highest memory requirements, as the genomes of all organisms need to be available for annotating nodes in the GFA file with their respective sequences.
-Using \texttt{pysam}'s FASTA class for dynamically reading from the genome files as required helped minimize required memory, though in the worst case all genomes are still required to be in memory simultaneously.
-See Table \ref{table:benchmarks} for concrete benchmarking results on two datasets.
+though in the worst case as many private regions as samples need to be annotated in every traversal step.\\
+The GFA export supports using the W-line feature added in version 1.1 of the GFA standard to explicitly annotate all or a selection of sample's paths through the MPG.% , we can add the sample paths to the GFA output as W-lines.
+Further, the origin and samples present in a node are added to each node using the annotations defined in the rGFA extension of the GFA1 standard.
+%we can use node labels to annotate each node with its used reference, corresponding interval and all samples passing through it.
+Annotating sample paths as W-lines requires one graph traversal per sample, although only the nodes contained in the sample need to be visited at this stage.\\
 
+The GFA export step has the highest memory requirements of all graph construction steps, despite favourable computational complexity.
+This derives from the need to access genomes from many samples to obtain the node sequences in the graph
+%In practice, this stage of the algorithm does however have the highest memory requirements, as the genomes of all organisms need to be available for annotating nodes in the GFA file with their respective sequences.
+Using \texttt{pysam}'s FASTA class for dynamically reading from the genome files as required helped reduce required memory, but demand can still be substantial in datasets with many samples and large genomes.%though in the worst case all genomes are still required to be in memory simultaneously.
+See Table \ref{table:benchmarks} for concrete benchmarking results on two datasets.
 
 % go into properties, linearized structure, coresyn bounds
 % necessary branching after node
 % motivate here after the fact?
 % => respect global properties, avoid collapsing repetitive regions
+% compare explicitly to pure sequence/variation graph?
 % link to SV allele discussion + panco
 
+\subsection*{Properties of the multisynteny graph}
+%\newcommand{\aln}{\mathcal{A}}
 
-\subsection*{Proof of Non-Circularity}
-\newcommand{\aln}{\mathcal{A}}
-
+After having defined and introduced the multisyntenic pangenome graph, we can now 
 We consider two multisyntenic regions $M$ and $M'$ that are both upstream and downstream of each other in genomes $q$ and $q'$, forming a circle in the graph representation.
 Because downstream/upstreamness is transitive, this case covers all possible circles in the graph.
 Formally, we can express this as $\exists q, q': M[q] < M'[q] \wedge M'[q'] < M[q']$.
