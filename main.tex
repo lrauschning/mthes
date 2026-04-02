@@ -182,6 +182,15 @@ See Table \ref{table:benchmarks} for concrete benchmarking results on two datase
 
 \subsection*{Properties of the multisynteny graph}
 \newcommand{\aln}{\mathcal{A}}
+\begin{figure*}[ht]
+	\centering
+	\includegraphics[width=0.8\textwidth]{img/msyd-graph.pdf}
+	\caption{
+		\textbf{Illustration of the Multisyntnic Pangenome Graph (MPG).}.
+		Temporary figure, to be changed.\\
+	}
+	\label{fig:covcalc}
+\end{figure*}
 % go into properties, linearized structure, coresyn bounds
 % necessary branching after node
 % motivate here after the fact?
@@ -202,7 +211,7 @@ The definition of multisynteny requires that $\aln_{i\to j}(A_i) = A_j$ for all 
 We assume $A$ and $B$ to induce a cycle, that is for there to be both a path $A\to C\to\dots\to B$ and $B\to\dots\to C'\to A$.
 Private nodes along this path can be ignored, as they are essentially extended edges between multisyntenic nodes.
 By the construction of the multisynteny graph, these paths imply that $A\prec C\prec\dots\prec B\prec \dots \prec C'\prec A$.
-For every one of these steps, there must be at least one sample $\ell_i$ such that $X^i_{\ell^i} < X^{i+1}_{\ell_{i+1}}$, with $X^i$ as the multisyntenic region at position $i$ along the path.
+For every one of these steps, there must be at least one sample $\ell_i$ such that $X^i_{\ell_i} < X^{i+1}_{\ell_{i+1}}$, with $X^i$ as the multisyntenic region at position $i$ along the path.
 Since alignments are monotonic, and intervals of multisyntenic regions have to align to each other for all samples the region is present in, we can write each these steps in terms of an alignment to any sample.
 We further know that both $\ell_0, \ell_i \in S(A)$.
 We write
