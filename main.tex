@@ -284,7 +284,11 @@ In fact, the emitted GFA file contains comments indicating the chromosome subgra
 At the same time, as syntenic alignments are found using minimap2's approximate and SyRI may also fall back to a heuristic approach in complex situations, the multisyntenic pangenome graph constructed by msyd may in pratice be less than fully collapsed, particularly in highly diverged or repetitive regions.
 Approaches to further collapse the graph or filter out rare or small nodes may be useful in practice, in particular with regard to private nodes.
 
-Which graph is ideal to will depend 
+Which graph representation is ideal will of course depend on the nature of the dataset and scientific question.
+The MPG differs from other current pangenome representations.
+It has a more regular structure, and aims to capture large-scale structure over local events.
+In the next section, I will outline a procedure using the regular structure of the MPG to define a pangenomic coordinate system termed PanCo, allowing genomic coordinates to be compared across different samples in a principled and consistent way\footnote{Note that a similar procedure is in fact used to ensure consistent sorting across samples during MPG construction}.
+This not only serves a direct purpose, but also demonstrates the advantages of a representation possessing strong structural guarantees, and illustrates how these can be used to derive efficient algorithms appropriate for modern genomics datasets.
 
 \section*{Pangenomic Coordinates}
 
