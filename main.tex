@@ -181,7 +181,7 @@ Using \texttt{pysam}'s FASTA class for dynamically reading from the genome files
 See Table \ref{table:benchmarks} for concrete benchmarking results on two datasets.
 
 \subsection*{Properties of the multisynteny graph}
-%\newcommand{\aln}{\mathcal{A}}
+\newcommand{\aln}{\mathcal{A}}
 % go into properties, linearized structure, coresyn bounds
 % necessary branching after node
 % motivate here after the fact?
@@ -194,37 +194,77 @@ First, we can see that the MPG is acyclic.
 Again consider two nodes in the graph $A, B$.
 Without loss of generality, we can assume both to be multisyntenic nodes, as any private node can only connect two multisyntenic nodes.
 Let $a, b$ be the samples used as a reference when aligning $A, B$, and $S(X)$ and $X_i$ describe the samples $X \in \{A, B\}$ is present on and its representative interval on sample $i$, respectively.%hen we can refer to the samples used as a reference for $A, B$ as $a, b$
-We assume $A$ and $B$ to induce a cycle, that is for there to be both a path $A\to\dots\to C\to\dots\to B$ and $B\to\dots\to C'\to\dots\to A$.
+This time, we will also be using the syntenic alignment $\aln_{i\to j}$of two sample genomes $i, j$.
+We will treat the alignment as a function mapping an interval on sample $i$ to the corresponding position on sample $j$.
+If the input interval does not have a syntenic alignment anywhere on sample $j$, the alignment shall map it to a zero-width interval immediately after the last interval that aligns.
+Note that $\aln$ is a monotonic function though not necessarily injective or surjective.
+The definition of multisynteny requires that $\aln_{i\to j}(A_i) = A_j$ for all samples $i, j \in S(A)$ for a multisyntenic region $A$.\\
+We assume $A$ and $B$ to induce a cycle, that is for there to be both a path $A\to C\to\dots\to B$ and $B\to\dots\to C'\to A$.
 Private nodes along this path can be ignored, as they are essentially extended edges between multisyntenic nodes.
-By the construction of the multisynteny graph, these paths imply that $A\prec\dots\prec C\prec\dots\prec B\prec C'\prec\dots\prec A$.
-Consider the samples used at each of these steps.
-It cannot be a single sample $i$, as that would directly imply the contradiction $A_i < A_i$.
-% not two either, crossing aln => 3 things
-% argue contradiction from transitive aln, has to be subset of identity A -> A
-Therefore, there have to be at least 
-
-
-We consider two multisyntenic regions $M$ and $M'$ that are both upstream and downstream of each other in genomes $q$ and $q'$, forming a circle in the graph representation.
-Because downstream/upstreamness is transitive, this case covers all possible circles in the graph.
-Formally, we can express this as $\exists q, q': M[q] < M'[q] \wedge M'[q'] < M[q']$.
-Consider the alignment $\aln_{q \to q'}$.
-If this hasn't explicitly been constructed, we can induce it from two alignments to a common reference $r$: $\forall i \aln_{q \to q'}:= \aln^{-1}_{q' \to r}[\aln_{q \to r}[i]]$.
-Such an $r$ must exist, and be either the reference used during the realignment leading to $M$ or $M'$.
-We can quickly see the two parts of the statement leading to a contradiction when we consider that multisyntenic regions are defined to be aligning on all organisms they cover:% at $\aln_{q \to q'}$ , we can see a contradiction emerge quickly to our :
-
+By the construction of the multisynteny graph, these paths imply that $A\prec C\prec\dots\prec B\prec \dots \prec C'\prec A$.
+For every one of these steps, there must be at least one sample $\ell_i$ such that $X^i_{\ell^i} < X^{i+1}_{\ell_{i+1}}$, with $X^i$ as the multisyntenic region at position $i$ along the path.
+Since alignments are monotonic, and intervals of multisyntenic regions have to align to each other for all samples the region is present in, we can write each these steps in terms of an alignment to any sample.
+We further know that both $\ell_0, \ell_i \in S(A)$.
+We write
 \begin{eqnarray*}
-M[q] &< M'[q] &\\
-\aln_{q\to q'}[M[q]] &< \aln_{q \to q'}[M'[q]] &\mathrm{Alignments are monotonic}\\
-M[q'] &< M'[q'] &\mathrm{but} M'[q'] < M'[q]\mathrm{!}
+A_i < X^0_i < \aln_{\ell_i \to i}(X^1) <\dots < \aln_{\ell_{i} \to i} (X^{i}) < \aln_{\ell_i \to i} (A_{\ell_i})\\
+A_i < \dots < \aln_{\ell_i \to i} (A_{\ell_i})\\
+A_i < A_i
 \end{eqnarray*}
+, in the last step using that all regions in $A$ have to align to each other.
+This is obviously a contradiction, proving that the graph is circle-free.
 
-There are a few assumptions underlying this proof, some of which may be violated in practice.
-Note that msyd's implementation of the realignment step uses \texttt{minimap2} to compute alignments.
-Its fast minimizer-based approximative algorithm is not guaranteed to find the optimal alignment and may not always be monotonic, particularly in highly diverged or repetitive regions. % suboptimal alignments.% these conditions.
-%An additional source of alignment ambiguity is the stitching together of leftover non-multisyntenic sequence during the realignment step.\\
-The following SyRI step is also heuristic, but should be guaranteed to return a set of monotonic syntenic alignments, upholding the conditions for the above argument despite two heuristic steps.
-If either of the steps misses or wrongly filters a genuine alignment as suboptimal, however, the representation may be under-collapsed, falsely reporting haplotypes as distinct when they are not.
-%This proof does thus not guarantee that an msyd run may not produce output inducing a circular graph representation in certain edgecases, but instead serve to justify its pruning as making an approximative component of the algorithm match the mathematical guarantees of an exact algorithm.
+%iConsider the samples used along all of these steps. 
+%Let $i, l$ be the samples used in these steps first and last of these steps (not necessarily distinct).
+%
+%They cannot all be the same sample $i$, as that would directly imply a contradiction: $A_i < C_i < B_i < C'_i$, but also $C'_i < A_i < C_i$ if we walk the cycle twice.
+%
+%Consider now 
+%
+%If they are distinct, a similar contradiction arises when considering the properties of alignments.
+%Let $i, j$ be the samples used in the first and last step, respectively.
+%Then $\aln_{j\to i}(C'_j) < \aln_{j\to i}(A_j)$ must hold, as $C'_j < A_j$ and alignments are monotonic.
+%Similarly, 
+%
+%As $\aln{j\to i}(A_j) = A_i$, we obtain $\aln_{j\to i}(C'_j) < A_i < C_i$. 
+%This also causes a contradiction, as we can see $A_i < C_i <  $
+%We can expand $A_i < C_i < $
+%along with $C'_j < A_j < \aln_{j\to i}(C_i)$
+%We now consider only steps in the cycle where the sample is changed, and show that this cannot result in such a chain either. 
+%
+%% 
+%Assuming only two distinct samples $i, j$ in the chain also induces an immediate contradiction: $\aln_{i\to j} $
+%
+%$C_i < B_i < C'_i$, but also $C'_i < A_i < C_i$, if we walk the cycle twice.
+%% not two either, crossing aln => 3 things
+%% argue contradiction from transitive aln, has to be subset of identity A -> A
+%% not sure how to best make this arg, or if just to use old one?
+%Therefore, there have to be at least three distinct samples $i, j, k$ in the chain going from $A$ to $A$.
+%We consider the ai
+%By the definition of multisynteny, we know $A_i$ to align to $A_j$
+%
+%
+%We consider two multisyntenic regions $M$ and $M'$ that are both upstream and downstream of each other in genomes $q$ and $q'$, forming a circle in the graph representation.
+%Because downstream/upstreamness is transitive, this case covers all possible circles in the graph.
+%Formally, we can express this as $\exists q, q': M[q] < M'[q] \wedge M'[q'] < M[q']$.
+%Consider the alignment $\aln_{q \to q'}$.
+%If this hasn't explicitly been constructed, we can induce it from two alignments to a common reference $r$: $\forall i \aln_{q \to q'}:= \aln^{-1}_{q' \to r}[\aln_{q \to r}[i]]$.
+%Such an $r$ must exist, and be either the reference used during the realignment leading to $M$ or $M'$.
+%We can quickly see the two parts of the statement leading to a contradiction when we consider that multisyntenic regions are defined to be aligning on all organisms they cover:% at $\aln_{q \to q'}$ , we can see a contradiction emerge quickly to our :
+%
+%\begin{eqnarray*}
+%M[q] &< M'[q] &\\
+%\aln_{q\to q'}[M[q]] &< \aln_{q \to q'}[M'[q]] &\mathrm{Alignments are monotonic}\\
+%M[q'] &< M'[q'] &\mathrm{but} M'[q'] < M'[q]\mathrm{!}
+%\end{eqnarray*}
+%
+%There are a few assumptions underlying this proof, some of which may be violated in practice.
+%Note that msyd's implementation of the realignment step uses \texttt{minimap2} to compute alignments.
+%Its fast minimizer-based approximative algorithm is not guaranteed to find the optimal alignment and may not always be monotonic, particularly in highly diverged or repetitive regions. % suboptimal alignments.% these conditions.
+%%An additional source of alignment ambiguity is the stitching together of leftover non-multisyntenic sequence during the realignment step.\\
+%The following SyRI step is also heuristic, but should be guaranteed to return a set of monotonic syntenic alignments, upholding the conditions for the above argument despite two heuristic steps.
+%If either of the steps misses or wrongly filters a genuine alignment as suboptimal, however, the representation may be under-collapsed, falsely reporting haplotypes as distinct when they are not.
+%%This proof does thus not guarantee that an msyd run may not produce output inducing a circular graph representation in certain edgecases, but instead serve to justify its pruning as making an approximative component of the algorithm match the mathematical guarantees of an exact algorithm.
 
 \section*{Pangenomic Coordinates}
 
