@@ -98,15 +98,15 @@ The motivation for these projects was increasingly shifting away from a technolo
 % shift over to VCF format, 1000 GP/human genome diversity
 In order to efficiently compute associations between genotype and phenotype, genotypes of multiple samples have to be aggregated into a single, numerical matrix representation\cite{shabalin12}.
 To store the genotypes collected in large-scale sequencing efforts, the Variant Call Format was developed by the 1000 Genomes Project\cite{durbin10}.
-VCF closely follows this matrix representations, and while updates over the years have added ways to encode larger variations into the standard, its representation remains centred on cataloguing single-nucleotide polymorphisms in multiple samples.\\
-In a way, this represented a step backwards in genome representations, going from the deciphering of the exact (if not always complete) base sequence to a list of genotypes at segregating sites, analogous to Mendel's genotypes but at much higher scale.
-This representation also makes it impossible to describe a sample's genotype without referring to the reference; and combining samples using different reference genomes (or different versions/subsets of the same) is challenging, often requiring reprocessing of the raw sequencing data.
-The results of association studies
+VCF closely follows this matrix representation, and while updates over the years have added ways to encode larger variations into the standard, its representation remains centred on cataloguing single-nucleotide polymorphisms in multiple samples.\\
+This represented a step away from genome assembly, going from the deciphering of the exact (if usually not complete) base sequence to a list of genotypes at segregating sites, analogous to Mendel's genotypes but at much higher scale and without requiring directly observable phenotypes.
 
 % go into gwas peaks + genome annotations?
+%The results of association studies
 
 % emergence of long reads
 % briefly state of the art: long-read based de novo assembly
+\cite{nurk22, rhie23} % t2t, y chr
 
 \section*{Assembling Genomes}
 
@@ -192,6 +192,7 @@ These alignments are then used to refine the graph, by adding additional edges (
 
 
 \section*{Contemporary Genome Representations}
+This representation also makes it impossible to describe a sample's genotype without referring to the reference; and combining samples using different reference genomes (or different versions/subsets of the same) is challenging, often requiring reprocessing of the raw sequencing data.
 
 % pangenome stuff
 
