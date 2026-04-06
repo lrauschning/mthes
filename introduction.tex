@@ -238,43 +238,57 @@ This representation also makes it impossible to describe a sample's genotype wit
 		\textbf{Illustration of the SyRI algorithm.}\\
 		\textbf{Top}, in the first step, SyRI identifies a syntenic backbone of conserved genome structure between the reference and query.
 		\textbf{Bottom}, after identifying syntenic regions, leftover regions are known to be structurally variable, and are annotated appropriately in a multi-step process (see main text).
-		Finding conserved structure first both makes the algorithmic problem tractable, and helps to avoid calling spurious distal similarities as structural variation.
-		This is illustrated in the purple translocation with a dashed outline, in which case the large, syntenic alignment is a more parsimonious annotation than the secondary alignment indicating a translocation.\\
+		Finding conserved structure first both makes the algorithmic problem tractable, and helps to avoid calling spurious similarities as structural variation.
+		This is illustrated by the translocation drawn with a dashed outline (purple): here the large, syntenic alignments including both regions are a more parsimonious annotation than inserting a translocation based on the drawn secondary alignment.\\
 		Figure inspired by \cite{goel19}.
 	}
 	\label{fig:syri}
 \end{figure*}
 
-SyRI is a tool written by Manish Goel to compare the genome structure between a reference and query sequence\cite{goel19}.
-Its core insight is that finding \emph{syntenic}, that is structurally conserved, segments is far easier than finding rearrangements, and after all syntenic regions have been found all that is left to do is to annotate the remaining sequence as the right type of structural rearrangement.\\
+SyRI is a tool written by Manish Goel to compare the genome structure between a reference and query assemblies\cite{goel19}.
+Its core insight is that finding \emph{syntenic}, that is structurally conserved, segments is far easier than finding rearrangements, and after all syntenic regions have been found all that is left to do is to annotate the remaining sequence as the right kind of structural rearrangement.\\
 This is reflected in the SyRI algorithm:
 First, syntenic regions are identified from a whole-genome alignment by selecting a longest path of consistent alignments covering each chromosome.
 Two alignments are considered consistent if the regions they align occur in the same order in both genomes -- intuitively, this can be understood as two lines drawn between the aligning regions not crossing each other (compare also Fig. \ref{fig:syri}).
-Second, inverted alignments are added to cover gaps in the path, finding inversions.
-After that, remaining gaps are filled with inconsistent alignments annotated as translocations, if available.
-Secondary inconsistent alignments of syntenic regions are annotated likewise as duplications.
+Second, inverted alignments corresponding to gaps in the alignment are found, added to the syntenic path and annotated as non-translocated inversions.
+After that, alignments in remaining gaps are annotated as translocations, if available.
+Secondary inconsistent alignments of syntenic regions are likewise annotated as duplications.
 In a final step, cross-chromosomal translocations are identified and regions without any alignment (syntenic or otherwise) are annotated as highly diverged.\\
-After annotating genome structure, SyRI goes back to the raw alignment to identify small variants between the reference and sample.
+After finding genome structure, SyRI goes back to the raw alignment to identify small variants between the reference and sample.
 Both small and large variants are reported in a custom output format; small variants are also reported as a VCF file.
 SyRI's output can be visualized using the plotsr utility\cite{goel22}.
 
-SyRI's syntenic calls are used as the base for msyd's identification of shared genomic structure (described below), so SyRI forms our most central dependency.
-To maintain it in a usable state for msyd and more generally, SyRI was updated to use the 3.x version of \texttt{pandas}, and run in versions of python newer than 3.11.
-This required a partial rewrite of SyRI's internal datastructures and the way they are accessed using Cython's TypedMemoryView interface to account for pandas' change to copy-on-write behaviour.
-Along the way, some of SyRI's error handling was modernized, particularly to always give a non-zero return value on failure and avoid silent errors.\\
-All changes made to SyRI were upstreamed, and incorporated into a new release.
+\subsection*{The Multi-Synteny Detector (msyd)}
 
-
-\subsection*{The Multisynteny Detector (msyd)}
+\begin{figure*}[ht]
+	\centering
+	\includesvg[width=0.8\textwidth]{img/multisynteny.svg}
+	\caption{
+		\textbf{Illustration of msyd's multisynteny concept.}\\
+		\textbf{Left}, \emph{core syntenic} block or region.
+		This has conserved structure in all samples, though it may still contain small variants.
+		It can be identified very efficiently, regardless of the choice of reference.
+		\textbf{Middle}, \emph{merasynteny} including the reference sample.
+		This is identified as »bycatch« during the core synteny intersection step.
+		It is conserved in some, but not all samples, and corresponds to an allele of a structural variant.
+		In this case, the region indicated on G3 does not form part of a syntenic alignment to any other sample, and may be considered a \emph{private} region.
+		\textbf{Right}, \emph{non-reference merasyntenic} block.
+		Structurally conserved in some samples not including the chosen reference, this region will be missed by the initial intersection step to the sample labelled as reference.
+		In the illustrated case, it is deleted on the reference.
+		It can be recovered by performing the intersection again on a different sample.
+		Conceptually, there is no difference between merasynteny that includes and excludes the reference. 
+	}
+	\label{fig:syri}
+\end{figure*}
 
 % how to balance with bsc thesis?
 % maybe separate by section? this section only old stuff, new stuff in graph?
 % more detail than syri, but try to focus on new things
 
 Using SyRI, structurally conserved and variable regions between a sample and reference assembly can be found in a straightforward and efficient manner.
-In my Bachelor's Thesis supervised by Manish Goel, I developed a tool to merge SyRI's synteny calls across multiple samples compared to a common reference.
+In my Bachelor's Thesis supervised by Manish Goel, I developed a tool to merge SyRI's synteny calls across multiple samples called against a common reference.
 Later, I worked on extending this tool with a realignment step to recover structural features not present on the reference, and named it the multisynteny detector (msyd).
-As msyd's structural similarity calls form the baseline for the synteny-centred graph representation of a pangenome described in this thesis, I will give an outline of msyd's core concepts and the alterations made to it for this project in this section.
+As msyd's structural similarity calls form the baseline for the synteny-centred graph representation of a pangenome described in this thesis, I will give an outline of msyd's core concepts.
 For more details on the msyd algorithm, the interested reader is referred to my Bachelor's Thesis and msyd's documentation, available in the GitHub repository.
 
 % core vs merasynteny
@@ -283,17 +297,25 @@ A multisyntenic region is defined as a set of at least two intervals on multiple
 We further require multisyntenic regions to be maximal, defined as requiring that neither the multisyntenic region itself nor any set of subintervals can be extended to larger intervals or additional samples without violating the mutual synteny requirement.
 %that is there cannot be any other interval  that can be added to the multisyntenic region or a set constructed from subintervals of the multisyntenic region while still fulfilling the requirements given above.
 While a definition without requiring maximality would be consistent, it would allow multiple multisynteny annotations of the same dataset as well as overlapping multisyntenic regions.
-If a multisyntenic region encompasses all samples in a population/dataset, we term it to be core syntenic; otherwise we call it merasyntenic (from ancient greek μερiκως, meaning partial).
+If a multisyntenic region encompasses all samples in a population/dataset, we term it to be core syntenic; otherwise we call it merasyntenic (from ancient Greek μερiκως, meaning partial).
 % briefly, synteny intersection + realignment
-Synteny is transitive; that is, if region $a$ on sample $A$ is syntenic to regions $b, c$ on samples $B, C$, $b$ also has to be syntenic to $c$, and vice versa, as synteny is also symmetric.
+Synteny is transitive; that is, if region $a$ on sample $A$ is syntenic to regions $b, c$ on samples $B, C$, $b$ also has to be syntenic to $c$, and vice versa, as synteny is always symmetric.
 This allows the efficient identification of all core syntenic regions: if we choose any sample as a reference to compare all other samples to, we can intersect the synteny calls on the common reference sample to obtain all core synteny with only $\mathcal{O}(n)$ required whole-genome alignments and SyRI runs.
 This will also identify any merasynteny that includes the chosen reference sample, but miss any for which this is not the case.\\
-In order to recover these missing annotations, msyd includes a realignment procedure that iteratively repeats the intersection procedure with different references until all sequences are annotated.
-This is performed separately for each gap between two coresyntenic regions\footnote{As they cover all samples, there cannot be a multisyntenic region that crosses a coresyntenic region}, avoiding expensive whole-genome alignments at this step.
+In order to recover these missing annotations, msyd includes a realignment algorithm that iteratively repeats the intersection procedure with different references until all multisynteny is found.
+This is performed separately for each gap between two coresyntenic regions -- as they cover all samples, there cannot be a multisyntenic region that crosses a coresyntenic region --, avoiding expensive whole-genome alignments at this step, as it can require up to $\mathcal{O}(n^2)$ alignments.
 
+
+\subsection*{Dependency Modernizations}
 % changes: parallelization, move away from pandas datastructures
 In order to make msyd suitable for graph construction, the codebase was improved in a few key ways.
 In particular, the core datastructures were rewritten to avoid SyRI-style pandas DataFrames and instead use a Cython list type per chromosome.
 This new datastructure has a more convenient API, but more importantly can be efficiently serialized and thus allows parallelization across different chromosomes without interfering with Python's Global Interpreter Lock.
-In total, this allows msyd to efficiently utilize more cores, especially for steps other than the sequence alignment.
+In total, this allows msyd to use multiple cores, especially for steps other than the sequence alignment.
+
+To maintain it in a usable state for msyd and more generally, SyRI was updated to use the 3.x version of \texttt{pandas}, and run in versions of python newer than 3.11.
+This required a partial rewrite of SyRI's internal datastructures and the way they are accessed using Cython's TypedMemoryView interface to account for pandas' change to copy-on-write behaviour.
+Along the way, some of SyRI's error handling was modernized, particularly to always give a non-zero return value on failure and avoid silent errors.\\
+All changes made to SyRI were upstreamed, and incorporated into the 1.8.0 release.
+
 
