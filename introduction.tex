@@ -104,9 +104,27 @@ This represented a step away from genome assembly, going from the deciphering of
 % go into gwas peaks + genome annotations?
 %The results of association studies
 
+% TODO bridge?
+
 % emergence of long reads
 % briefly state of the art: long-read based de novo assembly
-\cite{nurk22, rhie23} % t2t, y chr
+In the late 2010s, long read sequencing technology became available.
+While dramatically increasing read lengths, initially these technologies suffered from high error rates and were costly to use.
+This made the technology less interesting for at the time well-established large-scale cohort sequencing projects, but long reads proved incredibly useful to genome assembly.
+Using long reads and suitable assembly algorithms, much more contiguous genome assemblies could be produced, requiring less or even no scaffolding.%seq to a much higher standard meassemblies could 
+For a more in-depth discussion of long-read sequencing technologies and assembly algorithms, see the next section.
+While initial long-read assemblies contained many small-scale errors due to high error rates in the underlying sequencing technology, these can be corrected using short reads from the same sample in a step known as polishing, though recent decreases in error rates of long read technologies have largely made this step unnecessary.%this has become less necessary as error rates in long-read sequ.
+Long reads renewed interest in genome assembly, and made more difficult genomes tractable.
+This inspired the ongoing Earth Biogenome Project and Vertrebrate Genome Project's efforts to provide a reference genome for every known eukaryotic/vertebrate species\footnote{With the Earth Biogenome project in particular acting as a common roof for many other clade-specific sequencing projects}\cite{lewin18, rhie21}.\\
+Using long reads, the complete sequence of a human autosomal genome (and, separately, the human Y chromosome) could be deciphered for the first time in 2022/23\cite{nurk22, rhie23}. % t2t, y chr
+While this initial assembly was a highly manual and very cost-intensive approach \footnote{Not entirely unlike the initial Human Genome Project.}, the lessons learned as well as further improvements in long-read sequencing technology allowed the development of assembly algorithms and sequencing standards allowing for the economical and reliable production of chromosome-scale assemblies in human.
+
+
+In the next section, I will go into more detail about current genome assembly methods
+
+% pangenomes
+
+
 
 \section*{Assembling Genomes}
 
