@@ -229,6 +229,14 @@ This representation also makes it impossible to describe a sample's genotype wit
 
 \section*{SyRI and msyd}
 
+The genome representation proposed in this thesis has two main dependencies, the Synteny and Rearrangement Identifier (SyRI) and the Multisynteny Detector (msyd).
+These dependencies are central to the proposed representation, both in regards software implementation and its conceptual underpinnings.
+Both SyRI and msyd were previously developed in the same lab, one (msyd) as part of my Bachelor's Thesis.
+In this section, a brief outline of the inner workings of both methods is given, along with a description of modernizations carried out to make both softwares suitable for this project. %As an understanding of the essential steps in both of these dependencies is required for 
+This is intended to give readers who are not familiar with either tool the necessary background to understand guarantees on the representation's input that are used in formal arguments later in this thesis, and an understanding of the limitations of these same inputs.
+SyRI is described in more detail in \cite{goel19}.
+The initial version of msyd is described in my Bachelor's Thesis, and in the API documentation.
+
 \subsection*{The Synteny and Rearrangement Identifier (SyRI)}
 \begin{figure*}[ht]
 	\centering
@@ -250,6 +258,9 @@ Its core insight is that finding \emph{syntenic}, that is structurally conserved
 This is reflected in the SyRI algorithm:
 First, syntenic regions are identified from a whole-genome alignment by selecting a longest path of consistent alignments covering each chromosome.
 Two alignments are considered consistent if the regions they align occur in the same order in both genomes -- intuitively, this can be understood as two lines drawn between the aligning regions not crossing each other (compare also Fig. \ref{fig:syri}).
+Finding this longest syntenic path is a complex optimization problem;% it is harder than ordinary sequence alignment in particular, because a region can have multiple alignments 
+SyRI approaches it by representing aligned blocks reported by ordinary whole-genome aligners as nodes in a graph.
+It then finds a longest path in this graph through a divide-and-conquer algorithm, falling back to an exact solver implemented in the \texttt{longestrunsubsequence} or a greedy heuristic in the base case, depending on its size and complexity.% with an edge if they are adjacent and consistent 
 Second, inverted alignments corresponding to gaps in the alignment are found, added to the syntenic path and annotated as non-translocated inversions.
 After that, alignments in remaining gaps are annotated as translocations, if available.
 Secondary inconsistent alignments of syntenic regions are likewise annotated as duplications.
@@ -313,9 +324,9 @@ In particular, the core datastructures were rewritten to avoid SyRI-style pandas
 This new datastructure has a more convenient API, but more importantly can be efficiently serialized and thus allows parallelization across different chromosomes without interfering with Python's Global Interpreter Lock.
 In total, this allows msyd to use multiple cores, especially for steps other than the sequence alignment.
 
-To maintain it in a usable state for msyd and more generally, SyRI was updated to use the 3.x version of \texttt{pandas}, and run in versions of python newer than 3.11.
-This required a partial rewrite of SyRI's internal datastructures and the way they are accessed using Cython's TypedMemoryView interface to account for pandas' change to copy-on-write behaviour.
-Along the way, some of SyRI's error handling was modernized, particularly to always give a non-zero return value on failure and avoid silent errors.\\
+To maintain it in a usable state for msyd and for general use, SyRI was updated to be compatible with the 3.x version of \texttt{pandas}, and run in versions of python newer than 3.11.
+This required a partial rewrite of SyRI's internal datastructures and the way Cython's TypedMemoryView interface is used to account for pandas' change to copy-on-write behaviour in version 3.
+Along the way, some of SyRI's error handling was modernized, particularly to avoid silent errors and always return a non-zero exit code in any error state.\\
 All changes made to SyRI were upstreamed, and incorporated into the 1.8.0 release.
 
 
