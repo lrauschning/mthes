@@ -1,4 +1,4 @@
-
+% small intro blurb?
 
 
 \section*{Phaseability}
@@ -57,7 +57,6 @@ We can thus derive a simple minimal requirement for reconstructing the phasing o
 \label{theo-phase-simple}
 \end{theorem}
 
-%TODO proof
 A proof is simple to construct: if the condition is true, for any two haplo-unique sites on the same haplotype $u_i, u_j$ with $i < j$, a chain of neighbouring haplo-unique sequences $u_i, u_{i+1}, \dots, u_{j-1}, u_{j}$ can be found and by the transitive closure $\mathcal{P}(u_i, u_j)$ must equal $1$/true.
 If we know all neighbouring haplo-unique sequences to be covered, the absence of such a chain implies that $u_i$ and $u_j$ do not share a haplotype, and thus $\mathcal{P}(u_i, u_j)$ must evaluate to $0$/false.\\
 
@@ -68,7 +67,6 @@ However, considering practical limitations, having positive evidence for every h
 Otherwise, it may be relaxed to require a read only for all except one of the haplotypes.
 %requiring a read only a read covering all adjacent haplo-unique sequences on all haplotypes can be lowered to all except one of the haplotypes.
 
-%TODO statmodelling
 Using some statistical modelling, we can turn this simple minimal requirement into an estimate of the minimal sequencing coverage required to confidently resolve the phasing of a genome.
 It should be noted that limitations in read accuracy and genome assembly and phasing algorithms may in practice impose somewhat higher requirements; however, calculating a lower bound can answer if single-technology phased assembly is at all possible, and provide guidance on which parameters are limiting factors and thus should prioritized for protocol optimization.
 
