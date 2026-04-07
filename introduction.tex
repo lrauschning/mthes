@@ -125,12 +125,12 @@ While this initial assembly was a highly manual and very cost-intensive approach
 
 It is now feasible to obtain largely complete genome assemblies for larger and larger samples -- currently, several hundred in the largest efforts\cite{hprc2}. % cite weigel?
 %The largest project in human >200 samples, while in arabidopsis.
-Many projects have been started to use these technologies to obtain genomes for a representative set of the population, an effort generally termed pangenomics. % review24?
-This takes inspiration from bacterial genomics, where a genome has for a longer time been studied as a dynamic assembly of genes, many of which can freely be shared within or across taxon using plasmids and other non-chromosomal carries of genetic information.% interchange, particular in non-chromosomal DNA, has long been studied 
+Many projects have been started to use these technologies to obtain genomes for a representative set of the population, an effort generally termed pangenomics\cite{matthews24}. % review24?
+%This takes inspiration from bacterial genomics, where a genome has for a longer time been studied as a dynamic assembly of genes, many of which can freely be shared within or across taxon using plasmids and other non-chromosomal carries of genetic information.% interchange, particular in non-chromosomal DNA, has long been studied 
 Humans have been the main focus of these efforts, but there are also projects in model organisms, in particular \textit{A. thaliana} \cite{lian24, nassir25, wang26, hprc2}. % cite mulder?
-While pangenome projects promise a more complete view of genomic variation in their target organism, a major stated aim of pangenomic efforts, particularly the Human Pangenome Reference Consortium, is to provide a reference as a shared community resource that can be used for downstream applications, similar to the initial release of the human genome.
+While pangenome projects promise a more complete view of genomic variation in their target organism, a major stated aim of pangenomic efforts, particularly the Human Pangenome Reference Consortium, is to provide a reference as a shared community resource that can be used for downstream applications, similar to the initial release of the human genome\cite{liao23}.
 This requires a new concept of what a reference is, how it can (or should be) used and a software ecosystem to make the new reference useful in practice.\\
-After going into more details about current sequencing and genome assembly methods in the following section, I will survey some current approaches for a pangenomic reference in the next section thereafter.
+After going into more details about the current state of the art in sequencing and genome assembly in the following section, I will survey some current approaches for a pangenomic reference in the section thereafter.
 I will conclude that there is no strong consensus, and many current approaches suffer from unclear conceptualization.% approach lacks substantial conceptual 
 
 % pangenomes
@@ -263,7 +263,7 @@ These alignments are then used to refine the graph, by adding additional edges (
 % => both dont work, example read alignment?
 % briefly mention additional haplotypes in HGRC Grch 38?
 
-
+The 
 
 % only use for term?
 % bacteria: gene-centred approach
@@ -285,6 +285,8 @@ These alignments are then used to refine the graph, by adding additional edges (
 
 % lead in to questions for this thesis
 This representation also makes it impossible to describe a sample's genotype without referring to the reference; and combining samples using different reference genomes (or different versions/subsets of the same) is challenging, often requiring reprocessing of the raw sequencing data.
+
+%This takes inspiration from bacterial genomics, where a genome has for a longer time been studied as a dynamic assembly of genes, many of which can freely be shared within or across taxon using plasmids and other non-chromosomal carries of genetic information.% interchange, particular in non-chromosomal DNA, has long been studied 
 
 \section*{SyRI and msyd}
 
@@ -348,7 +350,7 @@ SyRI's output can be visualized using the plotsr utility\cite{goel22}.
 		It can be recovered by performing the intersection again on a different sample.
 		Conceptually, there is no difference between merasynteny that includes and excludes the reference. 
 	}
-	\label{fig:syri}
+	\label{fig:multisyn}
 \end{figure*}
 
 % how to balance with bsc thesis?
