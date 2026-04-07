@@ -123,14 +123,16 @@ This inspired the ongoing Earth Biogenome Project and Vertrebrate Genome Project
 Using long reads, the complete sequence of a human autosomal genome (and, separately, the human Y chromosome) could be deciphered for the first time in 2022/23\cite{nurk22, rhie23}. % t2t, y chr
 While this initial assembly was a highly manual and very cost-intensive approach \footnote{Not entirely unlike the initial Human Genome Project.}, the lessons learned as well as further improvements in long-read sequencing technology allowed the development of assembly algorithms and sequencing standards allowing for the economical and reliable production of chromosome-scale assemblies in human and many other species.
 
-It is now feasible to obtain largely complete genome assemblies for larger and larger samples -- currently, several hundred in the largest efforts\cite{hprc2}. % cite weigel?
-%The largest project in human >200 samples, while in arabidopsis.
-Many projects have been started to use these technologies to obtain genomes for a representative set of the population, an effort generally termed pangenomics\cite{matthews24}. % review24?
-%This takes inspiration from bacterial genomics, where a genome has for a longer time been studied as a dynamic assembly of genes, many of which can freely be shared within or across taxon using plasmids and other non-chromosomal carries of genetic information.% interchange, particular in non-chromosomal DNA, has long been studied 
-Humans have been the main focus of these efforts, but there are also projects in model organisms, in particular \textit{A. thaliana} \cite{lian24, nassir25, wang26, hprc2}. % cite mulder?
-While pangenome projects promise a more complete view of genomic variation in their target organism, a major stated aim of pangenomic efforts, particularly the Human Pangenome Reference Consortium, is to provide a reference as a shared community resource that can be used for downstream applications, similar to the initial release of the human genome\cite{liao23}.
-This requires a new concept of what a reference is, how it can (or should be) used and a software ecosystem to make the new reference useful in practice.\\
-After going into more details about the current state of the art in sequencing and genome assembly in the following section, I will survey some current approaches for a pangenomic reference in the section thereafter.
+Again echoing the history of human genomics, after this initial assembly interest has turned to cataloguing diversity and providing a community resource, an effort spearheaded by the Human Pangenome Reference Consortium.
+Instead of a haplotype- or small variant-focused effort, the consortium aims to assemble the genomes of a representative sample of all of humanity.
+%across all parts of the human genome 
+%These advances have made it economical to assemble larger samples, and enabled the launch of the Human Pangenome Reference Consortium.
+In principle, this effort promises a complete view of genomic variation, and it is claimed to improve downstream applications by reducing reference bias\cite{liao23}.
+Pangenome projects are not restricted to humans, but there are similar efforts in all major model organisms and many species of agricultural or ecological interest \cite{manythings}.
+
+However, to replace the current use of a linear genomic reference, a new concept of is, how and when it can used and a software ecosystem to make this actionable are required.
+Developing these standards is a stated aim of the human pangenome project\cite{liao23, hprc-workinggroups}.\\
+After going into more details about the current state of the art in sequencing and genome assembly in the following section, I will survey some proposed approaches for a pangenomic reference in the section thereafter.
 I will conclude that there is no strong consensus, and many current approaches suffer from unclear conceptualization.% approach lacks substantial conceptual 
 
 % pangenomes
@@ -247,7 +249,9 @@ To integrate ultralong reads, they are aligned to the initial unitig graph(hifia
 These alignments are then used to refine the graph, by adding additional edges (both) and duplicating nodes to resolve ambiguous paths (only hifiasm).
 
 % phasing
+% go into potato/polyploids
 
+Using sequencing approaches described in the previous section, it is possible to routinely produce chromosome-scale assemblies -- that is, assemblies that are largely complete and contiguous.
 \cite{ebpseqrecs, sarashetti24}
 
 % additional info, highlight hic in particular
@@ -263,7 +267,16 @@ These alignments are then used to refine the graph, by adding additional edges (
 % => both dont work, example read alignment?
 % briefly mention additional haplotypes in HGRC Grch 38?
 
-The 
+While short-read based genotyping of very large cohorts remains popular in human genomics, the sequencing approaches described in the last section have made it possible to produce high-quality assemblies for larger and larger samples.
+
+It is now feasible to obtain largely complete genome assemblies for larger and larger samples -- currently, several hundred in the largest efforts\cite{hprc2}. % cite weigel?
+%The largest project in human >200 samples, while in arabidopsis.
+Many projects have been started to use these technologies to obtain genomes for a representative set of the population, an effort generally termed pangenomics\cite{matthews24}. % review24?
+%This takes inspiration from bacterial genomics, where a genome has for a longer time been studied as a dynamic assembly of genes, many of which can freely be shared within or across taxon using plasmids and other non-chromosomal carries of genetic information.% interchange, particular in non-chromosomal DNA, has long been studied 
+Humans have been the main focus of these efforts, but there are also projects in model organisms, in particular \textit{A. thaliana} \cite{lian24, nassir25, wang26, hprc2}. % cite mulder?
+
+Multiple consortia have been started to generate 
+
 
 % only use for term?
 % bacteria: gene-centred approach
