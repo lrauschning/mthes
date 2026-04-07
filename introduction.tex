@@ -251,10 +251,14 @@ These alignments are then used to refine the graph, by adding additional edges (
 % phasing
 % go into potato/polyploids
 
-Using sequencing approaches described in the previous section, it is possible to routinely produce chromosome-scale assemblies -- that is, assemblies that are largely complete and contiguous.
-\cite{ebpseqrecs, sarashetti24}
 
 % additional info, highlight hic in particular
+
+% draw conclusionlc
+In fact, a recent preprint demonstrated a chromosome assembly and contact map information using only ONT sequencing, at an estimated cost of approximately 3000€ per human sample \cite{gross26}.
+
+Using sequencing approaches described in the previous section, it is possible to routinely produce chromosome-scale assemblies -- that is, assemblies that are largely complete and contiguous.
+\cite{ebpseqrecs, sarashetti24}
 
 
 \section*{Contemporary Pangenome Representations}
@@ -267,15 +271,38 @@ Using sequencing approaches described in the previous section, it is possible to
 % => both dont work, example read alignment?
 % briefly mention additional haplotypes in HGRC Grch 38?
 
-While short-read based genotyping of very large cohorts remains popular in human genomics, the sequencing approaches described in the last section have made it possible to produce high-quality assemblies for larger and larger samples.
+%While short-read based genotyping of very large cohorts remains popular in human genomics, 
+The sequencing approaches described in the last section have made it possible to produce high-quality assemblies for larger and larger samples.
+Currently, the Human pangenome reference consortium has released phased genome assemblies of 200 samples, with plans to release the data of 350 samples in summer 2026 \cite{hprc2, hprc-timeline}.
+% add weigelllab arabidopsis?
+Humans have been the main focus of these efforts, but there are also major projects in model organisms, in particular the 1001G+ project in \textit{A. thaliana} \cite{1001g+, nassir25, wang26, hprc2}. % cite mulder?
+Increasing availability of \cite{lian24, igolkina25}
 
-It is now feasible to obtain largely complete genome assemblies for larger and larger samples -- currently, several hundred in the largest efforts\cite{hprc2}. % cite weigel?
-%The largest project in human >200 samples, while in arabidopsis.
-Many projects have been started to use these technologies to obtain genomes for a representative set of the population, an effort generally termed pangenomics\cite{matthews24}. % review24?
+As these modern datasets contain complete assembled genomes, they cannot adequately be represented in a VCF file like previous short-read genotyping projects without significant loss of information.
+VCF format cannot represent nested variants or structural variation differing in nested variants
+Additionally, phasing information would be lost, and retrieving the actual genomic sequence of a sample for e.g. read alignment would require another reference genome and be cumbersome at best.
+%Given that a representation is supposed to %ofor applications like read alignment or genome annotation would be cumbersome at best.
+Fundamentally, VCF's »list of differences« approach was designed to store small, simple variants in a suitable way for association studies, and makes it unsuitable as a reference.
+
+One may ask why the genomes need any kind of representation at all; storing the full sequence of all samples in separate (or even the same) FASTA file would preserve all information, and make obtaining the sequence trivial.
+This approach is not without precedent; the BLAST database is maintained in a similar way\cite{blastdoc}.
+While this »non-representation« would indeed not lose any information in the sample genomes, it would run into practical and conceptual limitations in many usecases.
+On the practical side, representing all sequences separately takes a constant amount of space per sample.
+This increases storage requirements, but more importantly makes using the reference in downstream analyses more memory- and compute-intensive.
+For example, a resequencing pipeline would need to align every read to >400 haploid genomes if it were to switch to the current human pangenome reference represented in this way.
+%The current human pangenome reference's raw haplotypes  
+This also shows the conceptual limitations of this non-representational approach; what would it mean in the described experiment for a read to align only to one genome, all 400, or to some but not others -- particularly if it does not align equally well all the time?
+Treating all samples separately may not remove any feature of the samples, but it fails to represent the information gleaned from their aggregation.\\
+It is however in my view a useful thought experiment to compare proposed representations to this non-representation, particular when considering their use in downstream analyses.
+This can elucidate advantages of the proposed representations and highlight information that is lost compared to the representation as unaggregated samples, ultimately highlighting desired features of a representation.
+In particular, a feature that emerges in this consideration is the ability to reconstruct the non-represented haplotypes from a representation; this guarantees that the representation does not lose information present in the samples, and ensures that it can be converted to any other pangenome representation (as the non-representation is the starting point for all attempts at representation).
+Pangenome representations fulfilling this criterion can be conceptualized as an annotation of sorts to the non-representation, providing context and highlighting key features without a loss of information. % too wishy washy?
+
+
+
+
+%Many projects have been started to use these technologies to obtain genomes for a representative set of the population, an effort generally termed pangenomics\cite{matthews24}. % review24?
 %This takes inspiration from bacterial genomics, where a genome has for a longer time been studied as a dynamic assembly of genes, many of which can freely be shared within or across taxon using plasmids and other non-chromosomal carries of genetic information.% interchange, particular in non-chromosomal DNA, has long been studied 
-Humans have been the main focus of these efforts, but there are also projects in model organisms, in particular \textit{A. thaliana} \cite{lian24, nassir25, wang26, hprc2}. % cite mulder?
-
-Multiple consortia have been started to generate 
 
 
 % only use for term?
