@@ -24,9 +24,10 @@
 Recent progress in genome sequencing and assembly technologies have made full genome assemblies more and more accessible, to the point where it is now feasible to obtain assemblies for entire sample populations in many species.
 Translating this data into knowledge has, however, been a significant challenge so far.
 Genome assemblies are a large and heterogeneous kind of data.
-Making the information contained within them accessible is far from trivial, and requires computational approaches scaling to efficiently utilize large computational resources.
+Making the information contained within them accessible is far from trivial, and requires carefully designed computational tools to efficiently handle large datasets and work well in HPC systems.
 
-The matter of how to represent today's genome assembly datasets is absolutely crucial to any attempt at analyzing them, both in allowing efficient algorithms to be constructed and in limiting, enabling or focusing the questions that we ask a dataset.
+The matter of how to represent today's genome assembly datasets is absolutely crucial to any attempt at analyzing them.
+A well-designed representation is required to design efficient algorithms, but it can also enable or limit us in the questions we can ask a dataset.%nlimiting, enabling or focusing the questions that we ask a dataset.
 Despite several recent proposals and a slowly maturing software ecosystem, I will argue that the representation of today's genome datasets is an unsolved question still requiring considerable conceptual contributions.
 %While for previous resequencing datasets the VCF format has emerged as a de facto standard -- despite significant limitations especially regarding storage efficiency --, there is still considerable disagreement about how to represent modern datasets of genome assemblies. 
 To inform this discussion and provide background to the approach proposed in this thesis, the two sections below give a history of how genomics got to where it is now and what kind of datasets are possible given the current state of the art.
@@ -48,7 +49,7 @@ Mendel's genomes also lacked any internal structure; gametes were viewed as prod
 The genome as such was a passive container of alleles, and not conceptualized beyond this.\\
 After the rediscovery of Mendel's work in the early 20th century, the discovery of chromosomes as the bearer of heredity information and further crossing experiments performed among others by Thomas Hunt Morgan's laboratory in \textit{Drosophila melanogaster} revealed the genome to consist of chromosomes with a linear structure.
 Through careful crossing, chromosomes were mapped, again determining the genotype solely from the phenotype of the organism and its offspring.
-These genetic maps charted genes with observable phenotypes along the chromosomes, and revealed a shuffling process known as recombination, acting by discrete crossover events with a determinable likelyhood at each position along the genetic map.\\
+These genetic maps charted genes with observable phenotypes along the chromosomes, and revealed a shuffling process known as recombination, acting by discrete crossover events with a determinable likelihood at each position along the genetic map.\\
 The genome had evolved from a few unordered letters to a set of linear maps, whose cellular component (if not molecular identity) was known to contemporary researchers.
 Like Mendel, however, genes along the genome were thought of and named for their observable, segregating phenotypes, and the absence of any genomic technologies made genotyping a slow and labourious process.\\
 Later, microscopy of chromosomes revealed a banded structure, which work in maize by Barbara McClintock and in \textit{Drosophila spp.} by Theodosius Dobzhansky showed to sometimes vary across individuals, initially without giving rise to observable macroscopic phenotypes.
@@ -58,10 +59,10 @@ Cytogenetics can thus be termed the first genomic technology; in fact, through c
 %Applying this new population genetic theory to the observed allele frequency of inversions in captive \textit{D. pseudoobscura} populations, these »cryptic polymorphisms« were revealed to have an effect on observed fitness, in particular in heterozygotes, a phenomenon that was then termed heterosis.
 % expand on this?
 Increasingly, the study of the genome became emancipated from the reliance of clearly segregating phenotypes for every genetic polymorphism, and the discovery of rearrangements revealed that genomes in a species could vary beyond the single-gene level. % a genetic or cytogenetic map could vary between different individuals of a population.
-Genotyping technology allowed population genetic studies for the first time, though these were limited in the number of polymorphisms that could be studied at a time. %studied a limited amount of polymorphisms at a time.
+%Genotyping technology allowed population genetic studies for the first time, though these were limited in the number of polymorphisms that could be studied at a time. %studied a limited amount of polymorphisms at a time.
 
 The discovery first of DNA as the molecule carrying genetic information and later of its 3D structure in the 1940s and 1950s by Avery\cite{avery42} and Franklin, Crick and Watson\cite{watson53} provided for the first time a vision to describe the genome at a molecular level.
-More molecular studies followed like the discovery of transcription, replication and the decoding of the genetic code, providing some understanding on a basepair level.
+More molecular studies followed like the decoding of the genetic code and the discovery of promoters and transcription factor binding sites, providing some understanding on a basepair level\cite{nirenberg61, roeder19}.
 This opened the door to a radically different way of conceptualizing the genome -- not as an ordered map of segregating phenotypes or bands under a microscope, but as a string of bases along a phosphate backbone.
 As DNA became accessible by cloning, PCR and eventually early sequencing methods, databases of DNA sequences started to emerge.
 These would contain small fragments of the genome, often genes of particular interest, promotor or plasmid sequences.
@@ -88,7 +89,8 @@ This powered the HapMap project immediately after the human reference had been a
 % short read sequencing useful + cheap
 Later, sequencing costs declined sharply with the advent of early next-generation sequencing technologies.
 Especially in the beginning, these produced very short and error-prone untargeted reads that were not directly useful on their own.
-Using newly developed algorithms based on earlier approaches for searching for genes in reference genomes and databases\cite{li08, kent02}, the reads could be aligned to the reference genome, recovering the position they were sampled from.
+However, the reads could be aligned to the reference genome, recovering the position they were sampled from.
+Many classic read alignment tools were developed in this period, based on earlier approaches for searching for genes in reference genomes and databases\cite{li08, kent02}.
 Small differences in sequence between sample and reference could then be determined from these aligned reads using statistical models\cite{li08, mckenna10}.
 A key advantage over microarrays was the ability for \textit{de novo} variant discovery and to avoid the need for labourious microarray design and manufacturing, particularly in non-model organisms.
 At least for single-nucleotide variants or small indels in non-repetitive regions, next-generation sequencing allowed scalable comprehensive genotyping.
@@ -98,7 +100,7 @@ The motivation for these projects was increasingly shifting away from a technolo
 % shift over to VCF format, 1000 GP/human genome diversity
 In order to efficiently compute associations between genotype and phenotype, genotypes of multiple samples have to be aggregated into a single, numerical matrix representation\cite{shabalin12}.
 To store the genotypes collected in large-scale sequencing efforts, the Variant Call Format was developed by the 1000 Genomes Project\cite{durbin10}.
-VCF closely follows this matrix representation, and while updates over the years have added ways to encode larger variations into the standard, its representation remains centred on cataloguing single-nucleotide polymorphisms in multiple samples.\\
+VCF closely follows this matrix representation, and while updates over the years have added ways to encode larger variations into the standard, its representation remains centred on cataloguing single-nucleotide polymorphisms in multiple samples\cite{htsspecs}.\\
 This represented a step away from genome assembly, going from the deciphering of the exact (if usually not complete) base sequence to a list of genotypes at segregating sites, analogous to Mendel's genotypes but at much higher scale and without requiring directly observable phenotypes.
 
 % go into gwas peaks + genome annotations?
@@ -109,12 +111,14 @@ This represented a step away from genome assembly, going from the deciphering of
 % emergence of long reads
 % briefly state of the art: long-read based de novo assembly
 In the late 2010s, long read sequencing technology became available.
-While dramatically increasing read lengths, initially these technologies suffered from high error rates and were costly to use.
+While dramatically increasing read lengths, initially these technologies suffered from high error rates and were costly to use\cite{wang21}.
 This made the technology less interesting for at the time well-established large-scale cohort sequencing projects, but long reads proved incredibly useful to genome assembly.
 Using long reads and suitable assembly algorithms, much more contiguous genome assemblies could be produced, requiring less or even no scaffolding.%seq to a much higher standard meassemblies could 
 For a more in-depth discussion of long-read sequencing technologies and assembly algorithms, see the next section.
-While initial long-read assemblies contained many small-scale errors due to high error rates in the underlying sequencing technology, these can be corrected using short reads from the same sample in a step known as polishing, though recent decreases in error rates of long read technologies have largely made this step unnecessary.%this has become less necessary as error rates in long-read sequ.
-Long reads renewed interest in genome assembly, and made more difficult genomes tractable.
+While initial long-read assemblies contained many small-scale errors due to high error rates in the underlying sequencing technology, these can be corrected using short reads from the same sample in a step known as polishing
+\footnote{Recent decreases in error rates and better assembly algorithms have made this step unnecessary when using modern sequencing platforms. Polishing can also introduce errors by over-correcting based on misaligned short reads.}%this has become less necessary as error rates in long-read sequ.
+\cite{hu24, mastoras24}.
+Long reads renewed interest in genome assembly, and made more difficult genomes tractable\cite{logsdon20}.
 This inspired the ongoing Earth Biogenome Project and Vertrebrate Genome Project's efforts to provide a reference genome for every known eukaryotic/vertebrate species\footnote{With the Earth Biogenome project in particular acting as a common roof for many other clade-specific sequencing projects}\cite{lewin18, rhie21}.\\
 Using long reads, the complete sequence of a human autosomal genome (and, separately, the human Y chromosome) could be deciphered for the first time in 2022/23\cite{nurk22, rhie23}. % t2t, y chr
 While this initial assembly was a highly manual and very cost-intensive approach \footnote{Not entirely unlike the initial Human Genome Project.}, the lessons learned as well as further improvements in long-read sequencing technology allowed the development of assembly algorithms and sequencing standards allowing for the economical and reliable production of chromosome-scale assemblies in human and many other species.
@@ -138,14 +142,18 @@ I will conclude that there is no strong consensus, and many current approaches s
 In this section, I will give a brief introduction into the process used to assemble a genome, highlighting the current state of the art.
 In particular, I will focus on long read-based \textit{de novo} phased assembly, as this offers the most complete characterization of the genome and has recently become economically possible in larger samples, including in species with fairly complex genomes.
 
+\subsection*{DNA Sequencing}
+
 % assembly now within reach
 % go into assembly algos
 As the genome is far too large to be sequenced in one go, it is fragmented and some of these fragments sequenced; these sequenced fragments are known as reads.
 The problem of reconstructing the sequence of the entire genome from the sequence of the sampled reads is known as genome assembly, and is often compared to assembling a jigsaw puzzle from its pieces.
-However, there are a few key differences between genome assembly and solving a puzzle; chiefly, sequencing reads vary in length and sometimes contain sequencing errors or artifacts of the biochemical processes required to prepare DNA for sequencing.
+However, there are a few key differences between genome assembly and solving a puzzle; chiefly, sequencing reads vary in length and sometimes contain sequencing errors or PCR artifacts.
 Also, unlike puzzle pieces, reads are typically sampled randomly from the genome, an approach known for historical reasons as shotgun sequencing.\\
-We can already see two properties required for a sequencing dataset to be used to successfully assemble a genome; there need to be reads covering the entire genome and enough overlapping reads to correct any sequencing errors present in individual reads, lest they be propagated to the final genome assembly.
-Both of these problems can be avoided by sampling more reads, so are in practice a minor problem in datasets of sufficient size -- but they still need to be accounted for during genome assembly.\\
+We can already see a minimum requirement for a sequencing dataset to be used to successfully assemble a genome; there need to be sufficient reads at every position to correct any sequencing errors present in individual reads, lest they be propagated to the final genome assembly.
+As during sequencing certain motifs are far more error prone than others, this means substantially more sequencing is required than just covering every position once. %error rates are not distributed evenly, this  
+In practice, this is usually a minor problem, as it can be avoided by simply sequencing more -- but this adds significant complexity to genome assembly techniques.
+%Both of these problems can be avoided by sampling more reads, so are in practice a minor problem in datasets of sufficient size -- but they still need to be accounted for during genome assembly.\\
 A more stubborn problem is presented by repetitive or low-complexity regions.
 These make reconstruction challenging by causing spurious similarity between reads, obscuring the real similarity signal -- in the puzzle analogy, this is analogous to the blue sky or dense foliage being the most challenging regions.\\
 Longer reads can help resolve repetitive sequences in two ways.
@@ -157,29 +165,56 @@ As a read gets longer, it can cover more of these imperfections, and can be used
 %Recent developments in sequencing technology have made progress toward resolving these regions, in particular the impressive read lengths achievable with ONT-ultralong protocols and their decreasing error rate.% of ONT reads improving read length and  long read sequencing
 
 It comes as little surprise then that recent developments in sequencing technology have primarily focused on increasing read length and decreasing error rate in long-read sequencing.
-Increasing throughput as well as competition has also made long-read sequencing more affordable, making higher sequencing depths economically feasible.
+%Increasing throughput as well as competition has also made long-read sequencing more affordable, making higher sequencing depths economically feasible.
 Read length as well as error rate are primarily driven by sequencing technology, but steps required to extract DNA from a sample and prepare it for sequencing may also limit achievable read length and coverage, especially in small or difficult samples.
 %In contrast, sequencing depth is mostly determined by sequencing cost and throughput, which is driven both by technology and by market forces.
 %While earlier efforts in the development of sequencing technology had focused primarily on increasing throughput and decreasing costs for large-scale resequencing projects, recent developments have primarily centred on increasing read lengths and decreasing the error rate of existing long read technology.
 %State of the art long-read sequencing is dominated by 
 %Key developments in this space include:
-%\begin{itemize}
-Modern developments in long-read sequencing technology arguably started with Pacific Biosciences' announcement of HiFi sequencing in 2018, providing for the first time long reads with a very low error rate\cite{pbhifi}.
-This as made possible by preparing a sequencing library containing circular instead of linear molecules of DNA with an adapter sequence, allowing the same read to be sequenced multiple times and a consensus call to be made.
-Meanwhile, incremental improvements to Oxford Nanopore Technology's sequencing platform helped reduce its error rate and increase throughput.
+
+\subsection*{Long Reads}
+
+Today, two companies dominate long read sequencing: Oxford Nanopore Technologies (ONT), founded in 2005, and Pacific Biosciences (PacBio), founded as Nanofluidics Inc. in 2004.
+The two companies develop two completely different sequencing technologies:
+PacBio's approach is based on sequencing by synthesis, similar to dominant short read techologies.
+A single DNA polymerase is attached to the bottom of a Zero-Mode Waveguide engineered on a lithographically produced flowcell.
+The sample DNA is introduced in single-stranded state along with labelled nucleotides.
+As the polymerase synthesizes the complementary strand to the input DNA, the label is cleaved from the incorporated nucleotide.
+This results in a fluorescence signal in the Zero-Mode Waveguide, which is read out by the sequencer to reconstruct the read's base sequence.
+This sequencing technology is sometimes also known as Single-Molecule, Real-Time (SMRT) Sequencing\cite{pbtech}.\\
+In contrast, ONT's platform relies on a nanopore, as implied by the name.
+The biotechnologically produced nanopore is situated in a membrane separating two small cells, across which a voltage is applied.
+This induces an ionic current that flows through the pore, and scales with the pore's resistance and the applied voltage\cite{onttech}.
+The sample DNA is attached to a motor protein, and fed through the pore.
+The resistance of the pore and thus the measured current varies based on which nucleotides are currently in the narrow pore.
+From this signal, the read sequence is reconstructed using a Machine Learning model\cite{onttech, wang21}.
+
+Modern developments in long-read sequencing technology arguably started with PacBio's announcement of HiFi sequencing in 2018, providing for the first time long reads with a low error rate\cite{pbhifi}.
+This as made possible by preparing a sequencing library containing circular instead of linear molecules of DNA with an adapter sequence, allowing the same read to be sequenced multiple times and a consensus call to be made.\\
+In 2023, PacBio released the Revio sequencing platform, drastically improving throughput and driving down sequencing costs both on release and in subsequent improvements to the platform\cite{pbrevio25, pbrevio23}.
+%This increased competition also helped drive down prices for ONT sequencing.%, and alltogether contributed to making long reads the new standard in genome assembly.
+
+At the same time, ONT's sequencing platform received multiple improvements, helping to reduce its error rate and increase throughput\cite{wang21}.
 Most notable among these are the release of the R10 pore chemistry in 2020 and the Dorado basecaller in 2022\cite{doradorelease, r10.3release, sanderson23}.
-In 2023, PacBio released the Revio sequencing platform, improving throughput and driving down costs both on release and in subsequent improvements to the platform\cite{pbrevio25, pbrevio23}.
-This increased competition also helped drive down prices for ONT sequencing.%, and alltogether contributed to making long reads the new standard in genome assembly.
 % HERRO here?
+In 2024, HERRO was released, demonstrating a substantial reduction in error rate for ONT reads by all-against-all alignment and Machine Learning-aided consensus calling of varying bases\cite{stanojevic24}.
+This technique was quickly adopted both by ONT's Dorado basecaller (there called Dorado correct) and hifiasm.
 
 While Oxford Nanopore Technology's sequencing platform had always been capable of sequencing very long reads\cite{jain18}, more stable pores and library preparation protocols optimized for ultralong reads made longer and longer read lengths achievable in practice.
 %referred to as ultralong, %focused continuous developments in library preparation but suffered from higher error rates as well as throughput.
 %While traditional PacBio or ONT long reads are usually shorter than \qty{30}{\kilo\bp}, the development of ultralong library preparation protocols have made it possible to sequence longer and longer reads with ONT.
-Megabase-scale reads are now regularly observed in mammalian genomes, with the longest reported read announced by Oxford Nanopore to be \qty{4.3}{\mega\bp}, or more than twice the size of the \textit{Haemophilus influenzae} genome, the first non-viral genome ever assembled\cite{whales, fleischmann95}.
+Individual megabase-scale reads are now regularly observed in mammalian genomes, with the longest reported read announced by Oxford Nanopore to be \qty{4.3}{\mega\bp}, or more than twice the size of the \textit{Haemophilus influenzae} genome, the first non-viral genome ever assembled\cite{whales, fleischmann95}.
 % extend into advantages of modern 
 
+To summarize, both ONT and PacBio sell state-of-the-art long read sequencing platforms.
+While ONT can produce dramatically longer reads with the right library preparation, PacBio still has a lower error rate, though this gap has gotten much narrower with recent developments.
+While PacBio sequencing machines are bulky and expensive, ONT sequencers are small and more affordable, though costs for consumables are still higher and throughput is lower per machine.
+In the next subsection, I will discuss how these modern sequencing technologies are used to assemble a genome. 
+
+\subsection*{Assembly Algorithms}
+
 % need connection here
-However, seuqencing itself is not enough to obtain a genomic sequence; the genome assembly puzzle still needs to be solved.
+Sequencing a genome is is not enough to obtain a genomic sequence; the genome assembly puzzle still needs to be solved.
 Even for the smallest eukaryotic genomes, sequencing datasets are far too large for humans to process, making computer programs the mainstay for genome assembly from the very beginning, though human judgement is still often required for quality control, setting appropriate parameters and scaffolding.
 Genome assembly is a complex computational problem
 % footnote or main text?
@@ -189,7 +224,9 @@ Early approaches used simple greedy heuristics joining maximally overlapping rea
 Almost all later assembly softwares use one of two algorithmic paradigms, both based on a graph representation of the sequencing reads
 \footnote{One recently developed linear-time algorithm presents a notable exception, see \cite{wong23}}.\\
 De Bruijn-graph based assemblers split reads into overlapping fragments, termed $k$-mers.
-These are represented in a graph as edges, connecting the two $k-1$-mers obtained by removing the first/last letter of the original $k$-mer\cite{pevzner01, compeau11}.
+A $k-mer$ found in the reads is represented in the de Bruijn graph as an edge.
+If they are not already in the graph, the two $k$-mers of length $k-1$ obtained by removing the first and last letter from the original $k$-mer are added to the graph as (labelled) nodes.
+They are connected by an edge corresponding to the read $k$-mer\cite{pevzner01, compeau11}.
 The genome has to contain all $k$-mers found in the reads; as such, it corresponds to a path traversing all edges in the graph, also known as an Eulerian path.
 The Eulerian path in a graph can be found efficiently, but exact repeats of size greater than $k$ will be collapsed, and sequencing errors need to be identified and corrected prior to graph construction.
 Most de Bruijn-graph based assemblers include additional heuristics to address these limitations.\\

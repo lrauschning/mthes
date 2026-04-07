@@ -3222,11 +3222,91 @@ url={https://doi.org/10.1038/s41467-023-38716-x}
    abstract = "Complete, accurate, cost-effective, and high-throughput reconstruction of bacterial genomes for large-scale genomic epidemiological studies is currently only possible with hybrid assembly, combining long- (typically using nanopore sequencing) and short-read (Illumina) datasets. Being able to use nanopore-only data would be a significant advance. Oxford Nanopore Technologies (ONT) have recently released a new flowcell (R10.4) and chemistry (Kit12), which reportedly generate per-read accuracies rivalling those of Illumina data. To evaluate this, we sequenced DNA extracts from four commonly studied bacterial pathogens, namely &#160;&#160;Escherichia coli&#160;&#160;, &#160;&#160;Klebsiella pneumoniae&#160;&#160;, &#160;&#160;Pseudomonas aeruginosa&#160;&#160; and &#160;&#160;Staphylococcus aureus&#160;&#160;, using Illumina and ONT’s R9.4.1/Kit10, R10.3/Kit12, R10.4/Kit12 flowcells/chemistries. We compared raw read accuracy and assembly accuracy for each modality, considering the impact of different nanopore basecalling models, commonly used assemblers, sequencing depth, and the use of duplex versus simplex reads. ‘Super accuracy’ (sup) basecalled R10.4 reads - in particular duplex reads - have high per-read accuracies and could be used to robustly reconstruct bacterial genomes without the use of Illumina data. However, the per-run yield of duplex reads generated in our hands with standard sequencing protocols was low (typically &lt;10 %), with substantial implications for cost and throughput if relying on nanopore data only to enable bacterial genome reconstruction. In addition, recovery of small plasmids with the best-performing long-read assembler (Flye) was inconsistent. R10.4/Kit12 combined with sup basecalling holds promise as a singular sequencing technology in the reconstruction of commonly studied bacterial genomes, but hybrid assembly (Illumina+R9.4.1 hac) currently remains the highest throughput, most robust, and cost-effective approach to fully reconstruct these bacterial genomes.",
   }
 
+@Article{wang21,
+author={Wang, Yunhao
+and Zhao, Yue
+and Bollas, Audrey
+and Wang, Yuru
+and Au, Kin Fai},
+title={Nanopore sequencing technology, bioinformatics and applications},
+journal={Nature Biotechnology},
+year={2021},
+month={Nov},
+day={01},
+volume={39},
+number={11},
+pages={1348-1365},
+abstract={Rapid advances in nanopore technologies for sequencing single long DNA and RNA molecules have led to substantial improvements in accuracy, read length and throughput. These breakthroughs have required extensive development of experimental and bioinformatics methods to fully exploit nanopore long reads for investigations of genomes, transcriptomes, epigenomes and epitranscriptomes. Nanopore sequencing is being applied in genome assembly, full-length transcript detection and base modification detection and in more specialized areas, such as rapid clinical diagnoses and outbreak surveillance. Many opportunities remain for improving data quality and analytical approaches through the development of new nanopores, base-calling methods and experimental protocols tailored to particular applications.},
+issn={1546-1696},
+doi={10.1038/s41587-021-01108-x},
+url={https://doi.org/10.1038/s41587-021-01108-x}
+}
+
+@article{mastoras24,
+  title    = "Highly accurate assembly polishing with {DeepPolisher}",
+  author   = "Mastoras, Mira and Asri, Mobin and Brambrink, Lucas and Hebbar,
+              Prajna and Kolesnikov, Alexey and Cook, Daniel E and Nattestad,
+              Maria and Lucas, Julian and Won, Taylor S and Chang, Pi-Chuan and
+              Carroll, Andrew and Paten, Benedict and Shafin, Kishwar",
+  abstract = "Accurate genome assemblies are essential for biological research,
+              but even the highest quality assemblies retain errors caused by
+              the technologies used to construct them. Base-level errors are
+              typically fixed with an additional polishing step that uses reads
+              aligned to the draft assembly to identify necessary edits.
+              However, current methods struggle to find a balance between
+              over-and under-polishing. Here, we present an encoder-only
+              transformer model for assembly polishing called DeepPolisher,
+              which predicts corrections to the underlying sequence using
+              Pacbio HiFi read alignments to a diploid assembly. Our pipeline
+              introduces a method, PHARAOH (Phasing Reads in Areas Of
+              Homozygosity), which uses ultra-long ONT data to ensure
+              alignments are accurately phased and to correctly introduce
+              heterozygous edits in falsely homozygous regions. We demonstrate
+              that the DeepPolisher pipeline can reduce assembly errors by
+              half, with a greater than 70\% reduction in indel errors. We have
+              applied our DeepPolisher-based pipeline to 180 assemblies from
+              the next Human Pangenome Reference Consortium (HPRC) data
+              release, producing an average predicted Quality Value (QV)
+              improvement of 3.4 (54\% error reduction) for the majority of the
+              genome.",
+  journal  = "bioRxiv",
+  month    =  sep,
+  year     =  2024,
+  language = "en"
+}
+
+
+@article{hu24,
+    author = {Hu, Jiang and Wang, Zhuo and Liang, Fan and Liu, Shan-Lin and Ye, Kai and Wang, De-Peng},
+    title = {NextPolish2: A Repeat-aware Polishing Tool for Genomes Assembled Using HiFi Long Reads},
+    journal = {Genomics, Proteomics & Bioinformatics},
+    volume = {22},
+    number = {1},
+    pages = {qzad009},
+    year = {2024},
+    month = {01},
+    abstract = {The high-fidelity (HiFi) long-read sequencing technology developed by PacBio has greatly improved the base-level accuracy of genome assemblies. However, these assemblies still contain base-level errors, particularly within the error-prone regions of HiFi long reads. Existing genome polishing tools usually introduce overcorrections and haplotype switch errors when correcting errors in genomes assembled from HiFi long reads. Here, we describe an upgraded genome polishing tool — NextPolish2, which can fix base errors remaining in those “highly accurate” genomes assembled from HiFi long reads without introducing excessive overcorrections and haplotype switch errors. We believe that NextPolish2 has a great significance to further improve the accuracy of telomere-to-telomere (T2T) genomes. NextPolish2 is freely available at https://github.com/Nextomics/NextPolish2.},
+    issn = {1672-0229},
+    doi = {10.1093/gpbjnl/qzad009},
+    url = {https://doi.org/10.1093/gpbjnl/qzad009},
+    eprint = {https://academic.oup.com/gpb/article-pdf/22/1/qzad009/59350449/qzad009.pdf},
+}
+
+
+
+
 @online{hprc2,
 	title = "HPRC Data Release 2",
 	author = "Human Pangenome Project",
 	year = 2025,
 	url={https://humanpangenome.org/hprc-data-release-2/},
+}
+
+@online{htsspecs,
+	title = "HTS Specs",
+	author = "GA4GH",
+	year = 2025,
+	url={https://samtools.github.io/hts-specs/},
 }
 
 @online{ebpseqrecs,
@@ -3243,6 +3323,13 @@ url={https://doi.org/10.1038/s41467-023-38716-x}
 	url={https://github.com/nanoporetech/dorado/releases/tag/v0.0.1},
 }
 
+@online{pbtech,
+	title = "How does HiFi sequencing work?",
+	author = "Pacific Biosciences",
+	year = 2026,
+	url={https://www.pacb.com/technology/hifi-sequencing/how-it-works/},
+}
+
 @online{pbhifi,
 	title = "Highly Accurate Single-Molecule Long Reads",
 	author = "Pacific Biosciences Inc",
@@ -3256,7 +3343,6 @@ url={https://doi.org/10.1038/s41467-023-38716-x}
 	year = 2020,
 	url={https://nanoporetech.com/news/news-r103-newest-nanopore-high-accuracy-nanopore-sequencing-now-available-store}
 }
-
 
 @online{pbrevio25,
 	title = "PacBio Announces Major Advances for Revio and Vega to Lower Genome Cost and Expand Multiomic Capabilities",
@@ -3279,6 +3365,13 @@ url={https://doi.org/10.1038/s41467-023-38716-x}
 	url={http://bozeman.mbt.washington.edu/phrap.docs/phrap.html}
 }
 
+@online{onttech,
+	title = {How Nanopore sequencing works},
+	year=2026,
+	author = "Oxford Nanopore",
+	journal = "ONT Website",
+	url={https://nanoporetech.com/platform/technology/basecalling},
+}
 @online{whales,
 	title = {From kilobases to "whales": a short history of ultra-long reads and high-throughput genome sequencing},
 	year=2021,
@@ -3286,7 +3379,8 @@ url={https://doi.org/10.1038/s41467-023-38716-x}
 	journal = "ONT Blog",
 	url={https://nanoporetech.com/blog/news-blog-kilobases-whales-short-history-ultra-long-reads-and-high-throughput-genome}
 }
-@article {Stanojevic24,
+
+@article{stanojevic24,
 	author = {Stanojevi{\'c}, Dominik and Lin, Dehui and Florez de Sessions, Paola and {\v S}iki{\'c}, Mile},
 	title = {Telomere-to-telomere phased genome assembly using error-corrected Simplex nanopore reads},
 	elocation-id = {2024.05.18.594796},
@@ -3376,7 +3470,33 @@ doi={10.15252/embr.201540179},
 url={https://doi.org/10.15252/embr.201540179}
 }
 
+@Article{roeder19,
+author={Roeder, Robert G.},
+title={50+ years of eukaryotic transcription: an expanding universe of factors and mechanisms},
+journal={Nature Structural {\&} Molecular Biology},
+year={2019},
+month={Sep},
+day={01},
+volume={26},
+number={9},
+pages={783-791},
+abstract={The landmark 1969 discovery of nuclear RNA polymerases I, II and III in diverse eukaryotes represented a major turning point in the field that, with subsequent elucidation of the distinct structures and functions of these enzymes, catalyzed an avalanche of further studies. In this Review, written from a personal and historical perspective, I highlight foundational biochemical studies that led to the discovery of an expanding universe of the components of the transcriptional and regulatory machineries, and a parallel complexity in gene-specific mechanisms that continue to be explored to the present day.},
+issn={1545-9985},
+doi={10.1038/s41594-019-0287-x},
+url={https://doi.org/10.1038/s41594-019-0287-x}
+}
 
+@article{nirenberg61,
+author = {Marshall W. Nirenberg  and J. Heinrich Matthaei },
+title = {The dependence of cell-free protein synthesis in <i>E. coli</i> upon naturally occurring or synthetic polyribonucleotides},
+journal = {Proceedings of the National Academy of Sciences},
+volume = {47},
+number = {10},
+pages = {1588-1602},
+year = {1961},
+doi = {10.1073/pnas.47.10.1588},
+URL = {https://www.pnas.org/doi/abs/10.1073/pnas.47.10.1588},
+eprint = {https://www.pnas.org/doi/pdf/10.1073/pnas.47.10.1588}}
 
 
 @article{fleischmann95,
