@@ -325,8 +325,13 @@ Minigraph has support for using its sequence-to-graph alignment to iteratively c
 First, a graph consisting of a single node is initialized from a reference sequence.
 Then, all other sequences in the pangenome are aligned to this graph representation.
 At each step, unaligned regions in the query sequence are added as nodes to the graph, and partially aligning nodes are broken up into multiple nodes.
-Due to the minimizer-based heuristic approach, the resultant graph can look different depending on the sample ordering, and small variants are not represented in the graph structure (though, if base-level alignment was performed, some mayb be reconstructed from the reported CIGAR strings).
-Because of sample annotations present in the rGFA, the genome % can we reconstruct initial sequence?
+Due to the minimizer-based heuristic approach, the resultant graph can look different depending on the sample ordering, and small variants are not represented in the graph structure.\\% (though, if base-level alignment was performed, some mayb be reconstructed from the reported CIGAR strings).
+The input genomes cannot be reconstructed from minigraph output.
+rGFA allows sample annotations on nodes specifying the samples they are associated with, however % nodes by their annotations, the genome % can we reconstruct initial sequence?
+minigraph seems to only emit these annotations for the sample contributing a node to the graph with no option to change this\footnote{Though this information is available to the algorithm and could in principle be emitted.}.
+Even if these were emitted, the fact that minigraph graphs can contain cycles would make a reconstructed genotype ambiguous as to the number of cyclic repeats it contains\cite{minigraphdoc}.
+Emitting P-lines in the output would ensure the sample genomes can be reconstructed from the output, but this is explicitly not planned in future releases\cite{minigraphissue}.
+
 % TODO figure?
 
 The minigraph-cactus pipeline has been designed to recover small variants not considered by minigraph's minimizer-based approach\cite{hickey24}.
