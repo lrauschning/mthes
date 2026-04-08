@@ -112,7 +112,7 @@ Following this, the position the multisyntenic region each sample and the alignm
 While this format is amenable to indexing and easy for users to parse in custom scripts, a significant downside to any custom file format is lacking integration with other tools.
 In the last two years, version 1 of the GFA format and its rGFA subset, originally developed to store intermediary representations of genome assembly, has increasingly become the standard for representing pangenomic datasets, while its .
 It is now supported by read-based genotypers, read and graph aligners as well as multiple visualization suites\cite{lotsofstuff}.
-Both \texttt{vg} and \texttt{gfatools} provide utilities for the file format\cite{githubs?}.\\
+Both \texttt{vg} and \texttt{gfatools} provide utilities for the file format\cite{garrison18, gfatools}.\\
 Given this developing software ecosystem and GFA's graph-based nature allowing greater flexibility than VCF format, finding a way to represent msyd's multisynteny calls in GFA1 format is desirable.
 In this section, I outline how multisynteny can be represented as a graph, how this was implemented efficiently in the multisynteny detector, and derive some properties of this representation that make it attractive compared to other graphical representations of pangenomic datasets.
 See the following section for how this representation can be used to define a pangenomic coordinate system, and the Discussion for its broader implications in the context of modern pangenomics and population genomics.% further development forward-looking implications 

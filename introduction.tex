@@ -277,7 +277,7 @@ The sequencing approaches described in the last section have made it possible to
 Currently, the Human pangenome reference consortium has released phased genome assemblies of 200 samples, with plans to release the data of 350 samples in summer 2026 \cite{hprc2, hprc-timeline}.
 % add weigelllab arabidopsis?
 Humans have been the main focus of these efforts, but there are also major projects in model organisms, in particular the 1001G+ project in \textit{A. thaliana} \cite{1001g+, nassir25, wang26, hprc2}. % cite mulder?
-Increasing availability of \cite{lian24, igolkina25}
+Increasing throughput and falling costs have also meant that recently, medium-sized assembly datasets can be prepared by individual, well-resourced labs without requiring consortia\cite{lian24, sun25, igolkina25, gross26}.
 
 As these modern datasets contain complete assembled genomes, they cannot adequately be represented in a VCF file like previous short-read genotyping projects without significant loss of information.
 VCF format cannot represent nested variants or structural variation differing in nested variants
@@ -309,9 +309,23 @@ Pangenome representations fulfilling this criterion can be conceptualized as an 
 
 % need bridge? talk about HPRC again?
 % pangenome graph stuff, try to justify?
+Early work on representing datasets of genome assemblies has been done in bacterial genomics, aided by shorter genomes that are easier to assemble\cite{sanderson23, matthews24, rojas-miranda25}.
+Though the term \emph{pangenome} was first used in the literature to describe genomic variation in a human tumour dataset, it became widespread in the bacterial community in the late 2000s\cite{sigaux00, matthews24}.
+%As bacterial genomes often contain non-chromosomal elements, they are more dynamic than 
+%all the more necessary
+%have been working with complete, assembled \cite{matthews24}.
+Bacterial genomes can change dynamically by taking up or losing plasmids and other mobile genetic elements, often shared across different species and providing traits that are adaptive in a certain environment \cite{bottery22, rodriguez-beltran21}. % cite
+Reflecting this genomic elasticity and a straightforward interpretation, gene-centric representations have historically been the most popular approach in bacterial genomes\cite{matthews24}.
+While there are many kinds of gene-centric pangenome representations, a common lexicon has evolved in the field, differentiating core genes found in every sample's genome and accessory genes exhibiting presence/absence variation\footnote{Occasionally also into cloud genes, used for genes found only in a single or very few samples.}\cite{matthews24}.
+This terminology ignores any variants in or changes in the relative ordering of the genes.\\
+While gene-based pangenome representations have been used in eukaryotes as well, particularly for deep phylogenetic studies\cite{lovell22, matthews24}, sequence-based representations are desirable for today's datasets.
+Gene-based representations disregard the vast majority of the eukaryotic genome not coding for proteins, and thus cannot be used to investigate genome evolution proceeding neutrally or by changes in gene regulation, thought to be more common on a species- or family level. % TODO citation?
+Sequence graphs in particular have become the dominant representation used to represent eukaryotic pangenomes, though they have also recently gained traction in bacterial genomics\cite{canalda-baltrons25}.
+Driving factors have been the flexibility of graphs to accomodate quite different approaches, as well as an emerging software ecosystem around the GFA1 file format making graph-based representations increasingly usable in many workflows\cite{garrison18, gfatools}.
+
 
 % minigraph
-The first pangenome graph toolkit was \texttt{minigraph}, released in 2020 by Heng Li\cite{minigraph}.
+The first sequence-based pangenome graph toolkit was \texttt{minigraph}, released in 2020 by Heng Li\cite{minigraph}.
 It uses rGFA1, a subset of the GFA1 format proposed earlier by Heng Li.
 As in usual in GFA, nodes are labelled with their nucleotide sequence.
 Unlike in vanilla GFA1, edge labels are not used, as nodes are chosen to be non-overlapping.
@@ -340,6 +354,9 @@ Emitting P-lines in the output would ensure the sample genomes can be reconstruc
 
 % pggb, vargraph
 % go semi mathsy?
+
+
+
 
 % go into pangenome promises?
 % => reference bias, population representativeness
