@@ -349,6 +349,7 @@ Pangenome representations fulfilling this criterion can be conceptualized as an 
 %This takes inspiration from bacterial genomics, where a genome has for a longer time been studied as a dynamic assembly of genes, many of which can freely be shared within or across taxon using plasmids and other non-chromosomal carries of genetic information.% interchange, particular in non-chromosomal DNA, has long been studied 
 
 
+\subsection*{Gene-centric Pangenomes}
 % need bridge? talk about HPRC again?
 % pangenome graph stuff, try to justify?
 Early work on representing datasets of genome assemblies has been done in bacterial genomics, aided by shorter genomes that are easier to assemble\cite{sanderson23, matthews24, rojas-miranda25}.
@@ -365,6 +366,7 @@ Gene-based representations disregard the vast majority of the eukaryotic genome 
 Sequence graphs in particular have become the dominant representation used to represent eukaryotic pangenomes, though they have also recently gained traction in bacterial genomics\cite{noll23, canalda-baltrons25}.
 Driving factors have been the flexibility of graphs to accomodate quite different approaches, as well as an emerging software ecosystem around the GFA1 file format making graph-based representations increasingly usable in many workflows\cite{garrison18, gfatools}.
 
+\subsection*{Minigraph}
 % minigraph
 The first sequence-based pangenome graph toolkit was \texttt{minigraph}, released in 2020 by Heng Li\cite{minigraph}.
 It uses rGFA1, a subset of the GFA1 format proposed earlier by Heng Li.
@@ -392,7 +394,7 @@ Emitting P-lines in the output would ensure the sample genomes could be reconstr
 
 % TODO figure?
 
-
+\subsection*{The Pangenome Graph Builder (PGGB)}
 % pggb, vargraph
 % go semi mathsy?
 The Pangenome Graph Builder (PGGB) is the second prominent pangenome graph representation toolkit.
@@ -428,6 +430,7 @@ In general, because its graph is constructed from local all versus all alignment
 PGGB graphs also frequently contain cycles, or multiple successive very small nodes that are not straightforward to untangle\cite{cheng25}. % better citation?
 
 
+\subsection*{An emerging consensus?}
 % go into pangenome promises?
 % => reference bias, population representativeness
 % politely mention hairballs
