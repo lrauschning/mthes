@@ -320,9 +320,8 @@ While there are many kinds of gene-centric pangenome representations, a common l
 This terminology ignores any variants in or changes in the relative ordering of the genes.\\
 While gene-based pangenome representations have been used in eukaryotes as well, particularly for deep phylogenetic studies\cite{lovell22, matthews24}, sequence-based representations are desirable for today's datasets.
 Gene-based representations disregard the vast majority of the eukaryotic genome not coding for proteins, and thus cannot be used to investigate genome evolution proceeding neutrally or by changes in gene regulation, thought to be more common on a species- or family level. % TODO citation?
-Sequence graphs in particular have become the dominant representation used to represent eukaryotic pangenomes, though they have also recently gained traction in bacterial genomics\cite{canalda-baltrons25}.
+Sequence graphs in particular have become the dominant representation used to represent eukaryotic pangenomes, though they have also recently gained traction in bacterial genomics\cite{noll23, canalda-baltrons25}.
 Driving factors have been the flexibility of graphs to accomodate quite different approaches, as well as an emerging software ecosystem around the GFA1 file format making graph-based representations increasingly usable in many workflows\cite{garrison18, gfatools}.
-
 
 % minigraph
 The first sequence-based pangenome graph toolkit was \texttt{minigraph}, released in 2020 by Heng Li\cite{minigraph}.
@@ -346,16 +345,45 @@ These small variants make the graph »spiky«, hence the name.
 The input genomes cannot be reconstructed from minigraph output.
 rGFA allows sample annotations on nodes specifying the samples they are associated with, however % nodes by their annotations, the genome % can we reconstruct initial sequence?
 minigraph seems to only emit these annotations for the sample contributing a node to the graph with no option to change this\footnote{Though this information is available to the algorithm and could in principle be emitted.}.
-Even if these were emitted, the fact that minigraph graphs can contain cycles would make a reconstructed genotype ambiguous as to the number of cyclic repeats it contains\cite{minigraphdoc}.
-Emitting P-lines in the output would ensure the sample genomes can be reconstructed from the output, but this is explicitly not planned in future releases\cite{minigraphissue}.
+Even if these were emitted for all samples, the fact that minigraph graphs can contain cycles would make a reconstructed genotype ambiguous as to the number of cyclic repeats it contains\cite{minigraphdoc}.
+Emitting P-lines in the output would ensure the sample genomes could be reconstructed from the output, but this is explicitly not planned in future releases\cite{minigraphissue}.
 
 % TODO figure?
 
 
 % pggb, vargraph
 % go semi mathsy?
-
-
+The Pangenome Graph Builder (PGGB) is the second prominent pangenome graph representation toolkit.
+It was released initially as a shell script-based pipeline in 2021, then ported to a nextflow-based pipeline and published in 2024\cite{pggbv01, garrison24}.
+It takes a different approch to minigraph, in that the genome representation is based on the concept of a variation graph.
+A variation graph is a datastructure representing all pairwise alignments of a set of sequences in a graphical manner\cite{garrisonthesis}.
+While initially formally introduced as the graphical representation of a non-deterministic automaton built from the sequences, I will here introduce it in terms of alignment graphs.
+Consider the input sequences as segments of arbitrary but constant size
+\footnote{Both overlapping and non-overlapping segments yield a similar alignment graph, if self-alignments are disallowed.}
+. A bipartitegraph can be constructed with the segments of two input samples as nodes, and an edge between two nodes iff they align to each other.
+The segments of another sample can now be added, and the graph extended to a tripartite graph by connecting nodes in the previous two samples with aligning nodes in the new sample; this process can be iterated until the graph includes all samples.
+A segment shared by all or a subset of samples will induce a clique in this graph, that is a fully connected subgraph.
+A variation graph can be constructed by clique decomposition of this graph; to do this, consider a maximal set of cliques of the alignment dgraph described above and take this as the nodeset of a new graph.
+Then project the paths implied by the sample genome's ordered segments into this path, and optionally collapse nodes where they do not diverge.
+%A segment that is shared by all genomes will thus ind
+%If we consider the sequences as 
+%It can be viewed as a maximal clique decomposition of an alignment graph
+\\
+The approach taken by PGGB to construct a pangenome variation graph is not too different from this characterization of variation graphs:
+PGGB first maps segment-based homology using an approximate minimizer-based approach.
+A random subset of the sequences assigned as homologous is then aligned at basepair resolution.
+Both of these steps are implemented in the WFmash package, combining the MapMash and WaveFront alignment algorithm\cite{marco-sola20, kille23}.
+Subsequently, an alignment graph is constructed and transitive closure is applied to recover alignments missed by the subsampling performed in the previous step\cite{garrison22, garrison24}.
+Fully connected components are collapsed into nodes in the variation graph-based pangenome graph.
+This initial representation is postprocessed in multiple steps to remove inconsistencies in the all versus all pairwise alignments and redundant nodes.
+In this postprocessing step, complex regions of the graph may be realigned using a graph-based multiple sequence alignment. 
+The graph induction is implemented in the seqwish package, while postprocessing uses the SMOOTHXG and GFAfix tools\cite{garrison22, garrison24, gfafix}.\\
+The PGGB pipeline is quite complex and involves multiple steps with $\mathcal{O}(n^2)$ worst-case complexity, making it very compute intensive although the implementation of base-level alignment subsetting has decreased compute requirementssomewhat.
+PGGB's nextflow implementation also scales more effectively on HPC systems, decreasing analysis latencies if sufficient computational resources are available.\\
+%collapses repeats
+As PGGB reports P lines containing paths for all samples, it is possible to reconstruct the input genomes, although some ambiguity remains .
+In general, because its graph is constructed from local all versus all alignments, PGGB can collapse nonlocal sequences if they have similar sequence and contain nonlocal edges, particularly in species with structurally complex or highly repetitive genomes\cite{cheng25}.
+PGGB graphs also frequently contain cycles, or multiple successive very small nodes that are not straightforward to untangle\cite{cheng25}. % better citation?
 
 
 % go into pangenome promises?
@@ -367,7 +395,7 @@ Emitting P-lines in the output would ensure the sample genomes can be reconstruc
 % separate section for msyd/syri?
 
 % lead in to questions for this thesis
-This representation also makes it impossible to describe a sample's genotype without referring to the reference; and combining samples using different reference genomes (or different versions/subsets of the same) is challenging, often requiring reprocessing of the raw sequencing data.
+%This representation also makes it impossible to describe a sample's genotype without referring to the reference; and combining samples using different reference genomes (or different versions/subsets of the same) is challenging, often requiring reprocessing of the raw sequencing data.
 
 %This takes inspiration from bacterial genomics, where a genome has for a longer time been studied as a dynamic assembly of genes, many of which can freely be shared within or across taxon using plasmids and other non-chromosomal carries of genetic information.% interchange, particular in non-chromosomal DNA, has long been studied 
 

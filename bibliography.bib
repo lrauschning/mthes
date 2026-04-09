@@ -3535,6 +3535,13 @@ url={https://doi.org/10.1038/s41588-025-02293-0}
 	journal = {bioRxiv}
 }
 
+@online{gfafix,
+	title = "GFAfix GitHub",
+	author = "Daniel Dörr,
+	year = 2024,
+	url={https://github.com/marschall-lab/GFAffix},
+}
+
 @online{hprc-timeline,
 	title = "HPRC Timeline",
 	author = "Human Pangenome Project",
@@ -3549,11 +3556,29 @@ url={https://doi.org/10.1038/s41588-025-02293-0}
 	url={https://humanpangenome.org/working-groups/},
 }
 
-@online{minigraph,
-	title = "MiniGraph GitHub",
-	author = "Heng Li",
-	year = 2020,
-	url={https://github.com/lh3/minigraph},
+@article{minigraph,
+	author={Li, Heng
+		and Feng, Xiaowen
+			and Chu, Chong},
+	title={The design and construction of reference pangenome graphs with minigraph},
+	journal={Genome Biology},
+	year={2020},
+	month={Oct},
+	day={16},
+	volume={21},
+	number={1},
+	pages={265},
+	abstract={The recent advances in sequencing technologies enable the assembly of individual genomes to the quality of the reference genome. How to integrate multiple genomes from the same species and make the integrated representation accessible to biologists remains an open challenge. Here, we propose a graph-based data model and associated formats to represent multiple genomes while preserving the coordinate of the linear reference genome. We implement our ideas in the minigraph toolkit and demonstrate that we can efficiently construct a pangenome graph and compactly encode tens of thousands of structural variants missing from the current reference genome.},
+	issn={1474-760X},
+	doi={10.1186/s13059-020-02168-z},
+	url={https://doi.org/10.1186/s13059-020-02168-z}
+}
+
+@online{pggbv01,
+	title = "PGGB Release v0.1",
+	author = "Erik Garrison",
+	year = 2021,
+	url={https://github.com/pangenome/pggb/tree/v0.1.0}
 }
 
 @online{gfatools,
@@ -3571,7 +3596,7 @@ url={https://doi.org/10.1038/s41588-025-02293-0}
 }
 
 @online{minigraphissue,
-	title = "MiniGraph Issue #27",
+	title = "MiniGraph Issue {\#}27",
 	author = "Heng Li",
 	year = 2020,
 	url={https://github.com/lh3/minigraph/issues/27},
@@ -3811,6 +3836,25 @@ doi={10.1038/s41587-023-01793-w},
 url={https://doi.org/10.1038/s41587-023-01793-w}
 }
 
+@article{noll23,
+   author = "Noll, Nicholas and Molari, Marco and Shaw, Liam P. and Neher, Richard A.",
+   title = "PanGraph: scalable bacterial pan-genome graph construction", 
+   journal= "Microbial Genomics",
+   year = "2023",
+   volume = "9",
+   number = "6",
+   pages = "",
+   doi = "https://doi.org/10.1099/mgen.0.001034",
+   url = "https://www.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.001034",
+   publisher = "Microbiology Society",
+   issn = "2057-5858",
+   type = "Journal Article",
+   keywords = "pangenome",
+   keywords = "microbial diversity",
+   keywords = "graphs",
+    eid = "001034",
+   abstract = "The genomic diversity of microbes is commonly parameterized as SNPs relative to a reference genome of a well-characterized, but arbitrary, isolate. However, any reference genome contains only a fraction of the microbial pangenome, the total set of genes observed in a given species. Reference-based approaches are thus blind to the dynamics of the accessory genome, as well as variation within gene order and copy number. With the widespread usage of long-read sequencing, the number of high-quality, complete genome assemblies has increased dramatically. In addition to pangenomic approaches that focus on the variation in the sets of genes present in different genomes, complete assemblies allow investigations of the evolution of genome structure and gene order. This latter problem, however, is computationally demanding with few tools available that shed light on these dynamics. Here, we present PanGraph, a Julia-based library and command line interface for aligning whole genomes into a graph. Each genome is represented as a path along vertices, which in turn encapsulate homologous multiple sequence alignments. The resultant data structure succinctly summarizes population-level nucleotide and structural polymorphisms and can be exported into several common formats for either downstream analysis or immediate visualization.",
+  }
 
 
 @article{stanojevic24,
@@ -4344,6 +4388,161 @@ issn={1476-4687},
 doi={10.1038/s41586-023-05896-x},
 url={https://doi.org/10.1038/s41586-023-05896-x}
 }
+
+@Article{garrison24,
+author={Garrison, Erik
+and Guarracino, Andrea
+and Heumos, Simon
+and Villani, Flavia
+and Bao, Zhigui
+and Tattini, Lorenzo
+and Hagmann, J{\"o}rg
+and Vorbrugg, Sebastian
+and Marco-Sola, Santiago
+and Kubica, Christian
+and Ashbrook, David G.
+and Thorell, Kaisa
+and Rusholme-Pilcher, Rachel L.
+and Liti, Gianni
+and Rudbeck, Emilio
+and Golicz, Agnieszka A.
+and Nahnsen, Sven
+and Yang, Zuyu
+and Mwaniki, Moses Njagi
+and Nobrega, Franklin L.
+and Wu, Yi
+and Chen, Hao
+and de Ligt, Joep
+and Sudmant, Peter H.
+and Huang, Sanwen
+and Weigel, Detlef
+and Soranzo, Nicole
+and Colonna, Vincenza
+and Williams, Robert W.
+and Prins, Pjotr},
+title={Building pangenome graphs},
+journal={Nature Methods},
+year={2024},
+month={Nov},
+day={01},
+volume={21},
+number={11},
+pages={2008-2012},
+abstract={Pangenome graphs can represent all variation between multiple reference genomes, but current approaches to build them exclude complex sequences or are based upon a single reference. In response, we developed the PanGenome Graph Builder, a pipeline for constructing pangenome graphs without bias or exclusion. The PanGenome Graph Builder uses all-to-all alignments to build a variation graph in which we can identify variation, measure conservation, detect recombination events and infer phylogenetic relationships.},
+issn={1548-7105},
+doi={10.1038/s41592-024-02430-3},
+url={https://doi.org/10.1038/s41592-024-02430-3}
+}
+
+
+@article{marco-sola20,
+    author = {Marco-Sola, Santiago and Moure, Juan Carlos and Moreto, Miquel and Espinosa, Antonio},
+    title = {Fast gap-affine pairwise alignment using the wavefront algorithm},
+    journal = {Bioinformatics},
+    volume = {37},
+    number = {4},
+    pages = {456-463},
+    year = {2020},
+    month = {09},
+    abstract = {Pairwise alignment of sequences is a fundamental method in modern molecular biology, implemented within multiple bioinformatics tools and libraries. Current advances in sequencing technologies press for the development of faster pairwise alignment algorithms that can scale with increasing read lengths and production yields.In this article, we present the wavefront alignment algorithm (WFA), an exact gap-affine algorithm that takes advantage of homologous regions between the sequences to accelerate the alignment process. As opposed to traditional dynamic programming algorithms that run in quadratic time, the WFA runs in time O(ns), proportional to the read length n and the alignment score s, using O(s2) memory. Furthermore, our algorithm exhibits simple data dependencies that can be easily vectorized, even by the automatic features of modern compilers, for different architectures, without the need to adapt the code. We evaluate the performance of our algorithm, together with other state-of-the-art implementations. As a result, we demonstrate that the WFA runs 20–300× faster than other methods aligning short Illumina-like sequences, and 10–100× faster using long noisy reads like those produced by Oxford Nanopore Technologies.The WFA algorithm is implemented within the wavefront-aligner library, and it is publicly available at https://github.com/smarco/WFA.},
+    issn = {1367-4803},
+    doi = {10.1093/bioinformatics/btaa777},
+    url = {https://doi.org/10.1093/bioinformatics/btaa777},
+    eprint = {https://academic.oup.com/bioinformatics/article-pdf/37/4/456/50359789/btaa777.pdf},
+}
+
+@article{kille23,
+    author = {Kille, Bryce and Garrison, Erik and Treangen, Todd J and Phillippy, Adam M},
+    title = {Minmers are a generalization of minimizers that enable unbiased local Jaccard estimation},
+    journal = {Bioinformatics},
+    volume = {39},
+    number = {9},
+    pages = {btad512},
+    year = {2023},
+    month = {08},
+    abstract = {The Jaccard similarity on k-mer sets has shown to be a convenient proxy for sequence identity. By avoiding expensive base-level alignments and comparing reduced sequence representations, tools such as MashMap can scale to massive numbers of pairwise comparisons while still providing useful similarity estimates. However, due to their reliance on minimizer winnowing, previous versions of MashMap were shown to be biased and inconsistent estimators of Jaccard similarity. This directly impacts downstream tools that rely on the accuracy of these estimates.To address this, we propose the minmer winnowing scheme, which generalizes the minimizer scheme by use of a rolling minhash with multiple sampled k-mers per window. We show both theoretically and empirically that minmers yield an unbiased estimator of local Jaccard similarity, and we implement this scheme in an updated version of MashMap. The minmer-based implementation is over 10 times faster than the minimizer-based version under the default ANI threshold, making it well-suited for large-scale comparative genomics applications.MashMap3 is available at https://github.com/marbl/MashMap.},
+    issn = {1367-4811},
+    doi = {10.1093/bioinformatics/btad512},
+    url = {https://doi.org/10.1093/bioinformatics/btad512},
+    eprint = {https://academic.oup.com/bioinformatics/article-pdf/39/9/btad512/51648656/btad512.pdf},
+}
+
+@article{garrison22,
+    author = {Garrison, Erik and Guarracino, Andrea},
+    title = {Unbiased pangenome graphs},
+    journal = {Bioinformatics},
+    volume = {39},
+    number = {1},
+    pages = {btac743},
+    year = {2022},
+    month = {11},
+    abstract = {Pangenome variation graphs model the mutual alignment of collections of DNA sequences. A set of pairwise alignments implies a variation graph, but there are no scalable methods to generate such a graph from these alignments. Existing related approaches depend on a single reference, a specific ordering of genomes or a de Bruijn model based on a fixed k-mer length. A scalable, self-contained method to build pangenome graphs without such limitations would be a key step in pangenome construction and manipulation pipelines.We design the seqwish algorithm, which builds a variation graph from a set of sequences and alignments between them. We first transform the alignment set into an implicit interval tree. To build up the variation graph, we query this tree-based representation of the alignments to reduce transitive matches into single DNA segments in a sequence graph. By recording the mapping from input sequence to output graph, we can trace the original paths through this graph, yielding a pangenome variation graph. We present an implementation that operates in external memory, using disk-backed data structures and lock-free parallel methods to drive the core graph induction step. We demonstrate that our method scales to very large graph induction problems by applying it to build pangenome graphs for several species.seqwish is published as free software under the MIT open source license. Source code and documentation are available at https://github.com/ekg/seqwish. seqwish can be installed via Bioconda https://bioconda.github.io/recipes/seqwish/README.html or GNU Guix https://github.com/ekg/guix-genomics/blob/master/seqwish.scm.},
+    issn = {1367-4811},
+    doi = {10.1093/bioinformatics/btac743},
+    url = {https://doi.org/10.1093/bioinformatics/btac743},
+    eprint = {https://academic.oup.com/bioinformatics/article-pdf/39/1/btac743/48448986/btac743.pdf},
+}
+
+@thesis{garrisonthesis,
+	author={Garrison, Erik},
+	year=2019,
+	title={Graphical pangenomics [Doctoral thesis]},
+	doi={https://doi.org/10.17863/CAM.41621},
+}
+
+% as zenodo, in case above doesn't work
+%@misc{erik_garrison_2018_3294392,
+%  author       = {Erik Garrison},
+%  title        = {Graphical pangenomics},
+%  month        = oct,
+%  year         = 2018,
+%  publisher    = {Zenodo},
+%  version      = {v1.1.1},
+%  doi          = {10.5281/zenodo.3294392},
+%  url          = {https://doi.org/10.5281/zenodo.3294392},
+%}
+
+@Article{cheng25,
+author={Cheng, Lin
+and Wang, Nan
+and Bao, Zhigui
+and Zhou, Qian
+and Guarracino, Andrea
+and Yang, Yuting
+and Wang, Pei
+and Zhang, Zhiyang
+and Tang, Di{\'e}
+and Zhang, Pingxian
+and Wu, Yaoyao
+and Zhou, Yao
+and Zheng, Yi
+and Hu, Yong
+and Lian, Qun
+and Ma, Zhaoxu
+and Lassois, Ludivine
+and Zhang, Chunzhi
+and Lucas, William J.
+and Garrison, Erik
+and Stein, Nils
+and St{\"a}dler, Thomas
+and Zhou, Yongfeng
+and Huang, Sanwen},
+title={Leveraging a phased pangenome for haplotype design of hybrid potato},
+journal={Nature},
+year={2025},
+month={Apr},
+day={01},
+volume={640},
+number={8058},
+pages={408-417},
+abstract={The tetraploid genome and clonal propagation of the cultivated potato (Solanum tuberosum L.)1,2 dictate a slow, non-accumulative breeding mode of the most important tuber crop. Transitioning potato breeding to a seed-propagated hybrid system based on diploid inbred lines has the potential to greatly accelerate its improvement3. Crucially, the development of inbred lines is impeded by manifold deleterious variants; explaining their nature and finding ways to eliminate them is the current focus of hybrid potato research4--10. However, most published diploid potato genomes are unphased, concealing crucial information on haplotype diversity and heterozygosity11--13. Here we develop a phased potato pangenome graph of 60 haplotypes from cultivated diploids and the ancestral wild species, and find evidence for the prevalence of transposable elements in generating structural variants. Compared with the linear reference, the graph pangenome represents a broader diversity (3,076{\thinspace}Mb versus 742{\thinspace}Mb). Notably, we observe enhanced heterozygosity in cultivated diploids compared with wild ones (14.0{\%} versus 9.5{\%}), indicating extensive hybridization during potato domestication. Using conservative criteria, we identify 19,625 putatively deleterious structural variants (dSVs) and reveal a biased accumulation of deleterious single nucleotide polymorphisms (dSNPs) around dSVs in coupling phase. Based on the graph pangenome, we computationally design ideal potato haplotypes with minimal dSNPs and dSVs. These advances provide critical insights into the genomic basis of clonal propagation and will guide breeders to develop a suite of promising inbred lines.},
+issn={1476-4687},
+doi={10.1038/s41586-024-08476-9},
+url={https://doi.org/10.1038/s41586-024-08476-9}
+}
+
+
+
 
 
 
