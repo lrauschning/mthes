@@ -250,16 +250,49 @@ To integrate ultralong reads, they are aligned to the initial unitig graph(hifia
 These alignments are then used to refine the graph, by adding additional edges (both) and duplicating nodes to resolve ambiguous paths (only hifiasm).
 This allows both assemblers to utilize ultralong ONT reads to similar effect, boosting contiguity and resolving repetitive regions inaccessible with shorter reads.
 Though hifiasm tends to be faster and easier to use as a single command-line tool compared to verkkos architecture as a pipeline chaining many steps, both assemblers produce assemblies of similar quality.
-Though they differ in their underlying algorithmic paradigm, this is not too surprising given that recent performance improvements have largely come from the integration of ultralong ONT reads and read error correction, both steps they implement in a broadly similar manner.
+Though they differ in their underlying algorithmic paradigm, this is not too surprising given that recent performance improvements have largely come from the integration of ultralong ONT reads and read error correction before assembly, steps that both assemblers implement in a similar manner.
 
+\subsection*{Phasing}
 % phasing
 % go into potato/polyploids
+
+Returning to the jigsaw puzzle analogy, the astute reader may have noticed that it was previously presented with a sleight of hand:
+while the puzzle pieces were supposed to derive from the singular genome of the sample, most eukaryotes actually carry multiple copies of their genome in the cells that may not always be the same.
+% do i need to introduce this?
+\textit{A. thaliana} has two copies of its genome, referred to as a diploid.
+However, due to its generally selfing nature, in most samples not derived from a deliberate cross, these two copies will be almost identical save for individual \textit{de novo} mutations.
+For this reason, \textit{A. thaliana} is often referred to as a haplodiploid (rhyming haploid, the term for organisms carrying only a single copy of their genome).
+Humans and many other animals are also diploids, but generally have distinct haplotypes derived from their parents.\\ %different but compatible copies of their genome 
+But organisms can have far more than two copies of their genome, and are then known as polyploids.
+This is the case for many crop species, with e.g. bread wheat's 6 copies, modern potato cultivar's typically 4 and sugarcane's approximately 10.
+Sometimes, different haplotypes exhibit preferential pairing during meiosis.
+%As their evolution is more tightly coup % not sure if good point
+These are known as subgenomes and organisms that show this are known as allopolyploids.
+In crops, this is often the result of a (historical) cross between two divergent lines: for example, bread wheat has three distinct subgenomes known as the A, B and D genome that originated from different wild diploid species (via a tetraploid intermediary in the case of the A and B genomes).
+Incidentally, durum wheat is a tetraploid without the D genome, highlighting how breeding can create ploidy differences even between comparatively similar taxa. %TODO citation(s)?
+%Because preferentially pairing haplotypes have more recombination and tend to evolv, biasing recombination and 
+
+Resolving the sequence of different copies of the genome is known as phased assembly.
+This is a formidable challenge, especially so the more copies of the genome an organism has and the larger regions where different haplotypes have the same sequence are -- unfortunately, both high ploidy and long identical stretches are common in crops as a result of breeding and bottlenecks associated with domestication.\\
+Traditionally, phased assembly has required information beyond that present in the reads.
+A common approach known as trio sequencing requires sequencing the parents of the sample, using variants unique to one parent to infer the haplotype of reads or contigs.
+Another approach is to sequence the offspring or, as recently demonstrated, gametes of an individual\cite{campoy20}.
+Trio sequencing requires the parents of the sample to be known and accessible, and all of these approaches except gamete sequencing require additional sample preparation, besides the need for more sequencing.
+These approaches also get more complicated the more copies of the genome an organism has: in trio sequencing, one would need to go back one additional generation for every doubling in ploidy, but every generation adds additional recombination events complicating inference in the sample's data.\\ %and additionally recombination events in the family tree leading from the sampled ancestors 
+Proximity ligation data can also be used to infer the phasing of haplotypes, and does not require access to additional samples.
+% needs good assemblies to start with?
+%While proximity ligation is becoming increasingly accessible
+However, it is still an additional step 
+
+\cite{ebpseqrecs}.
+
+
 
 
 % additional info, highlight hic in particular
 
-% draw conclusionlc
-In fact, a recent preprint demonstrated a chromosome assembly and contact map information using only ONT sequencing, at an estimated cost of approximately 3000€ per human sample \cite{gross26}.
+% draw conclusion
+In fact, a recent preprint demonstrated a chromosome-scale phased assembly and contact map information using only ONT sequencing, at an estimated cost of approximately 3000€ per human sample \cite{gross26}.
 
 Using sequencing approaches described in the previous section, it is possible to routinely produce chromosome-scale assemblies -- that is, assemblies that are largely complete and contiguous.
 \cite{ebpseqrecs, sarashetti24}
