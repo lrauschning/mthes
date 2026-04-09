@@ -11,7 +11,7 @@
 
 \section*{Phaseability}
 
-\begin{figure*}[ht]
+\begin{figure*}[t]
 	\centering
 	\includesvg[width=0.8\textwidth]{img/covcalc.svg}
 	\caption{
@@ -32,12 +32,27 @@
 % => account for pop structure/IBD afterwards
 % consrtuct single probability output, then solve for read len or heterozygosity
 
-In this section, we want to obtain minimal input requirements for reconstructing phased potato genomes, and look at how different properties of our sequencing technology and genome characteristics affect these requirements.
+%Given that it is nowadays practical to assemble a complex plant genome using only Oxford Nanopore long read sequencing technology, our motivation is to answer the question if this extends to phased assembly, which has previously still required one or multiple of the aforementioned additional inputs.
+
+Given that a phased assembly of a human genome can nowadays be obtained with no additional inputs beyond ultra-long read sequencing\cite{cheng24, gross26}, the question naturally arises if this achievement can be extended to complex, polyploid genomes.
+Relying on only a single technology is highly desirable, as it simplifies experimental planning and reduces labour requirements, costs and possible failure modes, allowing higher sample throughput and shorter project timelines.
+This has, to the best of my knowledge, not yet been reported in the literature.
+The question naturally arises if this is because it is impossible with current sequencing technologies, and if so, what kind of advancements would be required to overcome this limitation.
+In this section, I will derive minimal requirements for sequencing datasets to contain the information required to phase a genome.% of a given read length to cover 
+This naturally leaves out the question of whether current algorithms are able to successfully extract this information, but serves as a limit on the phasing quality achievable by any algorithm.
+If requirement minima turn out to be uneconomically high, it can be concluded that read-based phasing is not feasible in the modelled setting, and additional information is required.
+The modelling effort may also serve to investigate how expected advances in sequencing technology affect our ability to use reads for phasing, in particular as reads get ever-longer.
+%as sequencing the effect of expected advances in sequencing technology, in particular longer reads.
+
+%for reconstructing phased potato genomes, and look at how different properties of our sequencing technology and genome characteristics affect these requirements.
+%Because of standing variation or spontaneous mutational processes, these so-called haplotypes may differ between another in minor or major ways.
+
+%We will concern ourselves with the minimal requirements for constructing a phasing from a set of long genomic sequencing reads.%, but it should be noted that HiC sequencing, a mapping population or parental or gamete sequencing may also serve to accomplish this goal.%, though less economically.
+% justify why only deriving minimal estimates/can assemblers reach this?
+
 To approach this problem, some clarity on what phasing is and is not is required, in particular how it relates to genome assembly.
-In the cells of a given biological organism, there are often multiple copies of the genome – depending on species and tissue, 10 or more copies have been reported\cite{healey24}.
-Because of standing variation or spontaneous mutational processes, these so-called haplotypes may differ between another in minor or major ways.
-Variation on the same haplotype is inherited together, unless recombination breaks it up; this has given haplotypes the moniker »the unit of heredity«.
-We term a position at which a haplotype is different from all others present in the host organism a \emph{haplo-unique site}; they may correspond to single small variants, (parts of) larger variants, or clusters of multiple nearby variants.
+
+We term a position at which a haplotype is different from all others present in the host organism a \emph{haplo-unique site}; they may correspond to single small variants, (parts of) larger variants, or clusters of multiple nearby variants that different haplotypes happen to have different alleles of.
 A phasing of a genome can be defined formally as a function taking as arguments two different haplo-unique sites, and returning whether they are found on the same molecule of DNA or not, thus sharing or not sharing a haplotype
 \footnote{Note that in this definition, different chromosomes are always considered separate haplotypes; this reflects the fact that chromosomes segregate independently in offspring, but an alternative definition of a haplotype by inheritance from the same parent may permit haplotypes covering more than one chromosome}
 .
@@ -45,19 +60,17 @@ If we refer to the set of all haplo-unique sequences as $U$ and a partition of $
 %such that $h_i \subset U$ and $\bigcup h_i = U$, this can be expressed formally as:
 $$\mathcal{P}: U \times U \to \{0, 1\}$$
 $$\mathcal{P}(u_0, u_1) := \begin{cases}1 & \textrm{if}\quad \exists h_i \in H: u_0, u_1 \in h_i \\ 0 & \textrm{otherwise} \end{cases}$$
+In particular, $\mathcal{P(u_0, u_1} =0$ for all $u_0, u_1$ not on the same chromosome.
+Defining phasing in terms of this boolean function rather than a haplotype partition directly has the advantage of being symmetric in regards to the arbitrary labeling of the haplotypes (i.e., $\mathcal{P}$ does not change if we decide to henceforth swap $h_1$ and $h_2$ or vice versa) and cleanly separating different chromosomes.
 	\\
 %How do we construct such a phasing?
-We will concern ourselves with the minimal requirements for constructing a phasing from a set of long genomic sequencing reads, but it should be noted that HiC sequencing, a mapping population or parental or gamete sequencing may also serve to accomplish this goal.%, though less economically.
-% justify why only deriving minimal estimates/can assemblers reach this?
-Given that it is nowadays practical to assemble a complex plant genome using only Oxford Nanopore long read sequencing technology, our motivation is to answer the question if this extends to phased assembly, which has previously still required one or multiple of the aforementioned additional inputs.
-Using only a single technology simplifies experimental planning and reduces both labour input and possible failure modes, allowing higher throughput and shorter timelines.
-
+Using this definition of phasing, we can proceed to examine the information we have available in a dataset of sequencing reads, and proceed to find criteria by which we can decide if a high-quality phasing can, in principle, be constructed from it.
 When encountering a read, we know all of its sequence to be derived from a single physical piece of DNA corresponding to a fragment of a single haplotype
-\footnote{with the possible exception of PCR artefacts if the library was not prepared by a PCR-free protocol}.
+\footnote{With the possible exception of PCR artefacts if the library was not prepared by a PCR-free protocol.}.
 If two haplo-unique sequences $u_0, u_1$ are found on the same read $r := (u_0, u_1)$, we can assign them to the same haplotype; this construction can be transitively extended, if we have two reads $(u_0, u_1), (u_1, u_2)$, we can use the shared haplo-unique site $u_1$ to assign $u_0$ and $u_2$ to the same haplotype.
-Note that, contrary to genome assembly, repetitive sequences are not inherently problematic; so long as the sequence contains sufficient haplo-unique sequences, it can be easy to phase but difficult to assemble; and vice versa, a perfectly nonrepetitive sequence may be difficult or impossible to phase but easy to assemble if it contains large stretches shared by all haplotypes.
+Note that, repetitive sequences are not inherently problematic for phasing; so long as the sequence contains sufficient haplo-unique sequences, it can be easy to phase (though possibly difficult to assemble); and vice versa, a perfectly nonrepetitive sequence may be difficult or impossible to phase if it contains large stretches shared by all haplotypes.
 
-We can thus derive a simple minimal requirement for reconstructing the phasing of a genome, given in theorem \ref{theo-phase-simple}
+We can thus derive a simple minimal requirement for reconstructing the phasing of a genome, given in theorem \ref{theo-phase-simple}.
 
 \begin{theorem}
 	Given a set of reads $\mathcal{R}$ and a set of haplotypes $\mathcal{H}$, each modelled as consisting of an ordered set of haplo-unique sequences $\mathcal{H}_i := (u^i_0, u^i_1, \dots u^i_n)$, it is possible to construct a phasing $\mathcal{P}$ if and only if $\forall (u_j, u_{j+1}) \exists x \in \mathcal{R}: (u_j, u_{j+1}) \in x$, that is if every adjacent pair of haplo-unique sequences is covered by at least one read.
@@ -97,8 +110,11 @@ The second requirement hearkens back to the early days of estimating sequencing 
 If we model observed coverage along the genome given a specified mean coverage using a Poisson distribution, we can derive a requirement for the mean coverage by solving for the quantile of the Poisson distribution.
 This corresponds exactly to the inverse of the upper $\Gamma$ function, a numeric approximation of which is available in the \texttt{zipfR} package.
 
-Finally, not all reads covering a certain position may be informative, if they happen to cover just one of the haplo-unique sequences.
-We can compute the fraction of informative reads spanning both haplo-unique sequences from the fraction of valid starting positions, given that every read is uniquely specified by its starting position.
+Finally, consider the effect of read length.
+First, it can trivially be seen that reads larger than the gap between adjacent haplo-unique sites are required in order to construct a phasing.
+%in order to construct a successful phasing, the read length has to be larger than the distance between adjacent haplo-unique sites; otherwise, 
+But even reads of sufficient length may not be informative, if they happen to cover just one of the haplo-unique sequences.
+We can compute the fraction of informative reads spanning both haplo-unique sequences for a given position from the fraction of valid starting positions, given that every read is uniquely specified by its starting position.
 A starting position is valid if a read of length $\ell$ starting from it spans both haplo-unique sites; all valid starting positions therefore have to be before the first haplo-unique sites, and there will be $\ell-d$ many, with $d$ giving the distance between the two haplo-unique sequences and the length of each site assumed to be negligible compared to the read length.
 As every read has a single starting position, a mean sequencing coverage of $X$ coverage corresponds to $X/\ell$ reads starting at every position along the genome in expectation.
 We thus expect $(\ell-d)\frac{X}{\ell}=\frac{\ell-d}{\ell}X$ reads to fulfil this criterion.
@@ -283,7 +299,7 @@ This is obviously a contradiction, proving that the graph is circle-free.
 
 This fact allows us to further characterize the MPG.
 As every path has to pass through coresyntenic nodes exactly once and the graph is circle-free, the coresyntenic nodes induce regular bottlenecks in the graph, giving it a linear backbone.
-Nodes always have equal in- and outdegree, except for those at the ends of the telomeres.
+Nodes always have equal in- and outdegree, except for those at contig breaks or telomere ends in T2T assemblies.
 The degree of a node is also bounded by the number of samples passing through it; as such, no node can have more adjacent edges than twice the number of samples.
 As the start/end of each node corresponds to the start/end of a syntenic alignment, all non-private nodes with less than two successors represent deletions.
 
