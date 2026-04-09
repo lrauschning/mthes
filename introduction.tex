@@ -248,6 +248,9 @@ Verkko is based on a de Bruijn graph approach, and hifiasm uses the OLC paradigm
 Both of these assemblers have similar specialized procedures integrating ONT ultralong reads to resolve difficult regions and improve assembly contiguity, as well as preprocessing steps performing read error correction\cite{cheng24, antipov25}.
 To integrate ultralong reads, they are aligned to the initial unitig graph(hifiasm)/a compressed de Bruijn graph (verkko).
 These alignments are then used to refine the graph, by adding additional edges (both) and duplicating nodes to resolve ambiguous paths (only hifiasm).
+This allows both assemblers to utilize ultralong ONT reads to similar effect, boosting contiguity and resolving repetitive regions inaccessible with shorter reads.
+Though hifiasm tends to be faster and easier to use as a single command-line tool compared to verkkos architecture as a pipeline chaining many steps, both assemblers produce assemblies of similar quality.
+Though they differ in their underlying algorithmic paradigm, this is not too surprising given that recent performance improvements have largely come from the integration of ultralong ONT reads and read error correction, both steps they implement in a broadly similar manner.
 
 % phasing
 % go into potato/polyploids
