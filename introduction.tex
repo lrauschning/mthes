@@ -267,7 +267,7 @@ But organisms can have far more than two copies of their genome, and are then kn
 This is the case for many crop species, with e.g. bread wheat's 6 copies, modern potato cultivar's typically 4 and sugarcane's approximately 10.
 Sometimes, different haplotypes exhibit preferential pairing during meiosis.
 %As their evolution is more tightly coup % not sure if good point
-These are known as subgenomes and organisms that show this are known as allopolyploids.
+These are known as subgenomes and organisms that show this are known as allopolyploids, while organisms with equal pairing between all haplotypes are referred to as autopolyploids.
 In crops, this is often the result of a (historical) cross between two divergent lines: for example, bread wheat has three distinct subgenomes known as the A, B and D genome that originated from different wild diploid species (via a tetraploid intermediary in the case of the A and B genomes).
 Incidentally, durum wheat is a tetraploid without the D genome, highlighting how breeding can create ploidy differences even between comparatively similar taxa. %TODO citation(s)?
 %Because preferentially pairing haplotypes have more recombination and tend to evolv, biasing recombination and 
@@ -275,27 +275,33 @@ Incidentally, durum wheat is a tetraploid without the D genome, highlighting how
 Resolving the sequence of different copies of the genome is known as phased assembly.
 This is a formidable challenge, especially so the more copies of the genome an organism has and the larger regions where different haplotypes have the same sequence are -- unfortunately, both high ploidy and long identical stretches are common in crops as a result of breeding and bottlenecks associated with domestication.\\
 Traditionally, phased assembly has required information beyond that present in the reads.
+% additional info, highlight hic in particular
 A common approach known as trio sequencing requires sequencing the parents of the sample, using variants unique to one parent to infer the haplotype of reads or contigs.
 Another approach is to sequence the offspring or, as recently demonstrated, gametes of an individual\cite{campoy20}.
 Trio sequencing requires the parents of the sample to be known and accessible, and all of these approaches except gamete sequencing require additional sample preparation, besides the need for more sequencing.
-These approaches also get more complicated the more copies of the genome an organism has: in trio sequencing, one would need to go back one additional generation for every doubling in ploidy, but every generation adds additional recombination events complicating inference in the sample's data.\\ %and additionally recombination events in the family tree leading from the sampled ancestors 
+These approaches also get more complicated the more copies of the genome an organism has: in trio sequencing, one would need to go back one additional generation for every doubling in ploidy, but every generation adds additional recombination events complicating inference in the sample's data. %and additionally recombination events in the family tree leading from the sampled ancestors 
 Proximity ligation data can also be used to infer the phasing of haplotypes, and does not require access to additional samples.
+This is the approach recommended by the Earth Biogenome Project, though the most common HiC- or OmniC-platforms require additional library and short-read sequencing for every sample\cite{ebpseqrecs}.
+The short reads used by most proximity ligation platforms may not uniquely align to a haplotype, particularly in highly polyploid and repetitive genomes.
+The recent development of long-read proximity ligation assays may help to address this as they become more widely available.
 % needs good assemblies to start with?
 %While proximity ligation is becoming increasingly accessible
-However, it is still an additional step 
+%However, %it is still an additional step 
+Ideally, one would phase an assembly directly using the sequencing reads; this has been demonstrated in humans by the hifiasm team, using ONT ultralong reads and an assembly algorithm especially designed for using these reads in phasing (now part of hifiasm)\cite{cheng21}.
 
-\cite{ebpseqrecs}.
+\subsection*{Genome Assembly in 2026}
+As outlined above, the last few years have seen major developments in DNA sequencing technology, and in the algorithms tthat use them to assemble genomes.  
+It is now routinely possible to produce chromosome-scale assemblies -- that is, assemblies that are largely complete and contiguous\cite{ebpseqrecs, sarashetti24}.
+In diploids, these assemblies can usually be phased to a high standard, although phasing in polyploids is still less reliable and often requires manual curation.
 
-
-
-
-% additional info, highlight hic in particular
-
+As the error rates of ONT sequencing have gotten lower, it has been demonstrated that genomes can be assembled using just their sequencing technology\cite{ebpseqrecs, cheng26}. % TODO more citations
+In fact, one recent preprint demonstrated chromosome-scale phased assembly in humans (as well as long-read based contact map profiling) using only 4 ONT flowcells at an estimated cost of approximately 3000€ per sample \cite{gross26}.
+Using only a single platform not only saves costs, but also simplifies planning and library preparation, allowing smaller teams to process more samples.
+While for humans and other diploids, experience has provided a »recipe« for a high-quality phased assembly that works reliably, for polyploids the process is still more ad hoc, with unclear input requirements and manual curation\cite{ebseq}.
+One of the aims of this thesis is to derive a lower bound for  input requirement for phasing an autotetraploid potato genome using only ONT long reads, like is now state of the art in humans.
+It is presented in the first part of the Main chapter.
 % draw conclusion
-In fact, a recent preprint demonstrated a chromosome-scale phased assembly and contact map information using only ONT sequencing, at an estimated cost of approximately 3000€ per human sample \cite{gross26}.
 
-Using sequencing approaches described in the previous section, it is possible to routinely produce chromosome-scale assemblies -- that is, assemblies that are largely complete and contiguous.
-\cite{ebpseqrecs, sarashetti24}
 
 
 \section*{Contemporary Pangenome Representations}
