@@ -1,4 +1,4 @@
-thesis.pdf: thesis.tex introduction.tex main.tex discussion.tex supplement.tex#thesis.aux
+thesis.pdf: thesis.tex introduction.tex main.tex discussion.tex appendix.tex#thesis.aux
 	lualatex thesis.tex
 
 #thesis.aux: bibliography.bib thesis.tex
