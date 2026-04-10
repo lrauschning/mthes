@@ -235,7 +235,7 @@ See Table \ref{table:benchmarks} for concrete benchmarking results on two datase
 	\caption{
 		Not sure which is better/if should keep both?
 		\textbf{Bandage visualization of the MPG of a testing dataset}.
-		This MPG was computed in a testing dataset composed of the AMPRIL population\cite{ampril}. It was computed without realignment, and so is likely undercollapsed.\\
+		This MPG was computed in a testing dataset composed of the AMPRIL population\cite{jiao20, ampril}. It was computed without realignment, and so is likely undercollapsed.\\
 	}
 	\label{fig:mpg-screenshots}
 \end{figure*}
@@ -412,10 +412,33 @@ Meanwhile, I am not aware of any indexing, including via external tools, of mini
 
 \section*{Dataset Preparation}
 
-% describe nextflow pipeline
-% link back to potato genomes
+To build a multisyntenic pangenome graph, a multisynteny callset is required.
+To compute this callset, msyd requires a synteny callset of every sample against a common reference..
+This can be computed with SyRI, and in turn requires a whole-genome alignment to the reference.
+Msyd also requires these alignment files in order to retrieve the alignments of the multisyntenic regions.
+For both realignment and graph construction, the genomic sequence of all samples is also required.
+Msyd takes these inputs in samplesheet format, with one line per sample containing all files for that sample.
 
+% describe nextflow pipeline
+In order to generate the inputs required for msyd at scale in large datasets, a nextflow-based pipeline was implemented to perform alignments and SyRI runs, along with a script to automatically generate msyd's samplesheet from the pipeline output (see Appendix \ref{app:dataset}).
+These preprocessing steps are typically much more computationally demanding than the msyd run itself; implementing them as a nextflow pipeline allows efficient parallelization across multiple nodes of a HPC environment\footnote{And provides robustness to jobs being cancelled when other jobs take more than their allocated memory, a persistent problem on the MPIPZ cluster}.
+
+% link back to potato genomes
 % provide rationale? not sure
+For software development and debugging, a previously prepared dataset based on the high-quality genome assemblies of the AMPRIL population described in refs. \cite{jiao20, ampril} was used.
+Two datasets were prepared using the pipeline described above, one from human and one from potato genomes.
+
+The human dataset was prepared from the HPRC's Phase 2 data release of >200 chromosome-scale phased assemblies\cite{hprc2}.
+This presents both a large dataset to test the graph's performance, and allows comparison to other pangenome graph representations, which were developed and primarily tested on human assemblies. 
+As some assemblies had chromosome breaks, they were first scaffolded to the CHM13 T2T reference using RagTag\cite{ragtag}.
+After that, the pipeline described above was run for all samples, using minimap2's \texttt{asm10} preset.
+
+The potato dataset was prepared from the European potato pangenome reported in ref. \cite{sun25}.
+It contains 10 haplotype-resolved assemblies for different cultivars for a total of 40 distinct haplotypes.
+Maximally representative cultivars have been selected for assembly based on pedigrees from historical breeding records and short-read genotyping.
+Altogether, the dataset is estimated to cover 85\% of the haplotype space present in modern European potatoes not contributed by recent introgression breeding.
+The potato dataset both reflects the lab's research interest, and provides a stress-test of the multisyntenic pangenome graph:
+potato genomes are very challenging to work with due to their high repeat content, extensive structural and small-scale diversity, and a breeding history shaped by ancient and modern introgressions.
 
 % report runtime + mem + storage
 
