@@ -305,7 +305,7 @@ As the start/end of each node corresponds to the start/end of a syntenic alignme
 
 Comparing to pangenome graphs based on local-alignments and variation graphs, MPG differ in a number of key ways.
 First, small variants not breaking synteny are not represented in the graph structure.
-This is similar to a common filtering step used for variation graphs \cite{stuffmaybethereviewfrom24?}.
+This is similar to a common filtering step used for variation graphs \cite{matthews24, hickey24}.
 As the graph can be annotated with exact positions on each sample and aligments are available in the PSF file, these can be recovered in a fairly straightforward way.
 Second, a MPG will never introduce a circle by collapsing repetitive sequences, and will also never collapse nonlocal nodes or produce nodes with many nonlocal connections.
 Similarly, no connection can be made between nodes on different chromosomes, ensuring that chromosomes can always cleanly be separated out as independent subgraphs.
@@ -346,7 +346,7 @@ As coresyntenic nodes have a total ordering and induce bottlenecks in the graph,
 That is, given two PanCos $\texttt{A.a}, \texttt{B.b}$ and $\texttt{A} > \texttt{B}$, $\texttt{A.a} > \texttt{B.b}$ follows regardless of the values of $\texttt{a}$ and $\texttt{b}$.
 The second number indexes merasyntenic nodes found between two core syntenic nodes.
 As the MPG is cycle-free, its directed edges imply a partial ordering.
-The second number's are assigned to be consistent with this partial ordering; that is, $\texttt{A}=\texttt{B}$ and $\texttt{a} > \texttt{b}$ implies $\texttt{A.a} \nless \texttt{B.b}$, meaning that either $\texttt{A.a} > \texttt{B.b}$ on all shared samples, or the two do not share any samples and cannot be compared via intermediary nodes.
+The second number's are assigned to be consistent with this partial ordering; that is, $\texttt{A}=\texttt{B}$ and $\texttt{a} > \texttt{b}$ implies $\texttt{A.a} \nless \texttt{B.b}$, meaning that either $\texttt{A.a} > \texttt{B.b}$ on all shared samples, or the two do not share any samples and cannot be compared by transitive closure of intermediary nodes, either.
 %Bearing in mind that no direct comparison is possible between nodes in some subgraph configurations, these are the strongest guarantees available.
 As the preceding coresyntenic node covers all samples occurs before any merasyn, , its second number is assigned as $0$; it follows that $\texttt{A.0} < \texttt{A.x}$ for $x > 0$.% nodetopological ordering begins at the preceding coresyntenic node, 
 In general, coresyntenic PanCos always end in $0$, and merasyntenic or private PanCos always have a non-zero number at the second position (\texttt{0.0} is undefined to avoid ambiguity).
@@ -364,7 +364,11 @@ It was shown earlier in this section that this ordering has to be consistent acr
 All that is left to do, then, is to scan through all nodes and increment two counters for core and merasynteny, resetting the latter counter when incrementing the first.
 
 % range queries? or discussion
-
+Ranges corresponding to coresynteny boundaries can easily be described by their two PanCos $\texttt{S.0} < \texttt{E.0}$, with any node with PanCo $\texttt{A.a}$ being part of the range iff $\texttt{S.0} < \texttt{A.a} < \texttt{E.0}$ holds.
+Ranges with merasyntenic boundaries $A.a \in [S.s;E.e]$ iff 
+% can i find a senseful definition?
+% not sure, can add disjointed ones between anywhere
+% => maybe maximalist definition, define away complement?
 
 
 % discussion stuff?
