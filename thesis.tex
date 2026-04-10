@@ -13,6 +13,23 @@
 \usetikzlibrary{arrows.meta}
 \usepackage{xcolor}
 
+\usepackage{listings}
+\lstset{
+	basicstyle=\ttfamily,
+	numbers=left,
+	numberstyle=\tiny,
+	frame=tb,
+	tabsize=4,
+	columns=fixed,
+	showstringspaces=false,
+	showtabs=false,
+	breaklines=true,
+	%keepspaces,
+	commentstyle=\color{gray},
+	keywordstyle=\color{orange}
+	}
+
+
 \usepackage{comment}
 \usepackage{amsmath, amssymb}
 \usepackage{graphicx}
@@ -154,7 +171,8 @@ TODO
 
 \pagestyle{plain}
 {\small
-\twocolumn
+%\twocolumn
+\onecolumn
 %\bibliographystyle{nejm}
 \bibliographystyle{unsrt}
 %\bibliographystyle{nature}
