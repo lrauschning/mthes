@@ -1,11 +1,11 @@
 % small intro blurb?
-
+%
 % mention potato dataset here, cite korbinians paper + want to expand
-% dont think this requires a major motivation, agriculture is enough
+% dont think this requires a major motivation, agriculture and more genomes more better
 % want bigger asm dataset
-
-% then teaser representation, mention using msyd/syri to analyzise structural diversity in potato genome
-
+%
+% then teaser representation, mention using msyd/syri to analyzise structural diversity in potato genome + maybe modernization?
+%
 % finall, briefly mention dataset?
 
 
@@ -204,14 +204,26 @@ See Table \ref{table:benchmarks} for concrete benchmarking results on two datase
 
 \subsection*{Properties of the multisynteny graph}
 \newcommand{\aln}{\mathcal{A}}
-\begin{figure*}[ht]
+\begin{figure*}[t]
 	\centering
 	\includesvg[width=0.8\textwidth]{img/msyd-graph.svg}
 	\caption{
-		\textbf{Illustration of the Multisyntnic Pangenome Graph (MPG).}.
+		\textbf{Illustration of the Multisyntenic Pangenome Graph (MPG).}.
 		Temporary figure, to be changed.\\
 	}
 	\label{fig:mpg-concept}
+\end{figure*}
+
+\begin{figure*}[t]
+	\centering
+	\includegraphics[width=0.4\textwidth]{img/2025-12-18\_19-04.png}
+	\includegraphics[width=0.4\textwidth]{img/Screen Shot 2025-12-19 at 11.54.27.png}
+	\caption{
+		Not sure which is better/if should keep both?
+		\textbf{Bandage visualization of the MPG of a testing dataset}.
+		This MPG was computed in a testing dataset composed of the AMPRIL population\cite{ampril}. It was computed without realignment, and so is likely undercollapsed.\\
+	}
+	\label{fig:mpg-screenshots}
 \end{figure*}
 % go into properties, linearized structure, coresyn bounds
 % necessary branching after node
@@ -366,6 +378,7 @@ All that is left to do, then, is to scan through all nodes and increment two cou
 % range queries? or discussion
 Ranges corresponding to coresynteny boundaries can easily be described by their two PanCos $\texttt{S.0} < \texttt{E.0}$, with any node with PanCo $\texttt{A.a}$ being part of the range iff $\texttt{S.0} < \texttt{A.a} < \texttt{E.0}$ holds.
 Ranges with merasyntenic boundaries $A.a \in [S.s;E.e]$ iff 
+TODO, not sure if necessary? 
 % can i find a senseful definition?
 % not sure, can add disjointed ones between anywhere
 % => maybe maximalist definition, define away complement?
@@ -386,6 +399,7 @@ Meanwhile, I am not aware of any indexing, including via external tools, of mini
 \section*{Datasets}
 
 % describe nextflow pipeline
+% link back to potato genomes
 
 % provide rationale? not sure
 
