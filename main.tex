@@ -135,7 +135,7 @@ Following this, the position the multisyntenic region each sample and the alignm
 \\
 While this format is amenable to indexing and easy for users to parse in custom scripts, a significant downside to any custom file format is lacking integration with other tools.
 In the last two years, version 1 of the GFA format and its rGFA subset, originally developed to store intermediary representations of genome assembly, has increasingly become the standard for representing pangenomic datasets, while its .
-It is now supported by read-based genotypers, read and graph aligners as well as multiple visualization suites\cite{lotsofstuff}.
+It is now supported by read-based genotypers, read and graph aligners as well as multiple visualization suites\cite{guarracino22, wick15}.
 Both \texttt{vg} and \texttt{gfatools} provide utilities for the file format\cite{garrison18, gfatools}.\\
 Given this developing software ecosystem and GFA's graph-based nature allowing greater flexibility than VCF format, finding a way to represent msyd's multisynteny calls in GFA1 format is desirable.
 In this section, I outline how multisynteny can be represented as a graph, how this was implemented efficiently in the multisynteny detector, and derive some properties of this representation that make it attractive compared to other graphical representations of pangenomic datasets.
@@ -206,7 +206,7 @@ See Table \ref{table:benchmarks} for concrete benchmarking results on two datase
 \newcommand{\aln}{\mathcal{A}}
 \begin{figure*}[ht]
 	\centering
-	\includegraphics[width=0.8\textwidth]{img/msyd-graph.pdf}
+	\includesvg[width=0.8\textwidth]{img/msyd-graph.svg}
 	\caption{
 		\textbf{Illustration of the Multisyntnic Pangenome Graph (MPG).}.
 		Temporary figure, to be changed.\\
@@ -317,7 +317,7 @@ Approaches to further collapse the graph or filter out rare or small nodes may b
 Which graph representation is ideal will of course depend on the nature of the dataset and scientific question.
 The MPG differs from other current pangenome representations.
 It has a more regular structure, and aims to capture large-scale structure over local events.
-In the next section, I will outline a procedure using the regular structure of the MPG to define a pangenomic coordinate system termed PanCo, allowing genomic coordinates to be compared across different samples in a principled and consistent way\footnote{Note that a similar procedure is in fact used to ensure consistent sorting across samples during MPG construction}.
+In the next section, I will outline a procedure using the regular structure of the MPG to define a pangenomic coordinate system termed PanCo, allowing genomic coordinates to be compared across different samples in a principled and consistent way.%\footnote{Note that a similar procedure is in fact used to ensure consistent sorting across samples during MPG construction.}.
 This not only serves a direct purpose, but also demonstrates the advantages of a representation possessing strong structural guarantees, and illustrates how these can be used to derive efficient algorithms appropriate for modern genomics datasets.
 
 \subsection*{Pangenomic Coordinate (PanCo)}
@@ -326,8 +326,53 @@ This not only serves a direct purpose, but also demonstrates the advantages of a
 % namecheck pangenome haplotype ID convention
 % compare to odgis + complex algorithm?
 
+To navigate a genome representation for any use, a system allowing for positions to be specified and compared is required.
+In a linear reference genome, a chromosome ID and number corresponding to the number of bases from the 3' end is sufficient for this purpose.
+This is a powerful and intuitive index: it supports both qualitative and numeric comparisons -- intuitively, the expressions $a < b$ and $|a - b|$ when comparing two positions $a,b$ --, and can seamlessly be extended to describe intervals as well as individual positions.\\
+In designing a navigation aid for a graph-based representation of multiple genomes, it would be preferable to keep as many of these features as possible while remaining simple to understand and efficient to implement.
+In this subsection, I will introduce Pangenomic Coordinates (PanCos), an addressing system exploiting the Multisyntenic Pangenome Graph's structural guarantees to provide an interpretable, straightforward way to specify and compare positions in all or some of the genomes simultaneously.
+
+A PanCo consists of two natural numbers, and uniquely identifies a node in the MPG when combined with a chromosome ID.
+Positions within the node can be given analogous to a linear reference, as a natural number indicating the distance from the 3' end on the sample used as reference for the MPG node.
+Using the alignments that induced the multisynteny, this can be mapped to syntenic positions in all samples present in the multisyntenic region.
+PanCos are typically written in the form \texttt{27.3} or \texttt{17.0} when working within a chromosome, or as \texttt{Chr04:27.3} otherwise.
+Alternatively, \texttt{\#} as a separator, to provide compatibility with the HPRC's Pangenome Sequence Naming convention
+\footnote{Some gfa tools require nodes to have numeric IDs; in this case, \texttt{000} may be used as a separator that will maintain unique IDs in typical cases.}\cite{pansn}.
+For easier human readability, a PanCo is prefixed by msyd with the letters \texttt{MERA}, \texttt{CORE} or \texttt{PRIV} dependending on its status when writing output files.
+
+The first number of the PanCo indicates the preceding coresyntenic node; if there is none, it is set to 0.
+This can only happen to multisynteny found between the start of a chromosome and the first multisyntenic regions, often representing structural diversity in subtelomeric repeat arrays.
+As coresyntenic nodes have a total ordering and induce bottlenecks in the graph, the first number can be used to compare PanCos.
+That is, given two PanCos $\texttt{A.a}, \texttt{B.b}$ and $\texttt{A} > \texttt{B}$, $\texttt{A.a} > \texttt{B.b}$ follows regardless of the values of $\texttt{a}$ and $\texttt{b}$.
+The second number indexes merasyntenic nodes found between two core syntenic nodes.
+As the MPG is cycle-free, its directed edges imply a partial ordering.
+The second number's are assigned to be consistent with this partial ordering; that is, $\texttt{A}=\texttt{B}$ and $\texttt{a} > \texttt{b}$ implies $\texttt{A.a} \nless \texttt{B.b}$, meaning that either $\texttt{A.a} > \texttt{B.b}$ on all shared samples, or the two do not share any samples and cannot be compared via intermediary nodes.
+%Bearing in mind that no direct comparison is possible between nodes in some subgraph configurations, these are the strongest guarantees available.
+As the preceding coresyntenic node covers all samples occurs before any merasyn, , its second number is assigned as $0$; it follows that $\texttt{A.0} < \texttt{A.x}$ for $x > 0$.% nodetopological ordering begins at the preceding coresyntenic node, 
+In general, coresyntenic PanCos always end in $0$, and merasyntenic or private PanCos always have a non-zero number at the second position (\texttt{0.0} is undefined to avoid ambiguity).
+
+%PanCo uses the structure of the MPG to
+%The PanCo of a core syntenic node will always have a second number equal to 0
+
 % algorithm, topological sorting
 % mention sort by org possible without graph structure
+Computing PanCos for coresyntenic regions is trivial, and can be done in linear time.
+For merasyntenic regions, an asymptotically efficient way to obtain a valid ordering would be to compute a topological ordering of the subgraph between the preceding and following coresyntenic node, e.g. by depth-based traversal.
+This has linear runtime in the number of nodes and edges in the subgraph; as the number of edges per node is bounded by the number of samples, the overall runtime is $\mathcal{O}(n|V|)$, with $n$ as the number of samples and $|V|$ as the number of merasyntenic nodes in the subgraph.
+However, in practice a consistent ordering can be obtained much faster and without even using the graph structure, simply by sorting multisyntenic regions using a simple comparator: $A<B$ iff $\exists i \in S(A) \cap S(B): A_i < B_i$, with $A<B$ undefined if $A$ and $B$ do not share a sample.
+It was shown earlier in this section that this ordering has to be consistent across all samples; it is in fact identical to the transitive closure of the directed adjacency defined as the MPG was introduced, and is already computed along with the graph representation.
+All that is left to do, then, is to scan through all nodes and increment two counters for core and merasynteny, resetting the latter counter when incrementing the first.
+
+% range queries? or discussion
+
+
+
+% discussion stuff?
+The fact that this powerful and interpretable coordinate system »falls out« of the graph representation at practically no additional computational cost reflects the advantages of a pangenome representation with strong theoretical guarantees.
+PanCos are not fully stable towards adding additional samples to the pangenome; while the coresyn part of the PanCo will not change, assuming the added sample does not break coresynteny, the merasyntenic part of the PanCo will likely require recomputing.
+
+Compare the ease at which a MPG can be indexed with PanCos to the difficulty of indexing nodes in a variation graph: the odgi sort command implements multiple cycle-breaking algorithms in order to then traverse the entire graph and assign a topological ordering, alongside a force-directed-layout based stochastic embedding approach\cite{guarracino22}.
+Meanwhile, I am not aware of any indexing, including via external tools, of minigraph's representations beside arbitrarily assigned numeric node IDs.
 
 % leave comparison/cross species for discussion
 

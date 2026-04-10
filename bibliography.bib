@@ -3535,11 +3535,37 @@ url={https://doi.org/10.1038/s41588-025-02293-0}
 	journal = {bioRxiv}
 }
 
+@article{wick15,
+    author = {Wick, Ryan R. and Schultz, Mark B. and Zobel, Justin and Holt, Kathryn E.},
+    title = {Bandage: interactive visualization of de novo genome assemblies},
+    journal = {Bioinformatics},
+    volume = {31},
+    number = {20},
+    pages = {3350-3352},
+    year = {2015},
+    month = {06},
+    abstract = {Summary: Although de novo assembly graphs contain assembled contigs (nodes), the connections between those contigs (edges) are difficult for users to access. Bandage (a Bioinformatics Application for Navigating De novo Assembly Graphs Easily) is a tool for visualizing assembly graphs with connections. Users can zoom in to specific areas of the graph and interact with it by moving nodes, adding labels, changing colors and extracting sequences. BLAST searches can be performed within the Bandage graphical user interface and the hits are displayed as highlights in the graph. By displaying connections between contigs, Bandage presents new possibilities for analyzing de novo assemblies that are not possible through investigation of contigs alone.Availability and implementation: Source code and binaries are freely available at https://github.com/rrwick/Bandage. Bandage is implemented in C++ and supported on Linux, OS X and Windows. A full feature list and screenshots are available at http://rrwick.github.io/Bandage.Contact:  rrwick@gmail.comSupplementary information  :  Supplementary data are available at Bioinformatics online.},
+    issn = {1367-4803},
+    doi = {10.1093/bioinformatics/btv383},
+    url = {https://doi.org/10.1093/bioinformatics/btv383},
+    eprint = {https://academic.oup.com/bioinformatics/article-pdf/31/20/3350/49036207/bioinformatics_31_20_3350.pdf},
+}
+
+
+
+
 @online{gfafix,
 	title = "GFAfix GitHub",
 	author = "Daniel Dörr",
 	year = 2024,
 	url={https://github.com/marschall-lab/GFAffix},
+}
+
+@online{pansn,
+	title = "PanSN GitHub",
+	author = "HPRC",
+	year = 2022,
+	url={https://github.com/pangenome/PanSN-spec},
 }
 
 @online{hprc-timeline,
@@ -4589,6 +4615,23 @@ issn={1476-4687},
 doi={10.1038/s41586-024-08476-9},
 url={https://doi.org/10.1038/s41586-024-08476-9}
 }
+
+@article{guarracino22,
+    author = {Guarracino, Andrea and Heumos, Simon and Nahnsen, Sven and Prins, Pjotr and Garrison, Erik},
+    title = {ODGI: understanding pangenome graphs},
+    journal = {Bioinformatics},
+    volume = {38},
+    number = {13},
+    pages = {3319-3326},
+    year = {2022},
+    month = {05},
+    abstract = {Pangenome graphs provide a complete representation of the mutual alignment of collections of genomes. These models offer the opportunity to study the entire genomic diversity of a population, including structurally complex regions. Nevertheless, analyzing hundreds of gigabase-scale genomes using pangenome graphs is difficult as it is not well-supported by existing tools. Hence, fast and versatile software is required to ask advanced questions to such data in an efficient way.We wrote Optimized Dynamic Genome/Graph Implementation (ODGI), a novel suite of tools that implements scalable algorithms and has an efficient in-memory representation of DNA pangenome graphs in the form of variation graphs. ODGI supports pre-built graphs in the Graphical Fragment Assembly format. ODGI includes tools for detecting complex regions, extracting pangenomic loci, removing artifacts, exploratory analysis, manipulation, validation and visualization. Its fast parallel execution facilitates routine pangenomic tasks, as well as pipelines that can quickly answer complex biological questions of gigabase-scale pangenome graphs.ODGI is published as free software under the MIT open source license. Source code can be downloaded from https://github.com/pangenome/odgi and documentation is available at https://odgi.readthedocs.io. ODGI can be installed via Bioconda https://bioconda.github.io/recipes/odgi/README.html or GNU Guix https://github.com/pangenome/odgi/blob/master/guix.scm.Supplementary data are available at Bioinformatics online.},
+    issn = {1367-4803},
+    doi = {10.1093/bioinformatics/btac308},
+    url = {https://doi.org/10.1093/bioinformatics/btac308},
+    eprint = {https://academic.oup.com/bioinformatics/article-pdf/38/13/3319/49883779/btac308.pdf},
+}
+
 
 
 
