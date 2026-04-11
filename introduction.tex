@@ -419,13 +419,15 @@ It uses rGFA1, a subset of the GFA1 format proposed earlier by Heng Li.
 As in usual in GFA, nodes are labelled with their nucleotide sequence.
 Unlike in vanilla GFA1, edge labels are not used, as nodes are chosen to be non-overlapping.
 At its core, minigraph is a \texttt{minimap}-inspired graph aligner, that is, a software capable of aligning a query sequence to a reference sequence graph.
-To perform the alignment, first minimizers are extracted from each node of the reference graph.
-Occurences of these minimizers in the query sequence are chained together to generate candidate nodes for the graph alignment.
-The final alignment is constructed by a dynamic programming-based scan through the candidate nodes, respecting order and length of the input sequence as well as the graph structure.
-This last step is also known as Graph Wavefront Alignment, and is notably a heuristic not using the full basepair sequence of either the graph or the input sequence.
-In version 0.17, published in 2022, support for a final base-level alignment step was added\cite{minigraph017}.\\
-Minigraph has support for using its sequence-to-graph alignment to iteratively construct a reference pangenome graph.
-First, a graph consisting of a single node is initialized from a reference sequence.
+It can be used to construct a pangenome graph by iteratively aligning samples to the graph.%using its sequence-to-graph alignment to iteratively construct a reference pangenome graph.
+Minigraph's alignment step first uses minimizers to map nodes to the query sequence.
+These are then chained into an alignment respecting the graph's structure.
+%To perform the alignment, first minimizers are extracted from each node of the reference graph.
+%Occurences of these minimizers in the query sequence are chained together to generate candidate nodes for the graph alignment.
+%The final alignment is constructed by a dynamic programming-based scan through the candidate nodes, respecting order and length of the input sequence as well as the graph structure.
+%This last step is also known as Graph Wavefront Alignment, and is notably a heuristic not using the full basepair sequence of either the graph or the input sequence.
+While minigraph's core algorithm does not use the genomic sequence of either the sample or graph except to find minimizers, support for a final base-level alignment step was added in version 0.17, published in 2022\cite{minigraph017}.\\
+To construct a pangenome graph using the alignment algorithm, a graph is first initialized as a single node containing a reference sequence.
 Then, all other sequences in the pangenome are aligned to this graph representation.
 At each step, unaligned regions in the query sequence are added as nodes to the graph, and partially aligning nodes are broken up into multiple nodes.
 Due to the minimizer-based heuristic approach, the resultant graph can look different depending on the sample ordering, and small variants are not represented in the graph structure.
@@ -477,6 +479,11 @@ PGGB graphs also frequently contain cycles, or multiple successive very small no
 
 
 \subsection*{An emerging consensus?}
+% gfa format ecosystem
+% problems in repeats, complex genomes
+% overcollapsing, nonlocal structures (=> hairballs)
+% unclear biological/popgen interpretation
+
 Driving factors have been the flexibility of graphs to accomodate quite different approaches, as well as an emerging software ecosystem around the GFA1 file format making graph-based representations increasingly usable in many workflows\cite{garrison18, gfatools}.
 
 % go into pangenome promises?
@@ -496,10 +503,9 @@ Driving factors have been the flexibility of graphs to accomodate quite differen
 
 The genome representation proposed in this thesis has two main dependencies, the Synteny and Rearrangement Identifier (SyRI) and the Multisynteny Detector (msyd).
 These dependencies are central to the proposed representation, both in regards software implementation and its conceptual underpinnings.
-Both SyRI and msyd were previously developed in the same lab, one (msyd) as part of my Bachelor's Thesis.
+Both SyRI and msyd were previously developed in the same lab; SyRI has been published in ref. \cite{goel19}, while the core msyd algorithm is described and motivated in my Bachelor's Thesis (supervised by Manish Goel, developer of SyRI and now at Illumina).
 In this section, a brief outline of the inner workings of both methods is given, along with a description of modernizations carried out to make both softwares suitable for this project. %As an understanding of the essential steps in both of these dependencies is required for 
 This is intended to give readers who are not familiar with either tool the necessary background to understand guarantees on the representation's input that are used in formal arguments later in this thesis, and an understanding of the limitations of these same inputs.
-SyRI is described in more detail in \cite{goel19}.
 The initial version of msyd is described in my Bachelor's Thesis, and in the API documentation.
 
 \subsection*{The Synteny and Rearrangement Identifier (SyRI)}
@@ -581,3 +587,5 @@ This will also identify any merasynteny that includes the chosen reference sampl
 In order to recover these missing annotations, msyd includes a realignment algorithm that iteratively repeats the intersection procedure with different references until all multisynteny is found.
 This is performed separately for each gap between two coresyntenic regions -- as they cover all samples, there cannot be a multisyntenic region that crosses a coresyntenic region --, avoiding expensive whole-genome alignments at this step, as it can require up to $\mathcal{O}(n^2)$ alignments.
 
+
+% summarize, reconnect to thesis goals?
