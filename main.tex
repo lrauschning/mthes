@@ -52,9 +52,9 @@ Given that a phased assembly of a human genome can nowadays be obtained with no 
 Relying on only a single technology is highly desirable, as it simplifies experimental planning and reduces labour requirements, costs and possible failure modes, allowing higher sample throughput and shorter project timelines.
 This has, to the best of my knowledge, not yet been reported in the literature.
 The question naturally arises if this is because it is impossible with current sequencing technologies, and if so, what kind of advancements would be required to overcome this limitation.
-In this section, I will derive minimal requirements for sequencing datasets to contain the information required to phase a genome.% of a given read length to cover 
-This naturally leaves out the question of whether current algorithms are able to successfully extract this information, but serves as a limit on the phasing quality achievable by any algorithm.
-If requirement minima turn out to be uneconomically high, it can be concluded that read-based phasing is not feasible in the modelled setting, and additional information is required.
+In this section, I will derive minimal requirements for long-read datasets to contain the information required to phase a genome. % of a given read length to cover 
+This naturally leaves out the question of whether current algorithms are able to successfully extract this information, but serves as a limit on the phasing quality achievable by any conceivable algorithm using only read information. 
+If requirement minima turn out to be uneconomically high, it can be concluded that read-based phasing is not feasible in the modelled setting, and additional information from e.g. HiC experiments is required.
 The modelling effort may also serve to investigate how expected advances in sequencing technology affect our ability to use reads for phasing, in particular as reads get ever-longer.
 %as sequencing the effect of expected advances in sequencing technology, in particular longer reads.
 
@@ -64,8 +64,7 @@ The modelling effort may also serve to investigate how expected advances in sequ
 %We will concern ourselves with the minimal requirements for constructing a phasing from a set of long genomic sequencing reads.%, but it should be noted that HiC sequencing, a mapping population or parental or gamete sequencing may also serve to accomplish this goal.%, though less economically.
 % justify why only deriving minimal estimates/can assemblers reach this?
 
-To approach this problem, some clarity on what phasing is and is not is required, in particular how it relates to genome assembly.
-
+To approach this problem, some clarity on what phasing is (and is not) is required, in particular how it relates to genome assembly.\\
 We term a position at which a haplotype is different from all others present in the host organism a \emph{haplo-unique site}; they may correspond to single small variants, (parts of) larger variants, or clusters of multiple nearby variants that different haplotypes happen to have different alleles of.
 A phasing of a genome can be defined formally as a function taking as arguments two different haplo-unique sites, and returning whether they are found on the same molecule of DNA or not, thus sharing or not sharing a haplotype
 \footnote{Note that in this definition, different chromosomes are always considered separate haplotypes; this reflects the fact that chromosomes segregate independently in offspring, but an alternative definition of a haplotype by inheritance from the same parent may permit haplotypes covering more than one chromosome}
