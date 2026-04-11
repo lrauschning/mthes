@@ -415,9 +415,6 @@ Different proposed approaches sit at different points along this spectrum, and i
 \subsection*{Minigraph}
 % minigraph
 The first modern sequence-based pangenome graph toolkit able to directly construct a graph not based on a VCF representation was \texttt{minigraph}, released in 2020 by Heng Li\cite{minigraph}.
-It uses rGFA1, a subset of the GFA1 format proposed earlier by Heng Li.
-As in usual in GFA, nodes are labelled with their nucleotide sequence.
-Unlike in vanilla GFA1, edge labels are not used, as nodes are chosen to be non-overlapping.
 At its core, minigraph is a \texttt{minimap}-inspired graph aligner, that is, a software capable of aligning a query sequence to a reference sequence graph.
 It can be used to construct a pangenome graph by iteratively aligning samples to the graph.%using its sequence-to-graph alignment to iteratively construct a reference pangenome graph.
 Minigraph's alignment step first uses minimizers to map nodes to the query sequence.
@@ -434,11 +431,11 @@ Due to the minimizer-based heuristic approach, the resultant graph can look diff
 To recover small variants not detected by minigraph's minimizer-based approach, later efforts developed the minigraph-cactus pipeline\cite{hickey24}.
 These small variants make the graph »spiky«, hence the name.
 \\% (though, if base-level alignment was performed, some mayb be reconstructed from the reported CIGAR strings).
-The input genomes cannot be reconstructed from minigraph output.
-rGFA allows sample annotations on nodes specifying the samples they are associated with, however % nodes by their annotations, the genome % can we reconstruct initial sequence?
-minigraph seems to only emit these annotations for the sample contributing a node to the graph with no option to change this\footnote{Though this information is available to the algorithm and could in principle be emitted.}.
-Even if these were emitted for all samples, the fact that minigraph graphs can contain cycles would make a reconstructed genotype ambiguous as to the number of cyclic repeats it contains\cite{minigraphdoc}.
-Emitting P-lines in the output would ensure the sample genomes could be reconstructed from the output, but this is explicitly not planned in future releases\cite{minigraphissue}.
+But even with these small variants added, minigraph's representation cannot be used to reconstruct the input haplotypes, as minigraph does not report sample's path through the graph \cite{minigraphdoc, minigraphissue}.%The input genomes cannot be reconstructed from minigraph output.
+%rGFA allows sample annotations on nodes specifying the samples they are associated with, however % nodes by their annotations, the genome % can we reconstruct initial sequence?
+%minigraph seems to only emit these annotations for the sample contributing a node to the graph with no option to change this\footnote{Though this information is available to the algorithm and could in principle be emitted.}.
+%Even if these were emitted for all samples, the fact that minigraph graphs can contain cycles would make a reconstructed genotype ambiguous as to the number of cyclic repeats it contains\cite{minigraphdoc}.
+%Emitting P-lines in the output would ensure the sample genomes could be reconstructed from the output, but this is explicitly not planned in future releases\cite{minigraphissue}.
 
 % TODO figure?
 
@@ -473,8 +470,10 @@ The graph induction is implemented in the seqwish package, while postprocessing 
 The PGGB pipeline is quite complex and involves multiple steps with $\mathcal{O}(n^2)$ worst-case complexity, making it very compute intensive although the implementation of base-level alignment subsetting has decreased compute requirementssomewhat.
 PGGB's nextflow implementation also scales more effectively on HPC systems, decreasing analysis latencies if sufficient computational resources are available.\\
 %collapses repeats
-As PGGB reports P lines containing paths for all samples, it is possible to reconstruct the input genomes, although some ambiguity remains .
-In general, because its graph is constructed from local all versus all alignments, PGGB can collapse nonlocal sequences if they have similar sequence and contain nonlocal edges, particularly in species with structurally complex or highly repetitive genomes\cite{cheng25}.
+As PGGB reports (potentially cyclic) paths for all samples, it is possible to reconstruct the input genomes from its representation.
+Compared to minigraph's representations, PGGB's output graphs tend to be much more collapsed.
+Though this depends on the exact parameters chosen during the all vs all alignment, in general PGGB collapses all repetitive elements, which can lead to many nonlocal edges in repeat-rich genomes\cite{cheng25}.\\
+%In general, because its graph is constructed from local all versus all alignments, PGGB can collapse nonlocal sequences if they have similar sequence and contain nonlocal edges, particularly in species with structurally complex or highly repetitive genomes\cite{cheng25}.
 PGGB graphs also frequently contain cycles, or multiple successive very small nodes that are not straightforward to untangle\cite{cheng25}. % better citation?
 
 
@@ -484,7 +483,36 @@ PGGB graphs also frequently contain cycles, or multiple successive very small no
 % overcollapsing, nonlocal structures (=> hairballs)
 % unclear biological/popgen interpretation
 
-Driving factors have been the flexibility of graphs to accomodate quite different approaches, as well as an emerging software ecosystem around the GFA1 file format making graph-based representations increasingly usable in many workflows\cite{garrison18, gfatools}.
+The sequence-oriented pangenome ecosystem has seen rapid development in recent years.
+Spearheaded by the HPRC and the partially overlapping minigraph-cactus team, it has developed a maturing ecosystem around the GFA1 file format, comprising both tools that produce and utilize pangenome graphs in this format, as well as utilities for manipulating them\cite{garrison18, hickey20, gfatools}.
+Originally designed by Heng Li to emit hifiasm's intermediary assembly graph outputs, GFA1 in its original iteration is a graph with nodes as sequences and edges as overlaps.
+To represent pangenome graphs, a subset sometimes referred to as rGFA1 is used; it disallows overlaps, requiring all edges to report empty overlaps of length 0.
+Extensions to the standard have added some pangenome-centric features to the format, such as the ability to report sample paths in the graph.
+Classical tools for visualizing GFAs have been used to visualize pangenome graphs, but the recent development of ODGI has aided visualization, particularly of PGGB's more densely connected graphs\cite{wick15, guarracino22, cheng25}.%, a pangenome graph-centric visualization toolkit has made the usability of the format much better, \cite{wick15, guarracino22}
+
+%As in usual in GFA, nodes are labelled with their nucleotide sequence.
+%It uses rGFA1, a subset of the GFA1 format proposed earlier by Heng Li.
+%Unlike in vanilla GFA1, edge labels are not used, as nodes are chosen to be non-overlapping.
+%Driving factors have been the flexibility of graphs to accomodate quite different approaches, as well as an emerging software ecosystem around the GFA1 file format making graph-based representations increasingly usable in many workflows
+
+However, graphical pangenomics still has some way to become established in the wider genomics field.
+In particular, many downstream applications only work with pangenomes produced by either PGGB or Minigraph(-Cactus), although they use the same file format.
+Repetitive and structurally complex regions and genomes also still present a considerable challenge, with especially PGGB introducing many nonlocal connections and producing a highly fragmented pangenome graph\cite{cheng25}.\\
+Most importantly, so far no downstream application using a graph-based representation to do something that would have been impossible or very challenging with either a linear reference or the uncollapsed haplotypes has been reported.%there has so far been a lack of downstream applications that would have not been possible or been downstream \cite{liao23}
+The HPRC's first draft release focused on improvements in short read alignment and small variant calling accuracy, and could demonstrate modest performance increases\footnote{About 1-2 percentage points for recall, less than 0.1 percentage points for precision in a medical dataset.}\cite{liao23}.
+Similarly, some improvements have been demonstrated for short-read structural variant calling, but it remains unreliable and increasingly obsolete given the accessibility of long reads\cite{hickey20}.
+Genome graphs have been used to reconstruct genomic sequence based on low coverage short- or long-read resequencing experiments\cite{sun25, siren24, wang26}.
+While these approaches manage much more complete profiling of sample genomes than traditional variant-calling based resequencing, they still cannot recover haplotypes not present in the (graph) reference, and struggle with novel recombination events; given the increasing affordability and ease of \textit{de novo} genome assembly from ONT reads, it is unclear if this approach will see community adoption.\\
+Graph representations have been used successfully to perform genetic associations for structural variants in cattle (genotype-phenotype association) and human (eQTL analysis) \cite{milia25, wang26}.
+This has recovered novel associations, and could present a compelling usecase for graph representations; however, especially in human, phenotypic association studies have been thought to require much larger sample sizes than are currently achievable in graph settings\cite{uffelmann21}, and it is commonly thought that SVs can be reliably tagged using small variants as markers, though the results reported by ref. \cite{wang26} challenge this assertion.
+Likewise, methods have been developed to use pangenome graph representation for identifying transposable elements, though they have not yet displaced traditional HMM-based approaches \cite{igolkina25, sierra24, tempel12}.
+% TE paragraph?
+
+I argue that a major factor holding the field back is a lack of clear conceptual motivation in current approaches besides collapsing similar sequences.
+This leads to graphs whose elements have unclear biological significance, and which are prone to produce unwieldy structures in complex regions or repetitive genomes.
+In this thesis, I will propose a different approach to represent sequence-oriented pangenomes based on extending the concept of synteny beyond the pairwise comparison of genomes.
+%Synteny is the underlying concept behind the 
+This representation uses both conceptual advances and software outputs from two softwares introduced in the next section.
 
 % go into pangenome promises?
 % => reference bias, population representativeness
