@@ -347,33 +347,11 @@ Currently, the Human Pangenome Reference Consortium has released phased genome a
 Humans have been the main focus of these efforts, but there are also major projects in model organisms, in particular the 1001G+ project in \textit{A. thaliana} \cite{1001g+, nassir25, wang26, hprc2}. % cite mulder?
 Increasing throughput and falling costs have also meant that recently, medium-sized assembly datasets can be prepared by individual, well-resourced labs without requiring consortia\cite{lian24, sun25, igolkina25, gross26}.
 
-As these modern datasets contain complete assembled genomes, they cannot adequately be represented in a VCF file like previous short-read genotyping projects without significant loss of information.
-VCF format cannot represent nested variants or structural variation differing in nested variants
-Additionally, phasing information would be lost, and retrieving the actual genomic sequence of a sample for e.g. read alignment would require another reference genome and be cumbersome at best.
-%Given that a representation is supposed to %ofor applications like read alignment or genome annotation would be cumbersome at best.
-Fundamentally, VCF's »list of differences« approach was designed to store small, simple variants in a suitable way for association studies, and makes it unsuitable as a reference.
-
-One may ask why the genomes need any kind of representation at all; storing the full sequence of all samples in separate (or even the same) FASTA file would preserve all information, and make obtaining the sequence trivial.
-This approach is not without precedent; the BLAST database is maintained in a similar way\cite{blastdoc}.
-While this »non-representation« would indeed not lose any information in the sample genomes, it would run into practical and conceptual limitations in many usecases.
-On the practical side, representing all sequences separately takes a constant amount of space per sample.
-This increases storage requirements, but more importantly makes using the reference in downstream analyses more memory- and compute-intensive.
-For example, a resequencing pipeline would need to align every read to >400 haploid genomes if it were to switch to the current human pangenome reference represented in this way.
-%The current human pangenome reference's raw haplotypes  
-This also shows the conceptual limitations of this non-representational approach; what would it mean in the described experiment for a read to align only to one genome, all 400, or to some but not others -- particularly if it does not align equally well all the time?
-Treating all samples separately may not remove any feature of the samples, but it fails to represent the information gleaned from their aggregation.\\
-It is however in my view a useful thought experiment to compare proposed representations to this non-representation, particular when considering their use in downstream analyses.
-This can elucidate advantages of the proposed representations and highlight information that is lost compared to the representation as unaggregated samples, ultimately highlighting desired features of a representation.
-In particular, a feature that emerges in this consideration is the ability to reconstruct the input haplotype sequences from a representation; this guarantees that the representation does not lose information present in the samples, and ensures that it can be converted to any other pangenome representation (as the non-representation is the starting point for all attempts at representation).
-Pangenome representations fulfilling this criterion can be conceptualized as an annotation of sorts to the non-representation, providing context and highlighting key features without a loss of information. % too wishy washy?
-
-
 % only use for term?
 % bacteria: gene-centred approach
 % but: wan tfull sequence for eukaryotes
 %Many projects have been started to use these technologies to obtain genomes for a representative set of the population, an effort generally termed pangenomics\cite{matthews24}. % review24?
 %This takes inspiration from bacterial genomics, where a genome has for a longer time been studied as a dynamic assembly of genes, many of which can freely be shared within or across taxon using plasmids and other non-chromosomal carries of genetic information.% interchange, particular in non-chromosomal DNA, has long been studied 
-
 
 \subsection*{Gene-centric Pangenomes}
 % need bridge? talk about HPRC again?
@@ -387,14 +365,56 @@ Bacterial genomes can change dynamically by taking up or losing plasmids and oth
 Reflecting this genomic elasticity and a straightforward interpretation, gene-centric representations have historically been the most popular approach in bacterial genomes\cite{matthews24}.
 While there are many kinds of gene-centric pangenome representations, a common lexicon has evolved in the field, differentiating core genes found in every sample's genome and accessory genes exhibiting presence/absence variation\footnote{Occasionally also into cloud genes, used for genes found only in a single or very few samples.}\cite{matthews24}.
 This terminology ignores any variants in or changes in the relative ordering of the genes.\\
-While gene-based pangenome representations have been used in eukaryotes as well, particularly for deep phylogenetic studies\cite{lovell22, matthews24}, sequence-based representations are desirable for today's datasets.
-Gene-based representations disregard the vast majority of the eukaryotic genome not coding for proteins, and thus cannot be used to investigate genome evolution proceeding neutrally or by changes in gene regulation, thought to be more common on a species- or family level. % TODO citation?
-Sequence graphs in particular have become the dominant representation used to represent eukaryotic pangenomes, though they have also recently gained traction in bacterial genomics\cite{noll23, canalda-baltrons25}.
-Driving factors have been the flexibility of graphs to accomodate quite different approaches, as well as an emerging software ecosystem around the GFA1 file format making graph-based representations increasingly usable in many workflows\cite{garrison18, gfatools}.
+While gene-based pangenome representations have been used in eukaryotes as well, particularly for deep phylogenetic studies\cite{lovell22, matthews24}, sequence-based representations tend to be more popular. %have been the focus of all major eukaryotic pangenome projects.% are desirable for today's datasets.
+Recently, some sequence-based pangenome graph representations originally developed for eukaryotic genomes have also made inroads into bacterial datasets\cite{noll23, canalda-baltrons25}.
+
+\subsection*{Sequence-based Pangenomes}
+Gene-based representations disregard the vast majority of the eukaryotic genome that does not code for proteins.
+This misses many variants, both neutral and affecting gene regulation.
+%, and thus cannot be used to investigate genome evolution proceeding neutrally or by changes in gene regulation, thought to be more common on a species- or family level. % TODO citation?
+As significant effort is spent assembling complete genomes, it is desirable to use a representation that can adequately represent all of the genome.
+All major eukaryotic pangenome projects have therefore focused on sequence-based pangenome representations, which will also form the basis of this thesis.
+Almost all sequence-oriented pangenome representations use some kind of a graph as the basis for their approach
+\footnote{With the notable of exception of GRCh38's additional unplaced contigs for certain regions known to be structurally polymorphic, if the reader accepts this as a pangenome.}.
+The sequence graphs used for this echo the representations used in Overlap-Layout-Consensus assembly algorithms (described in more detail in \textit{Genome Assembly} above), with the exception that pangenome graph representations typically disallow overlaps between different nodes.
+The major reason for using this graph-centred approach have been the availability of a well-established file format and a sequence graph's flexibility, accomodating quite different approaches in a common software ecosystem\cite{paten17, matthews24, gfatools, garrison18}.
+
+Early sequence-based pangenomes were constructed from VCF files obtained by calling variants between all samples and a common reference\cite{garrison18, pangenie}.
+However, these representations inherited all of VCF's limitations, in particular
+%they cannot adequately be represented in a VCF file like previous short-read genotyping projects without significant loss of information.
+VCF's inability to represent nested or complex variants and the ambiguouos way structural variants are represented in VCF.
+Additionally, VCF loses phasing information that cannot always be reconstructed during pangenome graph construction.
+%would be lost, and retrieving the actual genomic sequence of a sample for e.g. read alignment would require another reference genome and be cumbersome at best.
+%Given that a representation is supposed to %ofor applications like read alignment or genome annotation would be cumbersome at best.
+Fundamentally, VCF's list of differences approach was designed to store small variant genotypes across many samples for association studies, and is not suited to representing complete genomes.
+More modern approaches directly construct their pangenome representation from the input sequences, avoiding VCF's limitations.
+
+One may ask why the genomes need any kind of representation at all; storing the full sequence of all samples in separate (or even the same) FASTA file would preserve all information, and make obtaining the sequence trivial.
+This approach is not without precedent; the BLAST database is maintained in a similar way\cite{blastdoc}.
+While this »non-representation« would indeed not lose any information in the sample genomes, it would run into practical and conceptual limitations in most usecases.
+On the practical side, representing all sequences separately takes a constant amount of space per sample.
+This increases storage requirements, but more importantly makes using the reference in downstream analyses more memory- and compute-intensive.
+For example, a resequencing pipeline would need to align every read to >400 haplotypes if it were to switch to the current human pangenome reference represented in this way.
+%The current human pangenome reference's raw haplotypes  
+This also shows the conceptual limitations of this non-representational approach; what would it mean in the described experiment for a read to align only to one genome, all 400, or to some but not others -- particularly if it does not align equally well all the time?
+Treating all samples separately may not remove any feature of the samples, but it fails to represent the information gleaned from their aggregation.\\
+In my view, this is still a useful thought experiment to compare proposed representations with the raw, uncollapsed haplotypes.%, particular when considering their use in downstream analyses.
+This can highlight advantages of different proposed representations and elucidate limitations, ultimately revealing allowing an informed choice of representation and providing directions for the design of future implementation.\\%limitations and highlighting desired features of a representation.
+In particular, two features emerge in this consideration.
+First, the ability to reconstruct the input haplotype sequences from a representation; this property guarantees that the representation does not lose information present in the samples, and ensures that it can be converted to any other pangenome representation via the raw data.%(as the non-representation is the starting point for all attempts at representation).
+%There are two major reasons why this may not be the case in a given representation
+Reconstructing the input may be impossible either because the representation discards some genomic sequence from the input haplotypes, or because the representation is ambiguous as to the arrangement of the sequences -- i.e. keeps the pieces, but not the instruction manual for how to put them back together.
+Pangenome representations fulfilling this criterion can be conceptualized as a compression or annotation of the input haplotypes.\\ % too wishy washy?
+Second, a pangenome representation should be compact, scaling slower than the raw uncollapsed haplotypes.% and not require excessive space.
+This serves to make downstream analyses computationally more feasible given the scale of recent datasets, and to avoid excessive redundancy that would otherwise make it difficult to draw conclusions from approaches using the representation.%in the outputs of such analyses.
+In regards to this consideration, different representations can be thought of as occupying different places along a spectrum of redundant vs. collapsed representations\cite{paten17}.
+While the input haplotypes occupy the extreme end of collapsing nothing and preserving all redundancy, an imaginary fully collapsed representation would consist only of the bases \texttt{A}, \texttt{C}, \texttt{G}, \texttt{T}, and arguably be even less useful in practice.\\
+Different proposed approaches sit at different points along this spectrum, and it is helpful to bear this in mind when choosing between them and setting their parameters, particularly considering that different analyses may require or prefer different degrees of collapse \cite{hickey24, sierra24, igolkina25}
+%In practice the most useful representations will lie somewhere between these two extremes, but it is helpful to bear this spectrum in mind when choosing or designing pangenome representations.%of pangenome representations by their containing 
 
 \subsection*{Minigraph}
 % minigraph
-The first sequence-based pangenome graph toolkit was \texttt{minigraph}, released in 2020 by Heng Li\cite{minigraph}.
+The first modern sequence-based pangenome graph toolkit able to directly construct a graph not based on a VCF representation was \texttt{minigraph}, released in 2020 by Heng Li\cite{minigraph}.
 It uses rGFA1, a subset of the GFA1 format proposed earlier by Heng Li.
 As in usual in GFA, nodes are labelled with their nucleotide sequence.
 Unlike in vanilla GFA1, edge labels are not used, as nodes are chosen to be non-overlapping.
@@ -457,7 +477,8 @@ PGGB graphs also frequently contain cycles, or multiple successive very small no
 
 
 \subsection*{An emerging consensus?}
-TODO
+Driving factors have been the flexibility of graphs to accomodate quite different approaches, as well as an emerging software ecosystem around the GFA1 file format making graph-based representations increasingly usable in many workflows\cite{garrison18, gfatools}.
+
 % go into pangenome promises?
 % => reference bias, population representativeness
 % politely mention hairballs
