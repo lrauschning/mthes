@@ -478,9 +478,21 @@ It was shown earlier in this section that this ordering has to be consistent acr
 All that is left to do, then, is to scan through all nodes and increment two counters for core and merasynteny, resetting the latter counter when incrementing the first.
 
 % range queries? or discussion
-Ranges corresponding to coresynteny boundaries can easily be described by their two PanCos $\texttt{S.0} < \texttt{E.0}$, with any node with PanCo $\texttt{A.a}$ being part of the range iff $\texttt{S.0} < \texttt{A.a} < \texttt{E.0}$ holds.
-Ranges with merasyntenic boundaries $A.a \in [S.s;E.e]$ iff 
-TODO, not sure if necessary? 
+PanCo has partial support for describing ranges: those corresponding to coresynteny boundaries can easily be described by their two PanCo indexes $\texttt{S.0} < \texttt{E.0}$, with any node with PanCo $\texttt{A.a}$ being part of the range iff $\texttt{S.0} < \texttt{A.a} < \texttt{E.0}$ holds.
+Ranges inside of merasyntenic nodes are harder to work with, in particular because indexes may not be consecutive.
+If we define a range between two nodes as the intersection of their set of (indirect) predecessors and successors, respectively, the inclusion criterion above will not always be sharp, i.e. while all nodes within the range will meet the criterion, other nodes may do so as well.
+%will be met for all nodes in the range, may also be met for unrelated nodes 
+%An inclusion criterion as defined above will be met efining 
+%Additionally, a range may be ambiguous if it describes any two nodes not forming a (super-)bubble, i.e. a subgraph with no outside connections.
+%As a simple example, picture two the inclusive range between the nodes \texttt{A.a}, \texttt{A.b} immediately adjacent on a sample.
+%Now imagine that on another sample, a node \texttt{A.c} immediately follows after \texttt{A.a}.
+%If \texttt{A.b} is among the (including indirect) successors of \texttt{A.c}
+%Should \texttt{A.c} be included in the range?
+As a practical approach, I would advise using node-sets or paths instead of ranges when referring to subgraphs of the MPG not matching coresyntenic bubbles.
+While arguably more cumbersome, their more explicit nature provides for easier debugging and avoids ambiguity. %These are also to describe subsets of the MPG
+%They can be described using their complement
+%Ranges with merasyntenic boundaries $A.a \in [S.s;E.e]$ iff 
+%TODO, not sure if necessary? 
 % can i find a senseful definition?
 % not sure, can add disjointed ones between anywhere
 % => maybe maximalist definition, define away complement?
