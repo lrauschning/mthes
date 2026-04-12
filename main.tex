@@ -8,20 +8,6 @@
 %
 % finall, briefly mention dataset?
 
-%TODO incorporate
-\subsection*{Dependency Modernizations}
-% changes: parallelization, move away from pandas datastructures
-In order to make msyd suitable for graph construction, the codebase was improved in a few key ways.
-In particular, the core datastructures were rewritten to avoid SyRI-style pandas DataFrames and instead use a Cython list type per chromosome.
-This new datastructure has a more convenient API, but more importantly can be efficiently serialized and thus allows parallelization across different chromosomes without interfering with Python's Global Interpreter Lock.
-In total, this allows msyd to use multiple cores, especially for steps other than the sequence alignment.
-
-To maintain it in a usable state for msyd and for general use, SyRI was updated to be compatible with the 3.x version of \texttt{pandas}, and run in versions of python newer than 3.11.
-This required a partial rewrite of SyRI's internal datastructures and the way Cython's TypedMemoryView interface is used to account for pandas' change to copy-on-write behaviour in version 3.
-Along the way, some of SyRI's error handling was modernized, particularly to avoid silent errors and always return a non-zero exit code in any error state.\\
-All changes made to SyRI were upstreamed, and incorporated into the 1.8.0 release.
-
-
 
 \section*{Phaseability}
 
@@ -268,6 +254,21 @@ The GFA export step has the highest memory requirements of all graph constructio
 This derives from the need to access genomes from many samples to obtain the node sequences in the graph. 
 %In practice, this stage of the algorithm does however have the highest memory requirements, as the genomes of all organisms need to be available for annotating nodes in the GFA file with their respective sequences.
 Using \texttt{pysam}'s FASTA class for dynamically reading from the genome files as required helped reduce required memory, but demand can still be substantial in datasets with many samples and large genomes.%though in the worst case all genomes are still required to be in memory simultaneously.
+
+%TODO incorporate
+\subsection*{Dependency Modernizations}
+% changes: parallelization, move away from pandas datastructures
+In order to make msyd suitable for graph construction, the codebase was improved in a few key ways.
+In particular, the core datastructures were rewritten to avoid SyRI-style pandas DataFrames and instead use a Cython list type per chromosome.
+This new datastructure has a more convenient API, but more importantly can be efficiently serialized and thus allows parallelization across different chromosomes without interfering with Python's Global Interpreter Lock.
+In total, this allows msyd to use multiple cores, especially for steps other than the sequence alignment.
+
+To maintain it in a usable state for msyd and for general use, SyRI was updated to be compatible with the 3.x version of \texttt{pandas}, and run in versions of python newer than 3.11.
+This required a partial rewrite of SyRI's internal datastructures and the way Cython's TypedMemoryView interface is used to account for pandas' change to copy-on-write behaviour in version 3.
+Along the way, some of SyRI's error handling was modernized, particularly to avoid silent errors and always return a non-zero exit code in any error state.\\
+All changes made to SyRI were upstreamed, and incorporated into the 1.8.0 release.
+
+
 
 \subsection*{Properties of the multisynteny graph}
 \newcommand{\aln}{\mathcal{A}}
