@@ -379,9 +379,15 @@ This is obviously a contradiction, proving that the graph is acyclic.
 
 This fact allows us to further characterize the MPG.
 As every path has to pass through coresyntenic nodes exactly once and the graph is acyclic, the coresyntenic nodes induce regular bottlenecks in the graph, giving it a linear backbone.
+Subgraphs between two coresyntenic regions form (super-)bubbles, as the only ingress/egress nodes are the coresyntenic regions itself.
+This guarantees that there are no non-local edges in the MPG.\\
 Nodes always have equal in- and outdegree, except for those at contig breaks or telomere ends in T2T assemblies.
 The degree of a node is also bounded by the number of samples passing through it; as such, no node can have more adjacent edges than twice the number of samples.
-As the start/end of each node corresponds to the start/end of a syntenic alignment, all non-private nodes with less than two successors represent deletions.
+As the start/end of each node corresponds to the start/end of a syntenic alignment, all non-private nodes with less than two successors represent deletions.\\
+This bound on the number of edges is a useful property, as many classic graph algorithms scale linearly in the number of edges.
+%It also allows for analysing the space and runtime complexity of the representation itself runtime for the runtime analysis 
+
+
 
 %moved to discussion, replace with more concise section here
 
