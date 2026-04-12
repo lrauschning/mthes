@@ -197,11 +197,10 @@ In fact, this ordered set is guaranteed to be an acyclic path, as any node is ei
 Reflecting that the addition of private regions allows the graph to represent the sequence of the pangenome along with multisynteny calles, we term it \emph{Multisyntenic Pangenome Graph (MPG)}.
 
 \subsection*{Constructing a Multisynteny Graph}
-%TODO pseudocode figure
 
 \begin{algorithm}[t]
 	\SetKwFunction{MPG}{Construct\_MPG}
-	\Fn({}){\MPG{$\text{multisyns}$}}{
+	\Fn({}){\MPG{multisyns}}{
 		%multisyns := multisyns.sort()\\
 		curr := Map($\{s \to \textrm{null}\quad \forall s \in$ getSamples() $\}$ )\\
 		\For{\texttt{ms} $\in$ multisyns.sort()}{
@@ -225,6 +224,36 @@ Reflecting that the addition of private regions allows the graph to represent th
 	Lorem ipsum dolor sit amet.
 	}
 	\label{algo:mpg}
+\end{algorithm}
+
+\begin{algorithm}[t]
+	\SetKwFunction{GFA}{GFA\_Export}
+	\Fn({}){\GFA{nodes, samples}}{
+		index := PanCo()
+		%multisyns := multisyns.sort()\\
+		// already sorted from construction\\
+		\For{\texttt{n} $\in$ nodes}{
+			\eIf{\texttt{n}.multisyn is coresyn}{
+				index := index.increment\_core()\\
+			}{
+				index := index.increment\_mera()\\
+			}
+			\texttt{n}.index := index
+			emit\_S\_line(\texttt{n}.index, get\_sequence(\texttt{n}.multisyn))
+			\For{\texttt{p} $\in$ \texttt{n}.predecessors}{
+				// \texttt{p} must have been indexed, as it is a predecessor\\
+				emit\_L\_line(\texttt{p}.index, \texttt{n}.index)\\
+			}
+		}
+		\For{\texttt{s} $\in$ samples}{
+			path := trace\_path(\texttt{s})\\
+			emit\_W\_line(\texttt{s}, path)\\
+		}
+	}
+	\caption{\textbf{Pseudocode illustrating how a MPG is exported to GFA format using PanCo indexing.}\\
+	Lorem ipsum dolor sit amet.
+	}
+	\label{algo:gfa}
 \end{algorithm}
 
 % graph construction algo, briefly explained
