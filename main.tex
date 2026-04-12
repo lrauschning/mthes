@@ -31,7 +31,7 @@ All changes made to SyRI were upstreamed, and incorporated into the 1.8.0 releas
 	\caption{
 	\textbf{Minimum coverage requirements for genome phasing.}\\
 	\textbf{Step 1}, every haplotype needs to be covered by a read.
-	Because they are sampled randomly with replacement, more reads than haplotypes need to be drawn to be certain that all haplotypes are covered.\\
+	Because they are sampled randomly with replacement, more reads than haplotypes need to be drawn to be certain that all haplotypes are covered.
 	\textbf{Step 2}, the average coverage has to be adjusted as to be sufficient to fulfil step 1's requirement even in regions that randomly have lower coverage than average.
 	\textbf{Step 3}, not every read is informative for phasing.
 	In this illustration, $R_2$ and $R_3$ do not contain any information as they cover only a single haplotype.
@@ -50,13 +50,25 @@ All changes made to SyRI were upstreamed, and incorporated into the 1.8.0 releas
 
 Given that a phased assembly of a human genome can nowadays be obtained with no additional inputs beyond ultra-long read sequencing\cite{cheng24, gross26}, the question naturally arises if this achievement can be extended to complex, polyploid genomes.
 Relying on only a single technology is highly desirable, as it simplifies experimental planning and reduces labour requirements, costs and possible failure modes, allowing higher sample throughput and shorter project timelines.
-This has, to the best of my knowledge, not yet been reported in the literature.
+This has, to the best of my knowledge, not yet been reported in the literature for any polyploid genome.
 The question naturally arises if this is because it is impossible with current sequencing technologies, and if so, what kind of advancements would be required to overcome this limitation.
 In this section, I will derive minimal requirements for long-read datasets to contain the information required to phase a genome. % of a given read length to cover 
 This naturally leaves out the question of whether current algorithms are able to successfully extract this information, but serves as a limit on the phasing quality achievable by any conceivable algorithm using only read information. 
 If requirement minima turn out to be uneconomically high, it can be concluded that read-based phasing is not feasible in the modelled setting, and additional information from e.g. HiC experiments is required.
 The modelling effort may also serve to investigate how expected advances in sequencing technology affect our ability to use reads for phasing, in particular as reads get ever-longer.
 %as sequencing the effect of expected advances in sequencing technology, in particular longer reads.
+
+In the literature, there are many empirically motivated suggestions for sequencing depth to use, some of them practically validated in human or rarely other data\cite{sarashetti24, schell25, ebpseqrecs}.
+Sequencing depth recommendations are usually concerned either with the most economical way to genotype a cohort through resequencing, or a reliable way to obtain a high-quality assembly.
+With the recent possibility of phased assembly, some recommendations of sequencing inputs exist for humans, but none apply to polyploids or, more generally, separate phasing from assembly\cite{sarashetti24}.\\
+%If mentioned at all, phasing is treated as an afterthought to phased genome assembly.
+The most recent theory-oriented work discussing anything related I could find in the literature is Lander and Waterman's short paper on requirements for clone-based physical mapping in the second issue of Genomics in 1988 (ref. \cite{lander88}).
+The paper introduced the use of the Poisson distribution to model random clones/sequencing reads, and its approach was later used to derive coverage requirements for the human genome project\cite{illuminaseqrecs}.\\
+In this section, I have a similar aim to it:
+To model the read-based phasing problem in a systematic way, and derive minimal dataset requirements for a genome to be phaseable with a certain probability.
+This depends on key parameters, in particular ploidy and the length of shared stretches, that can be systematically investigated using a theoretical model.
+To conclude, I will discuss the concrete situation in potato, reflecting our laboratory's current efforts to assemble potato genomes, and present a small script providing sequencing recommendations based on the approach developed in this section.
+%close this gap by deriving minimal requirements%close this gap by deriving minimal requirements for the phasing of polyploid genomes, 
 
 %for reconstructing phased potato genomes, and look at how different properties of our sequencing technology and genome characteristics affect these requirements.
 %Because of standing variation or spontaneous mutational processes, these so-called haplotypes may differ between another in minor or major ways.
@@ -79,7 +91,7 @@ Defining phasing in terms of this boolean function rather than a haplotype parti
 %How do we construct such a phasing?
 Using this definition of phasing, we can proceed to examine the information we have available in a dataset of sequencing reads, and proceed to find criteria by which we can decide if a high-quality phasing can, in principle, be constructed from it.
 When encountering a read, we know all of its sequence to be derived from a single physical piece of DNA corresponding to a fragment of a single haplotype
-\footnote{With the possible exception of PCR artefacts if the library was not prepared by a PCR-free protocol.}.
+\footnote{With the possible exception of chimeric reads as a result of PCR artefacts or other sequencing errors.}.
 If two haplo-unique sequences $u_0, u_1$ are found on the same read $r := (u_0, u_1)$, we can assign them to the same haplotype; this construction can be transitively extended, if we have two reads $(u_0, u_1), (u_1, u_2)$, we can use the shared haplo-unique site $u_1$ to assign $u_0$ and $u_2$ to the same haplotype.
 Note that, repetitive sequences are not inherently problematic for phasing; so long as the sequence contains sufficient haplo-unique sequences, it can be easy to phase (though possibly difficult to assemble); and vice versa, a perfectly nonrepetitive sequence may be difficult or impossible to phase if it contains large stretches shared by all haplotypes.
 
@@ -133,7 +145,8 @@ As every read has a single starting position, a mean sequencing coverage of $X$ 
 We thus expect $(\ell-d)\frac{X}{\ell}=\frac{\ell-d}{\ell}X$ reads to fulfil this criterion.
 As we assume reads to be Poisson distributed, we can simply multiply our coverage estimate derived in step 2 with this factor.
 
-%TODO add table of concrete estimated requirements
+%TODO add table of concrete estimated requirements, for potato
+%TODO shout out R script
 
 
 \section*{A multisynteny graph}
@@ -184,10 +197,12 @@ In fact, this ordered set is guaranteed to be an acyclic path, as any node is ei
 Reflecting that the addition of private regions allows the graph to represent the sequence of the pangenome along with multisynteny calles, we term it \emph{Multisyntenic Pangenome Graph (MPG)}.
 
 \subsection*{Constructing a Multisynteny Graph}
+%TODO pseudocode figure
+
 % graph construction algo, briefly explained
 % linear runtime, maybe mention sorting uses panco?
 Internally, the graph is represented as a sorted list of nodes, with each node containing an adjacency list of its predecessors and successors, labelled by the sample on which they are directedly adjacent.
-This allows efficient forward and backward traversal, but avoids excessive pointer chasing and fragmented memory allocation.
+This allows efficient forward and backward traversal in a simple datastructure.%, but avoids excessive pointer chasing and fragmented memory allocation.
 Private nodes are encoded implicitly in the genomic coordinates associated with each multisyntenic node.
 The graph is divided by chromosome, allowing all algorithms to be parallelized by chromosomes.\\
 Since every node in the MPG has at most as many successors as there are samples, and the path of each sample through the graph is acyclic and mutually compatible, we can construct this graph representation using a simple linear scan through the multisyntenic regions.
@@ -213,7 +228,6 @@ The GFA export step has the highest memory requirements of all graph constructio
 This derives from the need to access genomes from many samples to obtain the node sequences in the graph
 %In practice, this stage of the algorithm does however have the highest memory requirements, as the genomes of all organisms need to be available for annotating nodes in the GFA file with their respective sequences.
 Using \texttt{pysam}'s FASTA class for dynamically reading from the genome files as required helped reduce required memory, but demand can still be substantial in datasets with many samples and large genomes.%though in the worst case all genomes are still required to be in memory simultaneously.
-See Table \ref{table:benchmarks} for concrete benchmarking results on two datasets.
 
 \subsection*{Properties of the multisynteny graph}
 \newcommand{\aln}{\mathcal{A}}
@@ -328,22 +342,24 @@ Nodes always have equal in- and outdegree, except for those at contig breaks or 
 The degree of a node is also bounded by the number of samples passing through it; as such, no node can have more adjacent edges than twice the number of samples.
 As the start/end of each node corresponds to the start/end of a syntenic alignment, all non-private nodes with less than two successors represent deletions.
 
-Comparing to pangenome graphs based on local-alignments and variation graphs, MPG differ in a number of key ways.
-First, small variants not breaking synteny are not represented in the graph structure.
-This is similar to a common filtering step used for variation graphs \cite{matthews24, hickey24}.
-As the graph can be annotated with exact positions on each sample and aligments are available in the PSF file, these can be recovered in a fairly straightforward way.
-Second, a MPG will never introduce a circle by collapsing repetitive sequences, and will also never collapse nonlocal nodes or produce nodes with many nonlocal connections.
-Similarly, no connection can be made between nodes on different chromosomes, ensuring that chromosomes can always cleanly be separated out as independent subgraphs.
-In fact, the emitted GFA file contains comments indicating the chromosome subgraphs.
+%moved to discussion, replace with more concise section here
 
-At the same time, as syntenic alignments are found using minimap2's approximate and SyRI may also fall back to a heuristic approach in complex situations, the multisyntenic pangenome graph constructed by msyd may in pratice be less than fully collapsed, particularly in highly diverged or repetitive regions.
-Approaches to further collapse the graph or filter out rare or small nodes may be useful in practice, in particular with regard to private nodes.
-
-Which graph representation is ideal will of course depend on the nature of the dataset and scientific question.
-The MPG differs from other current pangenome representations.
-It has a more regular structure, and aims to capture large-scale structure over local events.
-In the next section, I will outline a procedure using the regular structure of the MPG to define a pangenomic coordinate system termed PanCo, allowing genomic coordinates to be compared across different samples in a principled and consistent way.%\footnote{Note that a similar procedure is in fact used to ensure consistent sorting across samples during MPG construction.}.
-This not only serves a direct purpose, but also demonstrates the advantages of a representation possessing strong structural guarantees, and illustrates how these can be used to derive efficient algorithms appropriate for modern genomics datasets.
+%Comparing to pangenome graphs based on local-alignments and variation graphs, MPG differ in a number of key ways.
+%First, small variants not breaking synteny are not represented in the graph structure.
+%This is similar to a common filtering step used for variation graphs \cite{matthews24, hickey24}.
+%As the graph can be annotated with exact positions on each sample and aligments are available in the PSF file, these can be recovered in a fairly straightforward way.
+%Second, a MPG will never introduce a circle by collapsing repetitive sequences, and will also never collapse nonlocal nodes or produce nodes with many nonlocal connections.
+%Similarly, no connection can be made between nodes on different chromosomes, ensuring that chromosomes can always cleanly be separated out as independent subgraphs.
+%In fact, the emitted GFA file contains comments indicating the chromosome subgraphs.
+%
+%At the same time, as syntenic alignments are found using minimap2's approximate and SyRI may also fall back to a heuristic approach in complex situations, the multisyntenic pangenome graph constructed by msyd may in pratice be less than fully collapsed, particularly in highly diverged or repetitive regions.
+%Approaches to further collapse the graph or filter out rare or small nodes may be useful in practice, in particular with regard to private nodes.
+%
+%Which graph representation is ideal will of course depend on the nature of the dataset and scientific question.
+%The MPG differs from other current pangenome representations.
+%It has a more regular structure, and aims to capture large-scale structure over local events.
+%In the next section, I will outline a procedure using the regular structure of the MPG to define a pangenomic coordinate system termed PanCo, allowing genomic coordinates to be compared across different samples in a principled and consistent way.%\footnote{Note that a similar procedure is in fact used to ensure consistent sorting across samples during MPG construction.}.
+%This not only serves a direct purpose, but also demonstrates the advantages of a representation possessing strong structural guarantees, and illustrates how these can be used to derive efficient algorithms appropriate for modern genomics datasets.
 
 \subsection*{Pangenomic Coordinate (PanCo)}
 % start: navigating in a pangenome
