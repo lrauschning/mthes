@@ -230,37 +230,6 @@ Reflecting that the addition of private regions allows the graph to represent th
 	\label{algo:mpg}
 \end{algorithm}
 
-\begin{algorithm}[t]
-	\SetKwFunction{GFA}{GFA\_Export}
-	\Fn({}){\GFA{nodes, samples}}{
-		index := PanCo()\\
-		// already sorted from construction\\
-		\For{\texttt{n} $\in$ nodes}{
-			\eIf{\texttt{n}.multisyn is coresyn}{
-				index := index.increment\_core()\\
-			}{
-				index := index.increment\_mera()\\
-			}
-			\texttt{n}.index := index
-			emit\_S\_line(\texttt{n}.index, get\_sequence(\texttt{n}.multisyn))
-			\For{\texttt{p} $\in$ \texttt{n}.predecessors}{
-				// \texttt{p} must have been indexed, as it is a predecessor\\
-				emit\_L\_line(\texttt{p}.index, \texttt{n}.index)\\
-			}
-		}
-		\For{\texttt{s} $\in$ samples}{
-			path := trace\_path(\texttt{s}, nodes)\\
-			emit\_W\_line(\texttt{s}, path)\\
-		}
-	}
-	\caption{\textbf{Pseudocode illustrating how a MPG can be exported to GFA format, using PanCo indexes as node IDs.}\\
-	Note that we get the PanCo indexes »for free« from the ordering of the graph during construction\footnote{In the implementation, they are computed during graph construction; this was left out in Algorithm \ref{algo:mpg} for clarity}.
-	Here they are used as node IDs to make the GFA output easier to read.\\
-	The most expensive step in this algorithm in practice is obtaining the genomic sequence at the required position, as this involves significant I/O.
-	}
-	\label{algo:gfa}
-\end{algorithm}
-
 % graph construction algo, briefly explained
 % linear runtime, maybe mention sorting uses panco?
 Internally, the graph is represented as a sorted list of nodes, with each node containing an adjacency list of its predecessors and successors, labelled by the sample on which they are directedly adjacent.
@@ -288,7 +257,8 @@ Memory-wise, the graph requires two references per sample and multisyntenic regi
 GFA export is performed by traversing the graph using the same order as during graph construction
 \footnote{At no additional computational cost, as the sorting is retained in the node list.},
 though in the worst case as many private regions as samples need to be annotated in every traversal step.
-For an overview of the steps performed during GFA export, see Algorithm \ref{algo:gfa}.\\
+By default, the GFA format uses indexes introduced later in this section.
+See that section for an an overview of the GFA export procedure in Algorithm \ref{algo:gfa}.\\
 The GFA export supports using the W-line feature added in version 1.1 of the GFA standard to explicitly annotate all or a selection of sample's paths through the MPG.% , we can add the sample paths to the GFA output as W-lines.
 Further, the origin and samples present in a node are added to each node using the annotations defined in the rGFA extension of the GFA1 standard.
 %we can use node labels to annotate each node with its used reference, corresponding interval and all samples passing through it.
@@ -436,6 +406,38 @@ As the start/end of each node corresponds to the start/end of a syntenic alignme
 % use constraint by coresyn as coordinate system
 % namecheck pangenome haplotype ID convention
 % compare to odgis + complex algorithm?
+\begin{algorithm}[t]
+	\SetKwFunction{GFA}{GFA\_Export}
+	\Fn({}){\GFA{nodes, samples}}{
+		index := PanCo()\\
+		// already sorted from construction\\
+		\For{\texttt{n} $\in$ nodes}{
+			\eIf{\texttt{n}.multisyn is coresyn}{
+				index := index.increment\_core()\\
+			}{
+				index := index.increment\_mera()\\
+			}
+			\texttt{n}.index := index
+			emit\_S\_line(\texttt{n}.index, get\_sequence(\texttt{n}.multisyn))
+			\For{\texttt{p} $\in$ \texttt{n}.predecessors}{
+				// \texttt{p} must have been indexed, as it is a predecessor\\
+				emit\_L\_line(\texttt{p}.index, \texttt{n}.index)\\
+			}
+		}
+		\For{\texttt{s} $\in$ samples}{
+			path := trace\_path(\texttt{s}, nodes)\\
+			emit\_W\_line(\texttt{s}, path)\\
+		}
+	}
+	\caption{\textbf{Pseudocode illustrating how a MPG can be exported to GFA format, using PanCo indexes as node IDs.}\\
+	Note that we get the PanCo indexes »for free« from the ordering of the graph during construction.
+	In the implementation, they are computed during graph construction; this was left out in Algorithm \ref{algo:mpg} for clarity.
+	Here they are used as node IDs to make the GFA output easier to read.\\
+	The most expensive step in this algorithm in practice is obtaining the genomic sequence at the required position, as this involves significant I/O.
+	}
+	\label{algo:gfa}
+\end{algorithm}
+
 
 To navigate a genome representation for any use, a system allowing for positions to be specified and compared is required.
 In a linear reference genome, a chromosome ID and number corresponding to the number of bases from the 3' end is sufficient for this purpose.
