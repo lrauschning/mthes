@@ -185,7 +185,7 @@ We can use this property to derive a sample-independent definition of directed a
 This relation is similar to sample-adjacency, but is undefined if $A$ and $B$ do not share a sample.
 
 % similarity to assembly graph? => genomes as paths
-% => circle-free
+% => acyclic
 Using our definition of adjacency, we can now define a multisynteny graph.
 We first consider with the set of all multisyntenic regions as the node set, and connect two nodes with a directed edge if they are directedly adjacent.
 The sequence assigned to the nodes corresponds to the sequence found at the sample used as reference during the identification of the multisyntenic regions; it could also be defined to be a consensus sequence derived from the alignments, though computing this would require an MSA, which may become prohibitively expensive as the number of samples grows larger.
@@ -288,7 +288,7 @@ A_i < \dots < \aln_{\ell_i \to i} (A_{\ell_i})\\
 A_i < A_i
 \end{eqnarray*}
 , in the last step using that all regions in $A$ have to align to each other.
-This is obviously a contradiction, proving that the graph is circle-free.
+This is obviously a contradiction, proving that the graph is acyclic.
 
 %iConsider the samples used along all of these steps. 
 %Let $i, l$ be the samples used in these steps first and last of these steps (not necessarily distinct).
@@ -320,8 +320,8 @@ This is obviously a contradiction, proving that the graph is circle-free.
 %By the definition of multisynteny, we know $A_i$ to align to $A_j$
 %
 %
-%We consider two multisyntenic regions $M$ and $M'$ that are both upstream and downstream of each other in genomes $q$ and $q'$, forming a circle in the graph representation.
-%Because downstream/upstreamness is transitive, this case covers all possible circles in the graph.
+%We consider two multisyntenic regions $M$ and $M'$ that are both upstream and downstream of each other in genomes $q$ and $q'$, forming a cycle in the graph representation.
+%Because downstream/upstreamness is transitive, this case covers all possible cycle in the graph.
 %Formally, we can express this as $\exists q, q': M[q] < M'[q] \wedge M'[q'] < M[q']$.
 %Consider the alignment $\aln_{q \to q'}$.
 %If this hasn't explicitly been constructed, we can induce it from two alignments to a common reference $r$: $\forall i \aln_{q \to q'}:= \aln^{-1}_{q' \to r}[\aln_{q \to r}[i]]$.
@@ -343,7 +343,7 @@ This is obviously a contradiction, proving that the graph is circle-free.
 %%This proof does thus not guarantee that an msyd run may not produce output inducing a circular graph representation in certain edgecases, but instead serve to justify its pruning as making an approximative component of the algorithm match the mathematical guarantees of an exact algorithm.
 
 This fact allows us to further characterize the MPG.
-As every path has to pass through coresyntenic nodes exactly once and the graph is circle-free, the coresyntenic nodes induce regular bottlenecks in the graph, giving it a linear backbone.
+As every path has to pass through coresyntenic nodes exactly once and the graph is acyclic, the coresyntenic nodes induce regular bottlenecks in the graph, giving it a linear backbone.
 Nodes always have equal in- and outdegree, except for those at contig breaks or telomere ends in T2T assemblies.
 The degree of a node is also bounded by the number of samples passing through it; as such, no node can have more adjacent edges than twice the number of samples.
 As the start/end of each node corresponds to the start/end of a syntenic alignment, all non-private nodes with less than two successors represent deletions.
@@ -392,7 +392,7 @@ This can only happen to multisynteny found between the start of a chromosome and
 As coresyntenic nodes have a total ordering and induce bottlenecks in the graph, the first number can be used to compare PanCos.
 That is, given two PanCos $\texttt{A.a}, \texttt{B.b}$ and $\texttt{A} > \texttt{B}$, $\texttt{A.a} > \texttt{B.b}$ follows regardless of the values of $\texttt{a}$ and $\texttt{b}$.
 The second number indexes merasyntenic nodes found between two core syntenic nodes.
-As the MPG is cycle-free, its directed edges imply a partial ordering.
+As the MPG is acyclic, its directed edges imply a partial ordering.
 The second number's are assigned to be consistent with this partial ordering; that is, $\texttt{A}=\texttt{B}$ and $\texttt{a} > \texttt{b}$ implies $\texttt{A.a} \nless \texttt{B.b}$, meaning that either $\texttt{A.a} > \texttt{B.b}$ on all shared samples, or the two do not share any samples and cannot be compared by transitive closure of intermediary nodes, either.
 %Bearing in mind that no direct comparison is possible between nodes in some subgraph configurations, these are the strongest guarantees available.
 As the preceding coresyntenic node covers all samples occurs before any merasyn, , its second number is assigned as $0$; it follows that $\texttt{A.0} < \texttt{A.x}$ for $x > 0$.% nodetopological ordering begins at the preceding coresyntenic node, 
