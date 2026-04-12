@@ -202,10 +202,10 @@ Reflecting that the addition of private regions allows the graph to represent th
 	\SetKwFunction{MPG}{Construct\_MPG}
 	\Fn({}){\MPG{multisyns}}{
 		%multisyns := multisyns.sort()\\
-		curr := Map($\{s \to \textrm{null}\quad \forall s \in$ getSamples() $\}$ )\\
-		\For{\texttt{ms} $\in$ multisyns.sort()}{
-			\texttt{n} := init\_node(ms)\\
-			\For{\texttt{s} $\in$ \texttt{ms}.samples}{
+		curr := Map($\{s \to \textrm{null}\quad \forall s \in$ get\_samples() $\}$ )\\
+		\For{\texttt{m} $\in$ multisyns.sort()}{
+			\texttt{n} := init\_node(m)\\
+			\For{\texttt{s} $\in$ \texttt{m}.samples}{
 				\eIf{dist(curr[\texttt{s}].multisyn[\texttt{s}], n.multisyn[\texttt{s}]) > $T$}{
 					// $T$ is 0 by default, but can be configured\\
 					make\_link(curr[s], \texttt{n})\\
@@ -221,7 +221,11 @@ Reflecting that the addition of private regions allows the graph to represent th
 		}
 	}
 	\caption{\textbf{Pseudocode illustrating the MPG construction algorithm.}\\
-	Lorem ipsum dolor sit amet.
+	$T$ on line 5 is a parameter that can be adjusted by the user, if desired.
+	The default setting is $T=0$, meaning that even very small sequence between multisyntenic sequences are reported as private nodes.
+	This maintains the invariant of not discarding any sequence during graph construction; if this is not a concern, setting it to e.g. $50$ can result in a more compact graph representation.\\
+	The \texttt{make\_link} function stores a bidirectional link in the predecessor/successor lists of both nodes.\\
+	The worst-case runtime of this algorithm is determined by the call to \texttt{.sort} in line 2; in practice the input received from msyd is for the most part presorted, and sorting can be ensured in linear time, making the average-case runtime $\mathcal{O}(|\text{get\_samples()}||\text{multisyns}|$.
 	}
 	\label{algo:mpg}
 \end{algorithm}
@@ -229,8 +233,7 @@ Reflecting that the addition of private regions allows the graph to represent th
 \begin{algorithm}[t]
 	\SetKwFunction{GFA}{GFA\_Export}
 	\Fn({}){\GFA{nodes, samples}}{
-		index := PanCo()
-		%multisyns := multisyns.sort()\\
+		index := PanCo()\\
 		// already sorted from construction\\
 		\For{\texttt{n} $\in$ nodes}{
 			\eIf{\texttt{n}.multisyn is coresyn}{
@@ -246,12 +249,14 @@ Reflecting that the addition of private regions allows the graph to represent th
 			}
 		}
 		\For{\texttt{s} $\in$ samples}{
-			path := trace\_path(\texttt{s})\\
+			path := trace\_path(\texttt{s}, nodes)\\
 			emit\_W\_line(\texttt{s}, path)\\
 		}
 	}
-	\caption{\textbf{Pseudocode illustrating how a MPG is exported to GFA format using PanCo indexing.}\\
-	Lorem ipsum dolor sit amet.
+	\caption{\textbf{Pseudocode illustrating how a MPG can be exported to GFA format, using PanCo indexes as node IDs.}\\
+	Note that we get the PanCo indexes »for free« from the ordering of the graph during construction\footnote{In the implementation, they are computed during graph construction; this was left out in Algorithm \ref{algo:mpg} for clarity}.
+	Here they are used as node IDs to make the GFA output easier to read.\\
+	The most expensive step in this algorithm in practice is obtaining the genomic sequence at the required position, as this involves significant I/O.
 	}
 	\label{algo:gfa}
 \end{algorithm}
@@ -282,14 +287,15 @@ Memory-wise, the graph requires two references per sample and multisyntenic regi
 
 GFA export is performed by traversing the graph using the same order as during graph construction
 \footnote{At no additional computational cost, as the sorting is retained in the node list.},
-though in the worst case as many private regions as samples need to be annotated in every traversal step.\\
+though in the worst case as many private regions as samples need to be annotated in every traversal step.
+For an overview of the steps performed during GFA export, see Algorithm \ref{algo:gfa}.\\
 The GFA export supports using the W-line feature added in version 1.1 of the GFA standard to explicitly annotate all or a selection of sample's paths through the MPG.% , we can add the sample paths to the GFA output as W-lines.
 Further, the origin and samples present in a node are added to each node using the annotations defined in the rGFA extension of the GFA1 standard.
 %we can use node labels to annotate each node with its used reference, corresponding interval and all samples passing through it.
 Annotating sample paths as W-lines requires one graph traversal per sample, although only the nodes contained in the sample need to be visited at this stage.\\
 
-The GFA export step has the highest memory requirements of all graph construction steps, despite favourable computational complexity.
-This derives from the need to access genomes from many samples to obtain the node sequences in the graph
+The GFA export step has the highest memory requirements of all graph construction steps, despite favourable computational complexity. 
+This derives from the need to access genomes from many samples to obtain the node sequences in the graph. 
 %In practice, this stage of the algorithm does however have the highest memory requirements, as the genomes of all organisms need to be available for annotating nodes in the GFA file with their respective sequences.
 Using \texttt{pysam}'s FASTA class for dynamically reading from the genome files as required helped reduce required memory, but demand can still be substantial in datasets with many samples and large genomes.%though in the worst case all genomes are still required to be in memory simultaneously.
 
