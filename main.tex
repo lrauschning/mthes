@@ -199,6 +199,34 @@ Reflecting that the addition of private regions allows the graph to represent th
 \subsection*{Constructing a Multisynteny Graph}
 %TODO pseudocode figure
 
+\begin{algorithm}[t]
+	\SetKwFunction{MPG}{Construct\_MPG}
+	\Fn({}){\MPG{$\text{multisyns}$}}{
+		%multisyns := multisyns.sort()\\
+		curr := Map($\{s \to \textrm{null}\quad \forall s \in$ getSamples() $\}$ )\\
+		\For{\texttt{ms} $\in$ multisyns.sort()}{
+			\texttt{n} := init\_node(ms)\\
+			\For{\texttt{s} $\in$ \texttt{ms}.samples}{
+				\eIf{dist(curr[\texttt{s}].multisyn[\texttt{s}], n.multisyn[\texttt{s}]) > $T$}{
+					// $T$ is 0 by default, but can be configured\\
+					make\_link(curr[s], \texttt{n})\\
+				}{
+					\texttt{p} := init\_node(\texttt{n}.multisyn[\texttt{s}] - curr[\texttt{s}].multisyn[\texttt{s}])\\
+					make\_link(curr[\texttt{s}], \texttt{p})\\
+					make\_link(\texttt{p}, \texttt{n})\\
+					\textbf{yield} \texttt{p}\\
+				}
+					curr[s] := \texttt{n}\
+			}
+			\textbf{yield} \texttt{n}\\
+		}
+	}
+	\caption{\textbf{Pseudocode illustrating the MPG construction algorithm.}\\
+	Lorem ipsum dolor sit amet.
+	}
+	\label{algo:mpg}
+\end{algorithm}
+
 % graph construction algo, briefly explained
 % linear runtime, maybe mention sorting uses panco?
 Internally, the graph is represented as a sorted list of nodes, with each node containing an adjacency list of its predecessors and successors, labelled by the sample on which they are directedly adjacent.
@@ -211,16 +239,17 @@ When encountering a new multisyntenic region, a new node is initialized containi
 The successor-lists of these nodes are then updated to contain the newly initialized node, and it is added to the node list.
 This graph construction procedure avoids both lookahead and lookback by exploiting the nature of the MPG as union of a finite set of non-branching paths; to work successfully, it requires nodes to be scanned in an order compatible with the partial ordering derived from the directed adjacency relation.
 This can be ensured by simply sorting the multisynteny calls according to this relation prior to scanning.\\
+A sketch of the algorithm for computing an MPG from a multisynteny callset is given in Algorithm \ref{alg:mpg}.
 
-
-The graph construction algorithm has expected runtime complexity linear in the number of multisyntenic regions in the input.
-The worst-case runtime complexity is given by $\mathcal{O}(n|MS| + |MS|\log|MS|)$, with $n$ as the number of samples and $|MS|$ as the number of multisyntenic regions in the input msyd callset.
-The first term is due to the graph induction step, which is linear in the number of nodes in the output; as every multisyntenic node cannot induce no more than $n$ private nodes, this gives a bound of $n|MS|$ nodes in the output graph.
-In the expectation, in a large sample most multisyntenic regions would not induce a private regions or at most a constant number of private regions, giving a bound of $\mathcal{O}(|MS|)$.\\
+The graph construction algorithm has expected and worst-case runtime complexity linear in the number of multisyntenic regions in the input and the number of samples.
+In the worst-case, ensuring sorting could take longer than the actual graph construction; the total worst-case runtime complexity is given by $\mathcal{O}(n|MS| + |MS|\log|MS|)$, with $n$ as the number of samples and $|MS|$ as the number of multisyntenic regions in the input msyd callset.
+The first term is the graph construction step, which involves up to $n$ steps for every multisyntenic region.\\
+%which is linear in the number of nodes in the output; as every multisyntenic node cannot induce no more than $n$ private nodes, this gives a bound of $n|MS|$ nodes in the output graph.
+%In the expectation, in a large sample most multisyntenic regions would not induce a private regions or at most a constant number of private regions, giving a bound of $\mathcal{O}(|MS|)$.\\
 The second term comes from needing to ensure sorting of the multisyntenic regions prior to graph induction.
 As msyd's intersection algorithm ensures sorting, only switches to different realignment targets can introduce breaks in this sorting.
 This does not happen often in practice, so the appropriate output sorting is expected to take linear time in the average-case using an algorithm that can exploit prior sorted runs.\\%performed in expectation in linear time in expectation.
-Memory-wise, the graph requires two references per sample and multisyntenic region beyond the base multisynteny representation, with only a constant single reference per sample additionally required during construction.
+Memory-wise, the graph requires two references per sample and multisyntenic region beyond the base multisynteny representation, with only a constant single reference per sample additionally required during graph construction.
 
 GFA export is performed by traversing the graph using the same order as during graph construction
 \footnote{At no additional computational cost, as the sorting is retained in the node list.},
