@@ -1,18 +1,28 @@
 
+
 % pick up on representation from intro?
 
-% comparison to other tools from msygraph + panco
-
+%% further work, software improvement
+% validate covcalc in practice
 % ways to improve msyd:
 % move realignment to exact library
 
+Recently, Samija Amar in the lab managed to design a protocol to reliably obtain ultralong reads > \qty{200}{\kilo\bp} from potato.
+According to the sequencing minima derived in the first section of the main, this should make it feasible to generate read datasets with sufficient information to, in theory, phase all but the largest homozygous regions of the potato genome.%generate be sufficient to 
+Testing whether current algorithms can leverage this information for single-platform phased assembly of potato genomes will be interesting, either enabling the high-throughput generation of potato genomes, or providing an opportunity for the development of such tools\footnote{Of note, none of the leading assembly tools were designed from the ground up with ultralong reads in mind; there may be significant potential still left to obtain from these data.}.
+
+A clear next step is to investigate and visualize
+
+Regarding msyd, during dataset construction the realignment functionality of msyd proved to not unreliable, particularly in the potato dataset.
+This causes the multisyntenic pangenome graph to be undercollapsed in non-reference haplotypes.
+Testing problematic cases revealed that minimap2 may not report any alignment in short sequences, likely as a result of not finding enough minimizers.
+Porting the realignment step to use a Dynamic Programming-based aligner, for example Parasail, may make it more reliable\cite{daily16}.
+For short sequences, this should not significantly change runtime; for longer sequences, perhaps a fallback to minimap2 or another heuristic approach may still be desirable.
+
+%% Representation stuff
+% comparison to other tools from msygraph + panco
+% panco
 % MSA consensus stuff
-
-% cross-species comparison => panco
-
-% structural site frequency spectrum?
-
-% loop back to plant breeding?
 
 Comparing to pangenome graphs based on local-alignments and variation graphs, MPG differ in a number of key ways.
 First, small variants not breaking synteny are not represented in the graph structure.
@@ -22,7 +32,7 @@ Second, a MPG will never introduce a circle by collapsing repetitive sequences, 
 Similarly, no connection can be made between nodes on different chromosomes, ensuring that chromosomes can always cleanly be separated out as independent subgraphs.
 In fact, the emitted GFA file contains comments indicating the chromosome subgraphs.
 
-At the same time, as syntenic alignments are found using minimap2's approximate and SyRI may also fall back to a heuristic approach in complex situations, the multisyntenic pangenome graph constructed by msyd may in pratice be less than fully collapsed, particularly in highly diverged or repetitive regions.
+At the same time, as syntenic alignments are found using minimap2's approximate and SyRI may also fall back to a heuristic approach in complex situations, the multisyntenic pangenome graph constructed by msyd may in practice be less than fully collapsed, particularly in highly diverged or repetitive regions.
 Approaches to further collapse the graph or filter out rare or small nodes may be useful in practice, in particular with regard to private nodes.
 
 Which graph representation is ideal will of course depend on the nature of the dataset and scientific question.
@@ -42,4 +52,9 @@ Meanwhile, I am not aware of any indexing, including via external tools, of mini
 
 % leave comparison/cross species for discussion
 
+
+
+%% Future future stuff
+% cross-species comparison => panco
+% structural site frequency spectrum?
 
