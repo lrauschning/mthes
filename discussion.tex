@@ -1,28 +1,50 @@
 
 
 % pick up on representation from intro?
-
+\section*{Future Steps}
 %% further work, software improvement
 % validate covcalc in practice
 % ways to improve msyd:
 % move realignment to exact library
 
 Recently, Samija Amar in the lab managed to design a protocol to reliably obtain ultralong reads > \qty{200}{\kilo\bp} from potato.
-According to the sequencing minima derived in the first section of the main, this should make it feasible to generate read datasets with sufficient information to, in theory, phase all but the largest homozygous regions of the potato genome.%generate be sufficient to 
+According to the sequencing minima derived in the first section of the main, this should make it feasible to generate read datasets with sufficient information to, in theory, phase all but the largest homozygous regions of the potato genome.\\
 Testing whether current algorithms can leverage this information for single-platform phased assembly of potato genomes will be interesting, either enabling the high-throughput generation of potato genomes, or providing an opportunity for the development of such tools\footnote{Of note, none of the leading assembly tools were designed from the ground up with ultralong reads in mind; there may be significant potential still left to obtain from these data.}.
 
-A clear next step is to investigate and visualize
+Another clear next step is to investigate and visualize the multisyntenic pangenome graph representation of the potato dataset.
+Behaviour of the representations about regions known to be structurally variable, such as introgressed regions and regions containing NLR genes would be a particular point of interest.
+% msyd-cactus
+It would further be interesting to see whether it is possible to use the minigraph-cactus pipeline to »spikify« the MPG graph, recovering small variants\cite{hickey24}.
+As the file format is compatible and msyd graphs lack small variants similar to minigraph's output, in principle this should be possible, and may be a way to leverage the strengths of different approaches facilitated by a common ecosystem.\\
+Another approach would be to use the fact that multisyntenic regions have exact sequence positions on all of their samples as well as alignments of these regions to construct a consensus sequence for each node.
+A Center*-based approximative MSA could be computed efficiently given that the sequences are already aligned to a common reference.
+A consensus could be derived either by column-wise majority vote, or represented as a sequence profile using HMM-based alignment algorithms\cite{remmert12}.\\
+While the cactus-based approach would be faster to develop and benefit from cactus' efficient MSA approach\cite{armstrong20}, the availability of a per-node MSA may be interesting for population genetic studies, and profile-based alignments have proven very efficient and sensitive in both DNA and protein alignment\cite{tempel12, pfam20}.
 
-Regarding msyd, during dataset construction the realignment functionality of msyd proved to not unreliable, particularly in the potato dataset.
-This causes the multisyntenic pangenome graph to be undercollapsed in non-reference haplotypes.
-Testing problematic cases revealed that minimap2 may not report any alignment in short sequences, likely as a result of not finding enough minimizers.
+To reduce the degree of undercollapsing observed in the MPG, an improvement to the reliability of msyd's realignment functionality would likely be a major step.
+%During dataset construction, multiple cases were found where the realignment functionality of msyd sometimes does not find synteny, while manual inspection reveals clear, segregating haplotypes.
+While processing the datasets, the realignment functionality of msyd proved unreliable, in many cases not finding any synteny.
+In this case, the graph will annotate all regions as belonging either to the reference haplotype or private, missing shared haplotypes in non-reference sequences.
+While some degree of undercollapsing is unavoidable, 
+%proved to not unreliable, particularly in the potato dataset.
+%This causes the multisyntenic pangenome graph to be undercollapsed in non-reference haplotypes.
+, while manual inspection revealed several cases where clear, segregating haplotypes were missed, particularly in short gaps.
+Further testing revealed that minimap2 may not report any alignment in short sequences, likely as a result of not finding enough minimizers.
+As these are the basis for SyRI and ultimately msyd's calls, ultimately no multisynteny is reported.
+Minimap2 is likely not the best choice for sensitively aligning smaller regions, and has in the past also proven to not always work well with the spacers msyd inserts into already annotated regions.
 Porting the realignment step to use a Dynamic Programming-based aligner, for example Parasail, may make it more reliable\cite{daily16}.
 For short sequences, this should not significantly change runtime; for longer sequences, perhaps a fallback to minimap2 or another heuristic approach may still be desirable.
+An alternative would be a naïve, length-based merging of haplotypes, similar to that used by Jasmine\cite{jasmine}. 
+While this would be a very computationally efficient approach, it would likely fail to resolve nested variation, a key goal of modern pangenomic representations.
 
-%% Representation stuff
+%% Representation stuf
 % comparison to other tools from msygraph + panco
 % panco
 % MSA consensus stuff
+
+Exploring further representations...
+
+\section*{Comparing Representations}
 
 Comparing to pangenome graphs based on local-alignments and variation graphs, MPG differ in a number of key ways.
 First, small variants not breaking synteny are not represented in the graph structure.
