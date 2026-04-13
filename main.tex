@@ -156,28 +156,32 @@ As every read has a single starting position, a mean sequencing coverage of $X$ 
 We thus expect $(\ell-d)\frac{X}{\ell}=\frac{\ell-d}{\ell}X$ reads to fulfil this criterion.
 As we assume reads to be Poisson distributed, we can simply multiply our coverage estimate derived in step 2 with this factor.
 
-\begin{table}[t]
-\centering
-\caption{
-\textbf{Sequence coverage requirements under different parameters}.\\
-}
-\label{table:covcalc}
-\vspace{1em}
-\begin{tabular}{l|cccc}
-\textbf{Runtime in CPU seconds} & avg & σ & min & max\\ \hline
-\textbf{Ampril} & \qty{218}{\s}& \qty{40}{\s}& \qty{167}{\s}& \qty{260}{\s}\\
-\textbf{Ampsynth} & \qty{25.8}{\s}& \qty{0.5}{\s}& \qty{27.3}{\s}& \qty{25.2}{\s}\\
-\textbf{HGSV} & \qty{9637}{\s}& \qty{77}{\s}& \qty{9556}{\s}& \qty{9707}{\s}
-\end{tabular}
-\end{table}
+%\begin{table}[t]
+%\centering
+%\caption{
+%\textbf{Sequence coverage requirements under different parameters}.\\
+%}
+%\label{table:covcalc}
+%\vspace{1em}
+%\begin{tabular}{l|cccc}
+%\textbf{Ploidy} & avg & σ & min & max\\ \hline
+%\textbf{Ampril} & \qty{218}{\s}& \qty{40}{\s}& \qty{167}{\s}& \qty{260}{\s}\\
+%\textbf{Ampsynth} & \qty{25.8}{\s}& \qty{0.5}{\s}& \qty{27.3}{\s}& \qty{25.2}{\s}\\
+%\textbf{HGSV} & \qty{9637}{\s}& \qty{77}{\s}& \qty{9556}{\s}& \qty{9707}{\s}
+%\end{tabular}
+%\end{table}
 
 \begin{figure*}[t]
 	\centering
-	\includesvg[width=0.8\textwidth]{img/msyd-graph.svg}
+	\includegraphics[width=0.9\textwidth]{img/covbyibd.pdf}\\
+	%\hfill
+	\includegraphics[width=0.9\textwidth]{img/covbyadjrlen.pdf}\\
 	\caption{
-		\textbf{Plot of required coverage as a function of }.\\
-		%TODO
-		% plot as multiple curves with cov. as y, d/l as x, coloured by haplotype?
+		\textbf{Plot of required coverages in different scenarios.}\\
+		\textbf{Top}, 
+		\\
+		\textbf{Bottom},
+		\\
 	}
 	\label{fig:covcalc}
 \end{figure*}
