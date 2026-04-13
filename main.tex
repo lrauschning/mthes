@@ -387,6 +387,9 @@ As the start/end of each node corresponds to the start/end of a syntenic alignme
 This bound on the number of edges is a useful property, as many classic graph algorithms scale linearly in the number of edges.
 %It also allows for analysing the space and runtime complexity of the representation itself runtime for the runtime analysis 
 
+In the next section, I will outline a procedure using the regular structure of the MPG to define a pangenomic coordinate system termed PanCo, allowing genomic coordinates to be compared across different samples in a principled and consistent way.%\footnote{Note that a similar procedure is in fact used to ensure consistent sorting across samples during MPG construction.}.
+This not only serves a direct purpose, but also demonstrates the advantages of a representation possessing strong structural guarantees, and illustrates how these can be used to derive efficient algorithms appropriate for modern genomics datasets.
+
 
 
 %moved to discussion, replace with more concise section here
@@ -405,8 +408,6 @@ This bound on the number of edges is a useful property, as many classic graph al
 %Which graph representation is ideal will of course depend on the nature of the dataset and scientific question.
 %The MPG differs from other current pangenome representations.
 %It has a more regular structure, and aims to capture large-scale structure over local events.
-%In the next section, I will outline a procedure using the regular structure of the MPG to define a pangenomic coordinate system termed PanCo, allowing genomic coordinates to be compared across different samples in a principled and consistent way.%\footnote{Note that a similar procedure is in fact used to ensure consistent sorting across samples during MPG construction.}.
-%This not only serves a direct purpose, but also demonstrates the advantages of a representation possessing strong structural guarantees, and illustrates how these can be used to derive efficient algorithms appropriate for modern genomics datasets.
 
 \subsection*{Pangenomic Coordinate (PanCo)}
 % start: navigating in a pangenome
