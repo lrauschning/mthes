@@ -21,6 +21,11 @@ While the 16 cultivars were specifically chosen to be well-representative of the
 Single-platform phased assembly is now possible in humans, and would dramatically facilitate any efforts in this direction.
 To investigate whether it is also on the horizon in more complex genomes like potato, in the first section I derive minimal requirements for read-based phasing, and investigate the impact of different parameters upon these.% in different ploidy settings
 
+After deriving the minimal sequencing requirements, I will introduce the Multisyntenic Pangenome Graph (MPG) as a novel pangenome graph representation.
+The representation is centred on multisyntenic regions, which provides some guarantees that can be leveraged to prove that the representation has some desirable properties.\\
+Using some of these properties, a straightforward and utile indexing scheme termed Pangenomic Coordinates (PanCo) can be defined in a very natural way.
+In the section, I also describe a simple and efficient algorithm for constructing a multisyntenic pangenome graph from a callset of multisyntenic regions, as well as for exporting it as a GFA file.%, using the indexing method. 
+
 In the last section, I describe a pipeline implemented to perform the preprocessing required to obtain this representation efficiently in large datasets.
 %In the first section of this chapter, I will therefore describe 
 Two datasets processed using his pipeline are briefly described.
