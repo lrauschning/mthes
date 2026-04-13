@@ -1,35 +1,36 @@
 
-\section*{Comparing Representations}
+\section*{Multisyntenic Pangenome Graphs as a Genome Representation}
 
 Comparing to pangenome graphs based on local-alignments and variation graphs, MPG differ in a number of key ways.
-First, small variants not breaking synteny are not represented in the graph structure.
-This is similar to a common filtering step used for variation graphs \cite{matthews24, hickey24}.
-As the graph can be annotated with exact positions on each sample and aligments are available in the PSF file, these can be recovered in a fairly straightforward way.
-Second, a MPG will never introduce a circle by collapsing repetitive sequences, and will also never collapse nonlocal nodes or produce nodes with many nonlocal connections.
-Similarly, no connection can be made between nodes on different chromosomes, ensuring that chromosomes can always cleanly be separated out as independent subgraphs.
-In fact, the emitted GFA file contains comments indicating the chromosome subgraphs.
+First, MPGs are acyclic by construction, which other leading approaches cannot guarantee.
+This dramatically simplifies the graph structure, and allows the use of more efficient algorithms for many common operation.
+%First, small variants not breaking synteny are not represented in the graph structure.
+%This is similar to a common filtering step used for variation graphs \cite{matthews24, hickey24}.
+%As the graph can be annotated with exact positions on each sample and aligments are available in the PSF file, these can be recovered in a fairly straightforward way.
+%Second, a MPG will never introduce a circle by collapsing repetitive sequences, and will also never collapse nonlocal nodes or produce nodes with many nonlocal connections.
+MPGs will also never have nonlocal connections, as all edges represent adjacency on at least one sample.
+This also guarantees that chromosomes will always form disjoined subgraphs in the MPG.%, as there cannot ever be adjacency across chromosomes.
+%Similarly, no connection can be made between nodes on different chromosomes, ensuring that chromosomes can always cleanly be separated out as independent subgraphs.
+%In fact, the emitted GFA file contains comments indicating the chromosome subgraphs.
+This forms a stark difference to how other pangenome graph representations, which especially in repetitive sequences often introduce cycles or nonlocal connections.% choose to draw edges and collapse nodes; 
 
-At the same time, as syntenic alignments are found using minimap2's approximate and SyRI may also fall back to a heuristic approach in complex situations, the multisyntenic pangenome graph constructed by msyd may in practice be less than fully collapsed, particularly in highly diverged or repetitive regions.
-Approaches to further collapse the graph or filter out rare or small nodes may be useful in practice, in particular with regard to private nodes.
-
-Which graph representation is ideal will of course depend on the nature of the dataset and scientific question.
-The MPG differs from other current pangenome representations.
-It has a more regular structure, and aims to capture large-scale structure over local events.
-In the next section, I will outline a procedure using the regular structure of the MPG to define a pangenomic coordinate system termed PanCo, allowing genomic coordinates to be compared across different samples in a principled and consistent way.%\footnote{Note that a similar procedure is in fact used to ensure consistent sorting across samples during MPG construction.}.
-This not only serves a direct purpose, but also demonstrates the advantages of a representation possessing strong structural guarantees, and illustrates how these can be used to derive efficient algorithms appropriate for modern genomics datasets.
-
-
-
-% discussion stuff?
-The fact that this powerful and interpretable coordinate system »falls out« of the graph representation at practically no additional computational cost reflects the advantages of a pangenome representation with strong theoretical guarantees.
+MPGs respect and merge the ordering of all samples; as remarked in the proof of acyclicity, the $<$ comparator on any sample cannot be violated by the graph's successor-of relation, as $<$ is the transitive closure of the per-sample directed adjacency $\prec_i$.\\
+By baking in these structural guarantees, the Pangenome Coordinate (PanCo) system»falls out« of the graph representation very naturally, with practically no additional overhead.
+It reflects the advantages of a pangenome representation with strong theoretical guarantees, and allows easy navigation in the graph by maintaining some of the properties of genomic indices on linear genome references.\\
 %PanCos are not fully stable towards adding additional samples to the pangenome; while the coresyn part of the PanCo will not change, assuming the added sample does not break coresynteny, the merasyntenic part of the PanCo will likely require recomputing.
-
 Compare the ease at which a MPG can be indexed with PanCos to the difficulty of indexing nodes in a variation graph: the odgi sort command implements multiple cycle-breaking algorithms in order to then traverse the entire graph and assign a topological ordering, alongside a force-directed-layout based stochastic embedding approach\cite{guarracino22}.
-Meanwhile, I am not aware of any indexing, including via external tools, of minigraph's representations beside arbitrarily assigned numeric node IDs.
+Meanwhile, I am not aware of any indexing, including via external tools, of minigraph's or minigraph-cactus' representations beside arbitrarily assigned numeric node IDs.
+
+In general, the MPG representation has stricter criteria for collapsing parts of the raw haplotypes than other pangenome graphs; in order to be collapsed, regions have to not just align to another but form part of a syntenic whole-genome alignmnt in multiple samples.
+However, both alignments and synteny calls use heuristic procedures that may sometimes miss real synteny.
+Minimap2's approximate alignment may fail in highly repetitive or significantly diverged regions, while SyRI's greedy heuristic may not always find the largest chain of alignments to call as a syntenic backbone.
+As outlined in more detail in the next section below, this seems to be a particular problem in the realignment step.\\
+In practice, this means that it may often be possible to further collapse the MPG produced by the graph construction procedure without violating any of the MPG's guarantees.
+This is desirable, as it would lead to a more compact and easier-to-visualize representation, while keeping all of the MPG's strengths.
+Two ways to address this are conceivable; either to tune the pipeline of the graph construction's inputs, or to introduce an additional step after graph induction that further collapses the graph.\\
+TODO small linker to back to concrete datasets
 
 % leave comparison/cross species for discussion
-
-
 
 % pick up on representation from intro?
 \section*{Future Steps}
@@ -73,10 +74,18 @@ While this would be a very computationally efficient approach, it would likely f
 % panco
 
 % MSA consensus stuff
-Exploring further representations...
 
 
 %% Future future stuff
 % cross-species comparison => panco
 % structural site frequency spectrum?
+
+Exploring the consequences of the MPG genome representation more broadly... \\
+Beyond an indexing scheme, the Pangenomic Coordinate system can be thought of as a linearization of the pangenome maintaining consistency with all input haplotypes as a sort of consensus genome structure of the samples.
+If the samples are representative of the wider population, this linearization could be compared with other populations, both within and across species.
+This could enable both analyses of how genome structure evolves across separated population, commonly thought to be a major driving force of speciation since early work on cryptic polymorphisms inducing reproductive incompatibility by Dobzhansky and Müller\cite{TODO}.\\
+It could also provide a novel framework to perform intra-species association studies, if the populations are chosen as samples showing or not showing a certain trait.
+To estimate the heritability of the trait, the consensus linearizations of the splits could be compared using e.g. whole-genome-alignment algorithms, and compared to random splits to account for population structure.
+If this comparison can be made locally, it could also map associations to certain regions of the MPG.%Comparing the local similarity 
+\\ \textit{TODO, go into ideas for SV site frequency spectrum}
 
