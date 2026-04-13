@@ -178,9 +178,13 @@ As we assume reads to be Poisson distributed, we can simply multiply our coverag
 	\includegraphics[width=0.9\textwidth]{img/covbyadjrlen.pdf}\\
 	\caption{
 		\textbf{Plot of required coverages in different scenarios.}\\
-		\textbf{Top}, 
+		\textbf{Top}, minimal required coverage for multiple ploidies and read lengts against the maximal haplotype-shared region size.
+		While ploidy matters in determining the base sequencing depth, the effect of read length outpaces it as the limit of shared regions surpassing read length is reached.
+		Increasing read length is thus a major driver
+		All curves drawn using a QV of 20.
 		\\
-		\textbf{Bottom},
+		\textbf{Bottom}, minimal required coverage drawn against normalized read length (given in multiples of the shared region size) for different ploidies and desired quality scores.
+		The higher quality phasing requires more sequencing the more haplotypes are present in the sample, but even high phasing qualities of 30 are suprisingly accessible with sufficient read length.
 		\\
 	}
 	\label{fig:covcalc}
