@@ -156,8 +156,51 @@ As every read has a single starting position, a mean sequencing coverage of $X$ 
 We thus expect $(\ell-d)\frac{X}{\ell}=\frac{\ell-d}{\ell}X$ reads to fulfil this criterion.
 As we assume reads to be Poisson distributed, we can simply multiply our coverage estimate derived in step 2 with this factor.
 
-%TODO add table of concrete estimated requirements, for potato
-%TODO shout out R script
+\begin{table}[t]
+\centering
+\caption{
+\textbf{Sequence coverage requirements under different parameters}.\\
+}
+\label{table:covcalc}
+\vspace{1em}
+\begin{tabular}{l|cccc}
+\textbf{Runtime in CPU seconds} & avg & σ & min & max\\ \hline
+\textbf{Ampril} & \qty{218}{\s}& \qty{40}{\s}& \qty{167}{\s}& \qty{260}{\s}\\
+\textbf{Ampsynth} & \qty{25.8}{\s}& \qty{0.5}{\s}& \qty{27.3}{\s}& \qty{25.2}{\s}\\
+\textbf{HGSV} & \qty{9637}{\s}& \qty{77}{\s}& \qty{9556}{\s}& \qty{9707}{\s}
+\end{tabular}
+\end{table}
+
+\begin{figure*}[t]
+	\centering
+	\includesvg[width=0.8\textwidth]{img/msyd-graph.svg}
+	\caption{
+		\textbf{Plot of required coverage as a function of }.\\
+		%TODO
+		% plot as multiple curves with cov. as y, d/l as x, coloured by haplotype?
+	}
+	\label{fig:covcalc}
+\end{figure*}
+
+% add table of concrete estimated requirements, for potato
+% shout out R script
+
+To make these estimates actionable, they were implemented in an R script, given in the Appendix.
+It takes a read length, maximal length of sequences shared by all haplotypes and a required maximal phasing quality value, expressed as a Phred value.
+The latter presents an upper bound on the likelihood for insufficient data to be available for phasing.
+The script then calculates a minimum required coverage with reads of the given length, listing the impact of each of the steps outlined above.
+It also has support for estimating the number of required flowcells, given a genome size and ultralong yields per flowcell.
+Default values reflecting the potato genome are supplied for these.\\
+Notably, the quality value is interpreted as an upper bound, not as an average; that is, the sequencig requirements are calculated such that even the most challenging regions will meet the quality bound.
+In easier regions with smaller haplotype-shared regions, a significantly higher quality score may be attained.
+%Notablyi this reflects the maximal length; in regions with lower distance than that between haplo-unique sequences, it will be a pessimistic estimate% x %assumes that every 
+Values for several typical values are given in Table \ref{table:covcalc}.
+
+
+
+For the impact of different parameters, see also Figure \ref{fig:covcalc}. 
+
+% go into mutation strategy
 
 
 \section*{A multisynteny graph}
