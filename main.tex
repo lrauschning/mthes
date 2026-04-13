@@ -335,7 +335,7 @@ To maintain it in a usable state for msyd and for general use, SyRI was updated 
 This required a partial rewrite of SyRI's internal datastructures and the way Cython's TypedMemoryView interface is used to account for pandas' change to copy-on-write behaviour in version 3.
 Along the way, some of SyRI's error handling was modernized, particularly to avoid silent errors and always return a non-zero exit code in any error state.\\
 All changes made to SyRI were upstreamed, and incorporated into the 1.8.0 release.
-
+%TODO realignment difficulty
 
 
 \subsection*{Properties of the multisynteny graph}
@@ -607,3 +607,6 @@ potato genomes are very challenging to work with due to their high repeat conten
 
 % report runtime + mem + storage
 
+
+, while manual inspection revealed several cases where clear, segregating haplotypes were missed, particularly in short gaps.
+Further testing revealed that minimap2 may not report any alignment in short sequences, likely as a result of not finding enough minimizers.
