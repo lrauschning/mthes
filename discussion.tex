@@ -2,8 +2,7 @@
 \section*{Single-platform phased genome assembly}
 % phasing human math for human: trivial
 % => easy with UL reads
-%TODO
-
+Not sure what to write; reiterate closing of the phasing section in main?
 
 
 \section*{Multisyntenic Pangenome Graphs as a Genome Representation}
@@ -47,10 +46,13 @@ Strategies for achieving this are discussed in the next section.
 % ways to improve msyd:
 % move realignment to exact library
 
-Recently, ONT-Ultralong protocols suitable for plant samples have become available\cite{lu24}.
-Using the protocol, up to 4-fold coverage of potato genomes with ultralong reads > \qty{200}{\kilo\bp} per flowcell could be achieved (Craig Dent, personal communication).
-Given the sequencing requirement minima derived in the first section in Main, this should make it feasible to generate read datasets with sufficient information to, in theory, phase all but the largest homozygous regions of the potato genome.\\
-Testing whether current algorithms can leverage this information for single-platform phased assembly of potato genomes will be interesting, either enabling the high-throughput generation of potato genomes, or providing an opportunity for the development of such tools\footnote{Of note, none of the leading assembly tools were designed from the ground up with ultralong reads in mind; there may be significant potential still left to obtain from these data.}.
+Recently, ONT-Ultralong protocols suitable for plant samples have become available and established\cite{lu24}.
+Though the impressive average read lengths reported in ref. \cite{lu24} have not been reched in potato, reads up to about \qty{400}{\kilo\bp} have been observed in potato samples (Craig Dent and Samija Amar, personal communication).
+%Using this approach, up to 4-fold coverage of potato genomes with ultralong reads > \qty{200}{\kilo\bp} per flowcell could be achieved (Craig Dent, personal communication).
+Given the sequencing requirement minima derived in the first section in Main, this should make it feasible to generate read datasets with sufficient information to phase the majority of the potato genome, excluding several hundred large segments shared across haplotypes that can still induce breaks in the phasing.
+\\ %phase all but the largest homozygous regions of the potato genome.\\
+Testing whether current algorithms can successfully reach this stage, and how it interacts with HiC data will be an interesting avenue to explore, either facilitating the high-quality assembly of potato genomes or providing an opportunity for the development of such tools
+\footnote{Of note, none of the leading assembly tools were designed from the ground up with ultralong reads in mind; there may be significant potential still left to obtain from these data, and from their integration with HiC information.}.
 
 Another clear next step is to investigate and visualize the multisyntenic pangenome graph representation of the potato dataset.
 Behaviour of the representations about regions known to be structurally variable, such as introgressed regions and regions containing NLR genes would be a particular point of interest.
@@ -101,9 +103,10 @@ Forcing collapsed nodes to share an adjacent node would ensure that no cycles ar
 Exploring the consequences of the MPG genome representation more broadly... \\
 Beyond an indexing scheme, the Pangenomic Coordinate system can be thought of as a linearization of the pangenome maintaining consistency with all input haplotypes as a sort of consensus genome structure of the samples.
 If the samples are representative of the wider population, this linearization could be compared with other populations, both within and across species.
-This could enable both analyses of how genome structure evolves across separated population, commonly thought to be a major driving force of speciation since early work on cryptic polymorphisms inducing reproductive incompatibility by Dobzhansky and Müller\cite{TODO}.\\
+This could enable both analyses of how genome structure evolves across separated population, commonly thought to be a major driving force of speciation since early work on cryptic polymorphisms inducing reproductive incompatibility by Dobzhansky and Müller\cite{dobzhansky34, orr96}.\\
 It could also provide a novel framework to perform intra-species association studies, if the populations are chosen as samples showing or not showing a certain trait.
 To estimate the heritability of the trait, the consensus linearizations of the splits could be compared using e.g. whole-genome-alignment algorithms, and compared to random splits to account for population structure.
 If this comparison can be made locally, it could also map associations to certain regions of the MPG.%Comparing the local similarity 
-\\ \textit{TODO, go into ideas for SV site frequency spectrum}
+\\
+%\textit{TODO, go into ideas for SV site frequency spectrum}
 
