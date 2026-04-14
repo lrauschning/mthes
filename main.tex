@@ -142,6 +142,29 @@ Asking how many samples need to be drawn to cover every haplotype with confidenc
 For example, following the approach given below Lemma 3.8 in \cite{mitzenmacher17}, we can estimate that given an upper bound $\alpha$ of the probability of not having sampled all $n$ haplotypes, a sample of size at least $\lceil n(\log n - \log \alpha) \rceil$ is required.
 %TODO sharper estimate? give full derivation?
 
+
+\begin{table}[t]
+\centering
+\caption{
+\textbf{Sequence coverage requirements for different parameters}.\\
+In the first row is the ploidy of the organism.
+In the first column, the read length is given, expressed as multiples of the maximal length of sequences common across the haplotypes.
+If reads are shorter than this, no phasing can be produced.
+All values are computed with a QV bound of 20.
+Coverage values are rounded to the nearest whole number, and refer to haploid genome size.
+}
+\label{table:covcalc}
+\vspace{1em}
+\begin{tabular}{l|ccccc}
+	{\bf Ploidy/$\frac{\ell}{d}$}& 2 & 3 & 4 & 6 & 10\\
+	\hrule
+	1.5 & 45x & 70x & 95x & 147x & 252x \\
+	2.0 & 30x & 47x & 64x & 98x & 169x\\
+	4.0 & 20x & 31x & 42x & 65x & 112x\\ 
+	10.0 & 17x & 26x & 35x & 54x & 94x
+\end{tabular}
+\end{table}
+
 The second requirement hearkens back to the early days of estimating sequencing requirements for whole-genome shotgun sequences -- except instead of ensuring every position is covered at least once, we need every position to be covered in sufficient depth to make sure the first requirement is met.
 If we model observed coverage along the genome given a specified mean coverage using a Poisson distribution, we can derive a requirement for the mean coverage by solving for the quantile of the Poisson distribution.
 This corresponds exactly to the inverse of the upper $\Gamma$ function, a numeric approximation of which is available in the \texttt{zipfR} package.
@@ -155,21 +178,8 @@ A starting position is valid if a read of length $\ell$ starting from it spans b
 As every read has a single starting position, a mean sequencing coverage of $X$ coverage corresponds to $X/\ell$ reads starting at every position along the genome in expectation.
 We thus expect $(\ell-d)\frac{X}{\ell}=\frac{\ell-d}{\ell}X$ reads to fulfil this criterion.
 As we assume reads to be Poisson distributed, we can simply multiply our coverage estimate derived in step 2 with this factor.
-
-%\begin{table}[t]
-%\centering
-%\caption{
-%\textbf{Sequence coverage requirements under different parameters}.\\
-%}
-%\label{table:covcalc}
-%\vspace{1em}
-%\begin{tabular}{l|cccc}
-%\textbf{Ploidy} & avg & σ & min & max\\ \hline
-%\textbf{Ampril} & \qty{218}{\s}& \qty{40}{\s}& \qty{167}{\s}& \qty{260}{\s}\\
-%\textbf{Ampsynth} & \qty{25.8}{\s}& \qty{0.5}{\s}& \qty{27.3}{\s}& \qty{25.2}{\s}\\
-%\textbf{HGSV} & \qty{9637}{\s}& \qty{77}{\s}& \qty{9556}{\s}& \qty{9707}{\s}
-%\end{tabular}
-%\end{table}
+Note that read length only matters here in how it relates to the distance between two haplo-unique sites.
+Therefore, $d$ can be fixed as $d:=1$, and adjusted read length considered by giving $\ell$ in units of $d$, formally $\hat\ell:=\frac{\ell}{d}$ .
 
 \begin{figure*}[t]
 	\centering
@@ -180,7 +190,6 @@ As we assume reads to be Poisson distributed, we can simply multiply our coverag
 		\textbf{Plot of required coverages in different scenarios.}\\
 		\textbf{Top}, minimal required coverage for multiple ploidies and read lengts against the maximal haplotype-shared region size.
 		While ploidy matters in determining the base sequencing depth, the effect of read length outpaces it as the limit of shared regions surpassing read length is reached.
-		Increasing read length is thus a major driver
 		All curves drawn using a QV of 20.
 		\\
 		\textbf{Bottom}, minimal required coverage drawn against normalized read length (given in multiples of the shared region size) for different ploidies and desired quality scores.
@@ -202,17 +211,32 @@ Default values reflecting the potato genome are supplied for these.\\
 Notably, the quality value is interpreted as an upper bound, not as an average; that is, the sequencig requirements are calculated such that even the most challenging regions will meet the quality bound.
 In easier regions with smaller haplotype-shared regions, a significantly higher quality score may be attained.
 %Notablyi this reflects the maximal length; in regions with lower distance than that between haplo-unique sequences, it will be a pessimistic estimate% x %assumes that every 
-%Values for several typical values are given in Table \ref{table:covcalc}.
 
 % base requirement by haplotypes + QV
 % massively accelerated by read lengths
-To derive concrete recommendations, the 
-Using this 
+% describe general dynamics
+Values for several representative cases are given in Table \ref{table:covcalc}.
+Compare also Figure \ref{fig:covcalc} for plots of different scenarios.
+In general, it may be observed that the desired phasing quality and ploidy set a floor for the required coverage, while read lengh in relation to maximal distance between haplo-unique sites acts as a multiplier on this minimum.
+Desired phasing quality contributes suprisingly little to this minimum, though its contribution increases as ploidy does.
+As read length approaches this distance, required sequencing depth increases rapidly.
+To avoid this unfavourable scaling, reads should be at least twice, ideally 3 times or more the maximal length of haplotype-shared sequences.
 
-For plots showing impact of different parameters, compare Figure \ref{fig:covcalc}. 
+The recommendations produced by the script are concordant to recent empirical recommendations in human, if it is assumed that the read-length correction in humans is negligible
+\footnote{At an average distance of \qty{1}{\kilo\bp} between SNPs and no domestication bottlenecks or complex breeding history, this is a reasonable assumption when considering >\qty{50}{\kilo\bp} Ultralong reads}.
+While the theoretical minimum is calculated to be 15x without read length correction at a quality of 20, ref. \cite{sarashetti24} recommends 15-20x coverage of ONT-Ultralong (along with 10x of HiC data).\\
 
-% go into mutation strategy
-
+% go into potato values
+To provide some concrete minima for potato, a value for the size of regions common to different haplotypes is needed.
+Two studies have investigated this in the haplotypes of a single phased potato assembly each\cite{sun22, xiao26}.
+They both report individual segments common to multiple haplotypes up to a megabase scale, but do not report exact length statistics or their frequencies;
+an analysis using the Otava genome reported in ref. \cite{sun22} of 2619 shared segments larger than \qty{10}{\kilo\bp} revealed roughly 75\% of these to be below \qty{100}{\kilo\bp}, and over 90 \% to be smaller than \qty{200}{\kilo\bp} (Craig Dent, personal communication).
+From Table \ref{table:covcalc}, we can see that phasing through \qty{100}{\kilo\bp} regions using \qty{200}{\kilo\bp} reads at a quality score of 20 would require 64x coverage.
+Given that individual reads can reach up to \qty{400}{\kilo\bp} (Craig Dent and Samija Amar, personal communication), it is conceivable that up to 90\% of large shared sequences could be successfully phased using the current approach.\\
+Phasing through the megabase-scale regions found in the potato genome reliably and economically using only ultralong reads is, however, not conceivable without an order of magnitude increase in average read length.
+While is not unprecedented in long read sequencing, the increasing maturity of the ecosystem and the challenges of plant sample preparation make this seem unlikely to happen in the near future.\\
+But ultralong reads can still contribute to phasing: by resolving regions of the genome that are easier to phase, HiC signal can be aggregated across larger blocks, potentially allowing successful phasing at lower coverages.
+They can also serve as an independent signal to confirm HiC phasing calls, particularly in repetitive parts of the genome.
 
 \section*{A multisynteny graph}
 
