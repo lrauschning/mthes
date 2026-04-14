@@ -9,17 +9,18 @@
 % finall, briefly mention dataset?
 
 
-In this part of the thesis, I will describe a novel pangenome graph representation based on msyd's concept of multisynteny as well as its implementation, introduce a pipeline for performing the necessary preprocessing, and derive minimal sequencing requirements for phased assembly in complex genomes and introduce a pipeline for processing datal.
-Further, an indexing strategy for navigating the representation will be introduced, and some properties of the proposed representation will be proven.
+%In this part of the thesis, I will describe a novel pangenome graph representation based on msyd's concept of multisynteny as well as its implementation, introduce a pipeline for performing the necessary preprocessing, and derive minimal sequencing requirements for phased assembly in complex genomes and introduce a pipeline for processing datal.
+%Further, an indexing strategy for navigating the representation will be introduced, and some properties of the proposed representation will be proven.
 
 As datasets of high-quality phased assemblies are required before computing any pangenome representation, I begin with the section deriving sequencing requirements for read-based genome phasing.% is obtaining a daataset of many high-quality assemblies.
 %Our lab's genome assembly efforts have been focused on European potato cultivars, given its nature as a high-yielding staple crop that is challenging for breeders\cite{bradshaw22}.
 This is inspired by our lab's recent assembly of 10 tetraploid, high quality potato genomes \cite{sun25}.
 %This dataset and its processing are described in the last section of this thesis.
-While the 10 cultivars were specifically chosen to be well-representative of the genetic material in European breeding programmes, it more assemblies remain desirable, to cover recent introgressions and represent South American landraces, well known in potato breeding as a source of resistance genes and for their great phenotypic diversity\cite{bradshaw22}.
+While the 10 cultivars were specifically chosen to be well-representative of the genetic material in European breeding programmes, obtaining more assemblies remains desirable, both to cover recent introgressions and to include South American landraces in the representation.
+These are well known in potato breeding as a source of resistance genes and for their great phenotypic diversity\cite{bradshaw22}.
 %As described in the Introduction, single-platform phased assembly is now possible in humans.
 Single-platform phased assembly is now possible in humans, and would dramatically facilitate any efforts in this direction.
-To investigate whether it is also on the horizon in more complex genomes like potato, in the first section I derive minimal requirements for read-based phasing, and investigate the impact of different parameters upon these.% in different ploidy settings
+To investigate whether this approach can also be applied to more complex genomes like potato, in the first section I derive minimal requirements for read-based phasing, and investigate the impact of different parameters upon these.% in different ploidy settings
 
 After deriving the minimal sequencing requirements, I will introduce the Multisyntenic Pangenome Graph (MPG) as a novel pangenome graph representation.
 The representation is centred on multisyntenic regions, which provides some guarantees that can be leveraged to prove that the representation has some desirable properties.\\
@@ -69,9 +70,9 @@ If requirement minima turn out to be uneconomically high, it can be concluded th
 The modelling effort may also serve to investigate how expected advances in sequencing technology affect our ability to use reads for phasing, in particular as reads get ever-longer.
 %as sequencing the effect of expected advances in sequencing technology, in particular longer reads.
 
-In the literature, there are many empirically motivated suggestions for sequencing depth to use, some of them practically validated in human or rarely other data\cite{sarashetti24, schell25, ebpseqrecs}.
+In the literature, there are many empirically motivated suggestions for sequencing depth to use, some of them practically validated\footnote{Usually only in human.}\cite{sarashetti24, schell25, ebpseqrecs}.
 Sequencing depth recommendations are usually concerned either with the most economical way to genotype a cohort through resequencing, or a reliable way to obtain a high-quality assembly.
-With the recent possibility of phased assembly, some recommendations of sequencing inputs exist for humans, but none apply to polyploids or, more generally, separate phasing from assembly\cite{sarashetti24}.\\
+With the recent possibility of phased assembly, some recommendations of sequencing inputs exist for humans, but none apply to polyploids nor separate phasing from assembly\cite{sarashetti24}.\\
 %If mentioned at all, phasing is treated as an afterthought to phased genome assembly.
 A literature search failed to find any recent theory-oriented work on sequencing coverage estimation.
 The most recent work in this direction seems to be Lander and Waterman's short paper on requirements for clone-based physical mapping in the second issue of Genomics in 1988 (ref. \cite{lander88}).
@@ -226,14 +227,14 @@ To avoid this unfavourable scaling, reads should be at least twice, ideally 3 ti
 
 % go into potato values
 To provide some concrete minima for potato, a value for the size of regions common to different haplotypes is needed.
-Two studies have investigated this in the haplotypes of a single phased potato assembly each\cite{sun22, xiao26}.
+Two studies have investigated this in the haplotypes of a single phased potato assembly each\cite{sun22, xiao26}. 
 They both report individual segments common to multiple haplotypes up to a megabase scale, but do not report exact length statistics or their frequencies;
-an analysis using the Otava genome reported in ref. \cite{sun22} of 2619 shared segments larger than \qty{10}{\kilo\bp} revealed roughly 75\% of these to be below \qty{100}{\kilo\bp}, and over 90 \% to be smaller than \qty{200}{\kilo\bp} (Craig Dent, personal communication).
-From Table \ref{table:covcalc}, we can see that phasing through \qty{100}{\kilo\bp} regions using \qty{200}{\kilo\bp} reads while reaching a reliability score of 20 would require 64x coverage with ultralong reads.
+an analysis using the Otava genome reported in ref. \cite{sun22} of 2619 shared segments larger than \qty{10}{\kilo\bp} revealed roughly 75\% of these to be below \qty{100}{\kilo\bp}, and over 90 \% to be smaller than \qty{200}{\kilo\bp} (Craig Dent, personal communication). 
+From Table \ref{table:covcalc}, we can see that phasing through \qty{100}{\kilo\bp} regions using \qty{200}{\kilo\bp} reads while reaching a reliability score of 20 would require 64x coverage with ultralong reads. 
 Relaxing the reliability score threshold to 10 (implying that 10\% of breaks are expected to be unresolvable), \qty{200}{\kilo\bp} regions could be phased with 54x coverage of \qty{300}{\kilo\bp} reads.\\
-To summarize, the full phasing of a potato genome would require phasing across megabase scale haplotype-shared regions and is not achievable with current sequencing and library preparation techniques.
+To summarize, the full phasing of a potato genome would require phasing across megabase scale haplotype-shared regions and is not achievable with current sequencing and library preparation techniques. 
 However, the majority of shared segments are much smaller, and can feasibly be resolved using high-coverage ONT ultralong sequencing.\\
-Using the distribution of common segments described above, I estimate that an assembly using 54x coverage of \qty{300}{\kilo\bp} reads would contain at least 200 breaks from large regions from regions larger than \qty{200}{\kilo\bp}, 50 from unphased regions between \qty{100}\kilo\bp} and \qty{200}{\kilo\bp}, and additional 20 from shorter regions.
+Using the distribution of common segments described above, I estimate that an assembly using 54x coverage of \qty{300}{\kilo\bp} reads would contain at least 200 breaks from large regions from regions larger than \qty{200}{\kilo\bp}, 50 from unphased regions between \qty{100}{\kilo\bp} and \qty{200}{\kilo\bp}, and additional 20 from shorter regions.
 In total, this would imply an average of at least 6 phasing breaks per haplotype and chromosome.
 For some applications, particularly in plant breeding, this may already be sufficient; for applications requiring complete phasing, additional information could be used to fully phase the assemblies.
 While HiC data would be an obvious candidate, it might also be possible to use sample pedigrees or reference panels to resolve these breaks without additional sequencing.
@@ -358,21 +359,6 @@ The GFA export step has the highest memory requirements of all graph constructio
 This derives from the need to access genomes from many samples to obtain the node sequences in the graph. 
 %In practice, this stage of the algorithm does however have the highest memory requirements, as the genomes of all organisms need to be available for annotating nodes in the GFA file with their respective sequences.
 Using \texttt{pysam}'s FASTA class for dynamically reading from the genome files as required helped reduce required memory, but demand can still be substantial in datasets with many samples and large genomes.%though in the worst case all genomes are still required to be in memory simultaneously.
-
-%TODO incorporate
-\subsection*{Dependency Modernizations}
-% changes: parallelization, move away from pandas datastructures
-In order to make msyd suitable for graph construction, the codebase was improved in a few key ways.
-In particular, the core datastructures were rewritten to avoid SyRI-style pandas DataFrames and instead use a Cython list type per chromosome.
-This new datastructure has a more convenient API, but more importantly can be efficiently serialized and thus allows parallelization across different chromosomes without interfering with Python's Global Interpreter Lock.
-In total, this allows msyd to use multiple cores, especially for steps other than the sequence alignment.
-
-To maintain it in a usable state for msyd and for general use, SyRI was updated to be compatible with the 3.x version of \texttt{pandas}, and run in versions of python newer than 3.11.
-This required a partial rewrite of SyRI's internal datastructures and the way Cython's TypedMemoryView interface is used to account for pandas' change to copy-on-write behaviour in version 3.
-Along the way, some of SyRI's error handling was modernized, particularly to avoid silent errors and always return a non-zero exit code in any error state.\\
-All changes made to SyRI were upstreamed, and incorporated into the 1.8.0 release.
-%TODO realignment difficulty
-
 
 \subsection*{Properties of the multisynteny graph}
 \newcommand{\aln}{\mathcal{A}}
@@ -623,6 +609,23 @@ Msyd takes these inputs in samplesheet format, with one line per sample containi
 % describe nextflow pipeline
 In order to generate the inputs required for msyd at scale in large datasets, a nextflow-based pipeline was implemented to perform alignments and SyRI runs, along with a script to automatically generate msyd's samplesheet from the pipeline output (see Appendix \ref{app:dataset}).
 These preprocessing steps are typically much more computationally demanding than the msyd run itself; implementing them as a nextflow pipeline allows efficient parallelization across multiple nodes of a HPC environment\footnote{And provides robustness to jobs being cancelled when other jobs take more than their allocated memory, a persistent problem on the MPIPZ cluster}.
+
+%\subsection*{Dependency Modernizations}
+%In order 
+
+% changes: parallelization, move away from pandas datastructures
+Given the aim to make the pipeline scale to today's large pangenomic datasets, several improvements were made to the implementation of msyd's core functionality, reflecting both usability and performance improvements, including improved multithreading.
+In particular, the core datastructures were rewritten to avoid SyRI-style monolithic pandas DataFrames and instead use a Cython list type per chromosome.
+This new datastructure has a more convenient API, but more importantly can be efficiently serialized and thus allows parallelization across different chromosomes without the interference of Python's Global Interpreter Lock.% causing contentions between different worker threads.
+In total, this allows msyd to use multiple cores, especially for steps other than the sequence alignment.
+
+To maintain it in a usable state for the pipeline as well as general use, SyRI was updated to be compatible with the 3.x version of \texttt{pandas}, and run in versions of python newer than 3.11.
+This required a partial rewrite of SyRI's internal datastructures and the way Cython's TypedMemoryView interface is used to account for pandas' change to copy-on-write behaviour in version 3.
+Along the way, some of SyRI's error handling was modernized, particularly to avoid silent errors and always return a non-zero exit code in any error state.\\
+All changes made to SyRI were upstreamed, and will be incorporated into the 1.8 release.
+%TODO realignment difficulty
+
+
 
 % link back to potato genomes
 % provide rationale? not sure

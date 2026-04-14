@@ -26,7 +26,7 @@ Translating this data into knowledge has, however, been a significant challenge 
 Genome assemblies are a large and heterogeneous kind of data.
 Making the information contained within them accessible is far from trivial, and requires carefully designed computational tools to efficiently handle large datasets and work well in HPC systems.
 
-The matter of how to represent today's genome assembly datasets is absolutely crucial to any attempt at analyzing them to turn plentyful data into scarce understanding.
+The matter of how to represent today's genome assembly datasets is absolutely crucial to any attempt at leveraging today's plentyful data to gain understanding.
 A well-designed representation is required to design efficient algorithms, but any representation will also limit the questions we can ask a dataset.%nlimiting, enabling or focusing the questions that we ask a dataset.
 Despite several recent proposals and a slowly maturing software ecosystem\cite{gfatools,garrison18}, I will argue that the representation of today's genome datasets is an unsolved question still requiring considerable conceptual contributions.
 %While for previous resequencing datasets the VCF format has emerged as a de facto standard -- despite significant limitations especially regarding storage efficiency --, there is still considerable disagreement about how to represent modern datasets of genome assemblies. 
@@ -616,4 +616,5 @@ In order to recover these missing annotations, msyd includes a realignment algor
 This is performed separately for each gap between two coresyntenic regions -- as they cover all samples, there cannot be a multisyntenic region that crosses a coresyntenic region --, avoiding expensive whole-genome alignments at this step, as it can require up to $\mathcal{O}(n^2)$ alignments.
 
 
+% TODO
 % summarize, reconnect to thesis goals?

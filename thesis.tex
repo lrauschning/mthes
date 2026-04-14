@@ -147,8 +147,6 @@ I confirm that this Master's thesis is my own work and that I have documented al
 \chapter*{Abstract}
 % abstract classes cannot be instantiated
 
-%Genomics has seen spectacular advances in the last years, with the complete assembly of entire genomes becoming impossible, 
-%powered by long read sequencing technologies and assembly algorithms capable of utilizing them.
 %As it is becoming 
 Assembling a complete genome from telomere to telomere has gone from being impossible to an effort requiring a well-resourced consortium to routine in the span of less than 5 years.
 While for humans, high-quality complete genomes can now be obtained using a single sequencing platform to simplify the process, this has not been reported in other species.% the »recipe« to reliably obtain a high-quality, phased genome assembly is known through trial and error, substantial uncertainty remains in polyploids with less resources.
@@ -158,7 +156,6 @@ In this thesis, I derive a set of minimal requirements for phasing an assembly u
 
 The ease nowadays of assembling genomes promises a more complete understanding of genomic variation than previous resequencing efforts; yet it also lays bare that the foundations of the field are not built to accomodate modern assembly datasets
 %, but requires a fundamental change in how we represent genomes.
-%Instead of resequencing approaches comparing a genome to a reference, 
 %Increasingly, the 
 %This is laying bare the fact that a field often built on improvisation
 %Besides efficient tooling, this means conceptual work developing a 
@@ -166,9 +163,20 @@ The ease nowadays of assembling genomes promises a more complete understanding o
 To adequately represent large assembly datasets, I propose the Multisyntenic Pangenome Graph (MPG).
 %In this thesis, I propose a genome representation for assembly datasets.
 The MPG is conceptually motivated as an extension of the pairwise theory of genomic synteny underlying the SyRI algorithm, and accounts for global genome structure when collapsing sequences into nodes.
-This provides guarantees that other proposed representations do not, in particular it avoids cycles and nonlocal edges.
+This provides guarantees that other proposed representations do not, in particular it avoids cycles and nonlocal edges, and provides a linear backbone of shared structure across all samples.\\
+The graph representation possesses a natural index that preserves some of the properties of linear genome indices.
+This allows efficient description and navigation along the graph.
 
 
+\textit{Text graveyard, in no particular order}
+
+
+Genomics has seen spectacular advances in the last years, with the complete assembly of entire genomes becoming impossible, 
+powered by long read sequencing technologies and assembly algorithms capable of utilizing them.
+
+Instead of resequencing approaches comparing a genome to a reference, this requires a new representation accomodating multiple genomes.
+
+In a field often built on improvisation, this requires conceptual innovation.
 
 \pagestyle{fancy}
 \fancyhead{}
