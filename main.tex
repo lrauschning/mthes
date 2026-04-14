@@ -242,6 +242,19 @@ While HiC data would be an obvious candidate, it might also be possible to use s
 
 \section*{A multisynteny graph}
 
+\newcommand{\aln}{\mathcal{A}}
+
+\begin{figure*}[t]
+	\centering
+	\includesvg[width=0.8\textwidth]{img/msyd-graph.svg}
+	\caption{
+		\textbf{Illustration of the Multisyntenic Pangenome Graph (MPG).}.
+		Temporary figure, to be changed.\\
+	}
+	\label{fig:mpg-concept}
+\end{figure*}
+
+
 % start: GFA file format, integrate with tooling
 % => make msyd output more useful
 Using msyd, it is possible to comprehensively characterize multisynteny in a dataset of genome assemblies.
@@ -361,25 +374,24 @@ This derives from the need to access genomes from many samples to obtain the nod
 Using \texttt{pysam}'s FASTA class for dynamically reading from the genome files as required helped reduce required memory, but demand can still be substantial in datasets with many samples and large genomes.%though in the worst case all genomes are still required to be in memory simultaneously.
 
 \subsection*{Properties of the multisynteny graph}
-\newcommand{\aln}{\mathcal{A}}
 \begin{figure*}[t]
 	\centering
-	\includesvg[width=0.8\textwidth]{img/msyd-graph.svg}
+	\includegraphics[width=0.9\textwidth]{img/graphfigure.png}
+	%\includegraphics[width=0.4\textwidth]{img/Screen Shot 2025-12-19 at 11.54.27.png}
 	\caption{
-		\textbf{Illustration of the Multisyntenic Pangenome Graph (MPG).}.
-		Temporary figure, to be changed.\\
-	}
-	\label{fig:mpg-concept}
-\end{figure*}
-
-\begin{figure*}[t]
-	\centering
-	\includegraphics[width=0.4\textwidth]{img/2025-12-18\_19-04.png}
-	\includegraphics[width=0.4\textwidth]{img/Screen Shot 2025-12-19 at 11.54.27.png}
-	\caption{
-		Not sure which is better/if should keep both?
-		\textbf{Bandage visualization of the MPG of a testing dataset}.
-		This MPG was computed in a testing dataset composed of the AMPRIL population\cite{jiao20, ampril}. It was computed without realignment, and so is likely undercollapsed.\\
+		\textbf{Bandage visualization of the Multisyntenic Pangenome graph of a testing dataset}.
+		This MPG was computed in a testing dataset composed of 5 genomes from the AMPRIL population\cite{jiao20, ampril}.
+		It was computed with realignment disabled, so is likely undercollapsed.
+		\textbf{a),} the MPG of chromosome 1.
+		Note the linear structure and lack of nonlocal connections in the graph.
+		\textbf{b),} a zoomed-in of a structurally variable region of chromosome 1.
+		Node length corresponds to the length of the associated sequence.
+		The large node near the bottom is a \qty{321}{\kilo\bp} private region in the c24 sample.
+		\textbf{c, d),} smaller examples of structural variation in the graph.
+		Note the private nodes with similar length sharing both a predecessor and a successor as possibly undercollapsed (as this graph was generated from non-realigned data).
+		\textbf{a, b, d)} were visualized using GFAviz\cite{gfaviz}.
+		\textbf{c)} was visualized using BandageNG\cite{gonnella18}.
+		In \textbf{c)} and \textbf{d)}, the layout was manually adjusted for enhanced clarity.
 	}
 	\label{fig:mpg-screenshots}
 \end{figure*}
