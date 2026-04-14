@@ -641,7 +641,7 @@ The potato dataset both reflects the lab's research interest, and provides a str
 potato genomes are very challenging to work with due to their high repeat content, extensive structural and small-scale diversity, and a breeding history shaped by ancient and modern introgressions.
 
 % report runtime + mem + storage
-
-
-, while manual inspection revealed several cases where clear, segregating haplotypes were missed, particularly in short gaps.
-Further testing revealed that minimap2 may not report any alignment in short sequences, likely as a result of not finding enough minimizers.
+When testing the pipeline, msyd's realignment step fell out as being often unreliable, frequently not reporting any new synteny during a realignment step.
+Manual inspection revealed several cases where clear, segregating haplotypes were missed, particularly in short gaps.
+Further testing indicated that minimap2 did not report any alignment in the analyzed regions, likely as a result of not finding enough minimizers.
+While a MPG can still be constructed from a non-realigned dataset, it will represent non-reference sequences as private even though they may be shared.
