@@ -64,7 +64,7 @@ Relying on only a single technology is highly desirable, as it simplifies experi
 This has, to the best of my knowledge, not yet been reported in the literature for any polyploid genome.
 The question naturally arises if this is because it is impossible with current sequencing technologies, and if so, what kind of advancements would be required to overcome this limitation.
 In this section, I will derive minimal requirements for long-read datasets to contain the information required to phase a genome. % of a given read length to cover 
-This naturally leaves out the question of whether current algorithms are able to successfully extract this information, but serves as a limit on the phasing quality achievable by any conceivable algorithm using only read information. 
+This naturally leaves out the question of whether current algorithms are able to successfully extract this information, but serves as a limit on the reliability of read-based phasing achievable by any conceivable algorithm. 
 If requirement minima turn out to be uneconomically high, it can be concluded that read-based phasing is not feasible in the modelled setting, and additional information from e.g. HiC experiments is required.
 The modelling effort may also serve to investigate how expected advances in sequencing technology affect our ability to use reads for phasing, in particular as reads get ever-longer.
 %as sequencing the effect of expected advances in sequencing technology, in particular longer reads.
@@ -101,7 +101,7 @@ In particular, $\mathcal{P(u_0, u_1} =0$ for all $u_0, u_1$ not on the same chro
 Defining phasing in terms of this boolean function rather than a haplotype partition directly has the advantage of being symmetric in regards to the arbitrary labeling of the haplotypes (i.e., $\mathcal{P}$ does not change if we decide to henceforth swap $h_1$ and $h_2$ or vice versa) and cleanly separating different chromosomes.
 	\\
 %How do we construct such a phasing?
-Using this definition of phasing, we can proceed to examine the information we have available in a dataset of sequencing reads, and proceed to find criteria by which we can decide if a high-quality phasing can, in principle, be constructed from it.
+Using this definition of phasing, we can proceed to examine the information we have available in a dataset of sequencing reads, and proceed to find criteria by which we can decide if a reliable phasing can, in principle, be constructed from it.
 When encountering a read, we know all of its sequence to be derived from a single physical piece of DNA corresponding to a fragment of a single haplotype
 \footnote{With the possible exception of chimeric reads as a result of PCR artefacts or other sequencing errors.}.
 If two haplo-unique sequences $u_0, u_1$ are found on the same read $r := (u_0, u_1)$, we can assign them to the same haplotype; this construction can be transitively extended, if we have two reads $(u_0, u_1), (u_1, u_2)$, we can use the shared haplo-unique site $u_1$ to assign $u_0$ and $u_2$ to the same haplotype.
@@ -193,8 +193,8 @@ Therefore, $d$ can be fixed as $d:=1$, and adjusted read length considered by gi
 		While ploidy matters in determining the base sequencing depth, the effect of read length outpaces it as the limit of shared regions surpassing read length is reached.
 		All curves drawn using a QV of 20.
 		\\
-		\textbf{Bottom}, minimal required coverage drawn against normalized read length (given in multiples of the shared region size) for different ploidies and desired quality scores.
-		The higher quality phasing requires more sequencing the more haplotypes are present in the sample, but even high phasing qualities of 30 are suprisingly accessible with sufficient read length.
+		\textbf{Bottom}, minimal required coverage drawn against normalized read length (given in multiples of the shared region size) for different ploidies and desired reliability scores.
+		The phasing at a reliability score of 30 requires more sequencing the more haplotypes are present in the sample, but even high phasing qualities of 30 are suprisingly accessible with sufficient read length.
 		\\
 	}
 	\label{fig:covcalc}
@@ -204,13 +204,14 @@ Therefore, $d$ can be fixed as $d:=1$, and adjusted read length considered by gi
 % shout out R script
 
 To make these estimates actionable, they were implemented in an R script, given in the Appendix.
-It takes a read length, maximal length of sequence in common to all haplotypes and a required maximal phasing quality value, expressed as a Phred value.
-The latter presents an upper bound on the likelihood for insufficient data to be available for phasing.
+It takes a read length, maximal length of sequence in common to all haplotypes and a desired minimum probability for the phasing to contain the information required to resolve each shared segment.
+This probability is given as a Phred value and termed the (phasing) Reliability Score (RS).
+%It represents an upper bound on the likelihood for insufficient data to be available for phasing.
 The script then calculates a minimum required coverage with reads of the given length, listing the impact of each of the steps outlined above.
 It also has support for estimating the number of required flowcells, given a genome size and ultralong yields per flowcell.
 Default values reflecting the potato genome are supplied for these.\\
-Notably, the quality value is interpreted as an upper bound, not as an average; that is, the sequencig requirements are calculated such that even the most challenging regions will meet the quality bound.
-In easier regions with smaller haplotype-shared regions, a significantly higher quality score may be attained.
+Notably, the reliability score is interpreted as an upper bound, not as an average; that is, the sequencing requirements are calculated such that even the most challenging regions will meet the specified reliability.
+In easier regions with smaller haplotype-shared regions, the phasing may be siginificantly more reliable than the specified minimum.%a significantly higher quality score may be attained.
 %Notablyi this reflects the maximal length; in regions with lower distance than that between haplo-unique sequences, it will be a pessimistic estimate% x %assumes that every 
 
 % base requirement by haplotypes + QV
@@ -218,22 +219,18 @@ In easier regions with smaller haplotype-shared regions, a significantly higher 
 % describe general dynamics
 Values for several representative cases are given in Table \ref{table:covcalc}.
 Compare also Figure \ref{fig:covcalc} for plots of different scenarios.
-In general, it may be observed that the desired phasing quality and ploidy set a floor for the required coverage, while read lengh in relation to maximal distance between haplo-unique sites acts as a multiplier on this minimum.
-Desired phasing quality contributes suprisingly little to this minimum, though its contribution increases as ploidy does.
+In general, it may be observed that the desired phasing reliability and ploidy set a floor for the required coverage, while read lengh in relation to maximal distance between haplo-unique sites acts as a multiplier on this minimum.
+Desired reliability score contributes suprisingly little to this minimum, though its contribution increases as ploidy does.
 As read length approaches this distance, required sequencing depth increases rapidly.
 To avoid this unfavourable scaling, reads should be at least twice, ideally 3 times or more the maximal length of haplotype-shared sequences.
-
-The recommendations produced by the script are concordant to recent empirical recommendations in human, if it is assumed that the read-length correction in humans is negligible
-\footnote{At an average distance of \qty{1}{\kilo\bp} between SNPs and no domestication bottlenecks or complex breeding history, this is a reasonable assumption when considering >\qty{50}{\kilo\bp} Ultralong reads}.
-While the theoretical minimum is calculated to be 15x without read length correction at a PR of 20, ref. \cite{sarashetti24} recommends 15-20x coverage of ONT-Ultralong (along with 10x of HiC data).\\
 
 % go into potato values
 To provide some concrete minima for potato, a value for the size of regions common to different haplotypes is needed.
 Two studies have investigated this in the haplotypes of a single phased potato assembly each\cite{sun22, xiao26}.
 They both report individual segments common to multiple haplotypes up to a megabase scale, but do not report exact length statistics or their frequencies;
 an analysis using the Otava genome reported in ref. \cite{sun22} of 2619 shared segments larger than \qty{10}{\kilo\bp} revealed roughly 75\% of these to be below \qty{100}{\kilo\bp}, and over 90 \% to be smaller than \qty{200}{\kilo\bp} (Craig Dent, personal communication).
-From Table \ref{table:covcalc}, we can see that phasing through \qty{100}{\kilo\bp} regions using \qty{200}{\kilo\bp} reads at a reliability of 20 would require 64x coverage with ultralong reads.
-Relaxing the reliability to 10, \qty{200}{\kilo\bp} regions could be phased with 54x coverage of \qty{300}{\kilo\bp} reads.\\
+From Table \ref{table:covcalc}, we can see that phasing through \qty{100}{\kilo\bp} regions using \qty{200}{\kilo\bp} reads while reaching a reliability score of 20 would require 64x coverage with ultralong reads.
+Relaxing the reliability score threshold to 10 (implying that 10\% of breaks are expected to be unresolvable), \qty{200}{\kilo\bp} regions could be phased with 54x coverage of \qty{300}{\kilo\bp} reads.\\
 To summarize, the full phasing of a potato genome would require phasing across megabase scale haplotype-shared regions and is not achievable with current sequencing and library preparation techniques.
 However, the majority of shared segments are much smaller, and can feasibly be resolved using high-coverage ONT ultralong sequencing.\\
 Using the distribution of common segments described above, I estimate that an assembly using 54x coverage of \qty{300}{\kilo\bp} reads would contain at least 200 breaks from large regions from regions larger than \qty{200}{\kilo\bp}, 50 from unphased regions between \qty{100}\kilo\bp} and \qty{200}{\kilo\bp}, and additional 20 from shorter regions.
