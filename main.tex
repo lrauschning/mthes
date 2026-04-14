@@ -346,7 +346,7 @@ When encountering a new multisyntenic region, a new node is initialized containi
 The successor-lists of these nodes are then updated to contain the newly initialized node, and it is added to the node list.
 This graph construction procedure avoids both lookahead and lookback by exploiting the nature of the MPG as union of a finite set of non-branching paths; to work successfully, it requires nodes to be scanned in an order compatible with the partial ordering derived from the directed adjacency relation.
 This can be ensured by simply sorting the multisynteny calls according to this relation prior to scanning.\\
-A sketch of the algorithm for computing an MPG from a multisynteny callset is given in Algorithm \ref{alg:mpg}.
+A sketch of the algorithm for computing an MPG from a multisynteny callset is given in Algorithm \ref{algo:mpg}.
 
 The graph construction algorithm has expected and worst-case runtime complexity linear in the number of multisyntenic regions in the input and the number of samples.
 In the worst-case, ensuring sorting could take longer than the actual graph construction; the total worst-case runtime complexity is given by $\mathcal{O}(n|MS| + |MS|\log|MS|)$, with $n$ as the number of samples and $|MS|$ as the number of multisyntenic regions in the input msyd callset.
