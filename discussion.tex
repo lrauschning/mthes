@@ -1,8 +1,61 @@
 
-\section*{Single-platform phased genome assembly}
+\section*{Phaseability}
+
 % phasing human math for human: trivial
 % => easy with UL reads
-Not sure what to write; reiterate closing of the phasing section in main?
+By modelling read-based phasing systematically, estimates for minimal required coverage to phase genomes could be obtained in different scenarios.
+The impact of multiple parameters was assessed, and revealed read length compared to the length of regions common to all haplotypes to be the limiting factor for phasing to be feasilbe, with ploidy providing a floor for the minimal required coverage regardless of read length.\\
+In order to be economically feasible, read length should be at least twice, ideally three times or more of the maximal expected distance between haplo-unique sites.
+
+This proves that read-based phasing of polyploids is possible in principle just like in diploids, and breeding history (particularly with regards to recent introgressions and inbreeding) may determine phaseability more than ploidy.
+In potato, the presence of megabase-scale regions common to multiple haplotypes prevents complete read-based phasing at least using current sequencing technology, though partial phasing should be achievable using current approaches.
+Given that a read-based phasing can be obtained at no additional cost given that ultralong reads are required for genome assembly, it will be interesting to investigate if a partial phasing using them can relax the requirements for other approaches; in particular, it could allow complete phasing at far lower HiC coverage and with less manual intervention than required so far\cite{xiao26}.%HiC data to be sufficient for reliable complete genome phasing.
+
+The minima provided by my modelling-based approach are concordant with recent empirical recommendations in human, considering that the read-length correction can be neglected in humans 
+\footnote{At an average distance of \qty{1}{\kilo\bp} between SNPs and no complex breeding history, this is a reasonable assumption when considering >\qty{100}{\kilo\bp} Ultralong reads}.
+While the theoretical minimum is calculated to be 15x without read length correction at a reliability score of 20, ref. \cite{sarashetti24} recommends 15-20x coverage of ONT-Ultralong (along with 10x of HiC data).\\
+
+% read error => limit k-mer
+% define haplo-unique
+% discuss modelling with equal IBD/read lens vs distribution
+As in any modelling approach, some idiosyncracies of real data were omitted in favour of an idealized model providing mathematical simplicity and interpretability.\\
+First, it was assumed that haplo-unique sites can be perfectly identified in any read spanning them.
+How reasonable this assumption is depends on the nature and length of the haplo-unique site and the error profile of the sequencing technology.
+Assuming that unique $k$-mers are used as haplo-unique sites, the error rate of ONT sequencing should be sufficient to contain them with no errors for realistic values of $k$.
+For example, an ONT read with a quality score of 30 has a $>90\%$ chance of containing a $1000$-mer with no errors.
+In this sense, the read error rate constrains the maximal length of probes used to detect haplo-unique sites.
+% model by additional linear correction
+If this becomes a relevant constraint, probes designed to accomodate sequencing errors such as gapped $k$-mers or strobemers may be used\cite{mohammad-noori24, zentgraf25}.\\
+Modelling the impact of imperfect identification of haplo-unique sites would be fairly straightforward; similar to the read length correction described in this thesis, an additional step multiplying by the inverse of the likelyhood of misidentifying any of the two required haplo-unique sites could be added.\\
+Second, the modelling assumed all reads to have equal length.
+This is clearly not the case in real data.
+Given the sensibility of the coverage requirements to read length, accounting for varying read length may provide significantly sharper estimates, especially  in species with large common regions at the limit of phaseability.
+%, when common regions are more than half as long as reads, though 
+As a pragmatic recommendation, the coverage calculator can be run with multiple read lengths and results compared to find an ideal way to reach the desired phasing quality, as demonstrated in assessing the phaseability of the potato genome in the Main text.
+As a more concrete example, if a single ultralong sequencing run gives 5x coverage of the target genome with >\qty{100}{\kilo\bp} reads and 2x with \qty{200}{\kilo\bp} reads, the number of flowcells that the coverage calculator estimates for each of these two sets of parameters can be computed, and the lower number chosen for sequencing.\\
+From a statistics point of view, this could be modelled by a more sophisticated read length correction, by computing a per-length correction factor and applying it to the read length distribution, then reporting the expected value required to reach sufficient coverage.
+In practice, users may no always have a suitable read length distribution at hand, as it depends on library preparation and may vary between different sequencing runs.
+%joint probability of a a gap being phaseable by a read of any length
+%Integrating an automatic esti
+
+Finally, the modelling done in this thesis provides a minimum requirement for the dataset to contain sufficient information to phase a genome.
+To actually turn this into a phasing, this phasing signal needs to be extracted by an algorithm.
+In diploids, current algorithms seem to be capable of reaching this minimum, as evidenced by the success of read-based phased assembly in human\cite{sarashetti24, gross26}.\\
+Recent developments in ONT-Ultralong protocols suitable for plant samples provide an opportunity if current tooling can also reach this limit in complex, polyploid genomes\cite{lu24}.
+%Though the impressive average read lengths reported in ref. \cite{lu24} have not been reched in potato, reads up to about \qty{400}{\kilo\bp} have been observed in potato samples (Craig Dent and Samija Amar, personal communication).
+%Using this approach, up to 4-fold coverage of potato genomes with ultralong reads > \qty{200}{\kilo\bp} per flowcell could be achieved (Craig Dent, personal communication).
+%Given the sequencing requirement minima derived in the first section in Main, this should make it feasible to generate read datasets with sufficient information to phase the majority of the potato genome, excluding several hundred large segments shared across haplotypes that can still induce breaks in the phasing.
+\\ %phase all but the largest homozygous regions of the potato genome.\\
+If this is indeed the case, it may facilitate phased plant genome assembly by either eliminating or reducing the need for additional information, such as HiC sequencing.
+%Testing whether current algorithms can successfully reach this stage, and how it interacts with HiC data will be an interesting avenue to explore, either facilitating the high-quality assembly of potato genomes or providing an opportunity for the development of such tools
+If it is not, it provides an opportunity for tool developers to design novel algorithms to accomplish this. %from the ground up with Ultralong reads in mind.
+It should be noted that none of the leading phased assembly tools were designed with phased assembly or ultralong reads in mind;
+as such, there may yet be significant potential of these datasets that we are not yet able to utilize.
+Tool development efforts should also strive to integrate phasing information from reads with that of orthogonal information, particularly increasingly accessible long-read chromosome conformation methods like PoreC and CiFi\cite{gross26, mcginty25, deshpande22}.
+
+% find in datasets
+% findgselike tool?
+
 
 
 \section*{Multisyntenic Pangenome Graphs as a Genome Representation}
@@ -45,14 +98,6 @@ Strategies for achieving this are discussed in the next section.
 % validate covcalc in practice
 % ways to improve msyd:
 % move realignment to exact library
-
-Recently, ONT-Ultralong protocols suitable for plant samples have become available and established\cite{lu24}.
-Though the impressive average read lengths reported in ref. \cite{lu24} have not been reched in potato, reads up to about \qty{400}{\kilo\bp} have been observed in potato samples (Craig Dent and Samija Amar, personal communication).
-%Using this approach, up to 4-fold coverage of potato genomes with ultralong reads > \qty{200}{\kilo\bp} per flowcell could be achieved (Craig Dent, personal communication).
-Given the sequencing requirement minima derived in the first section in Main, this should make it feasible to generate read datasets with sufficient information to phase the majority of the potato genome, excluding several hundred large segments shared across haplotypes that can still induce breaks in the phasing.
-\\ %phase all but the largest homozygous regions of the potato genome.\\
-Testing whether current algorithms can successfully reach this stage, and how it interacts with HiC data will be an interesting avenue to explore, either facilitating the high-quality assembly of potato genomes or providing an opportunity for the development of such tools
-\footnote{Of note, none of the leading assembly tools were designed from the ground up with ultralong reads in mind; there may be significant potential still left to obtain from these data, and from their integration with HiC information.}.
 
 Another clear next step is to investigate and visualize the multisyntenic pangenome graph representation of the potato dataset.
 Behaviour of the representations about regions known to be structurally variable, such as introgressed regions and regions containing NLR genes would be a particular point of interest.
