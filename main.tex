@@ -73,7 +73,8 @@ In the literature, there are many empirically motivated suggestions for sequenci
 Sequencing depth recommendations are usually concerned either with the most economical way to genotype a cohort through resequencing, or a reliable way to obtain a high-quality assembly.
 With the recent possibility of phased assembly, some recommendations of sequencing inputs exist for humans, but none apply to polyploids or, more generally, separate phasing from assembly\cite{sarashetti24}.\\
 %If mentioned at all, phasing is treated as an afterthought to phased genome assembly.
-The most recent theory-oriented work discussing anything related I could find in the literature is Lander and Waterman's short paper on requirements for clone-based physical mapping in the second issue of Genomics in 1988 (ref. \cite{lander88}).
+A literature search failed to find any recent theory-oriented work on sequencing coverage estimation.
+The most recent work in this direction seems to be Lander and Waterman's short paper on requirements for clone-based physical mapping in the second issue of Genomics in 1988 (ref. \cite{lander88}).
 The paper introduced the use of the Poisson distribution to model random clones/sequencing reads, and its approach was later used to derive coverage requirements for the human genome project\cite{illuminaseqrecs}.\\
 In this section, I have a similar aim to it:
 To model the read-based phasing problem in a systematic way, and derive minimal dataset requirements for a genome to be phaseable with a certain probability.
@@ -224,19 +225,22 @@ To avoid this unfavourable scaling, reads should be at least twice, ideally 3 ti
 
 The recommendations produced by the script are concordant to recent empirical recommendations in human, if it is assumed that the read-length correction in humans is negligible
 \footnote{At an average distance of \qty{1}{\kilo\bp} between SNPs and no domestication bottlenecks or complex breeding history, this is a reasonable assumption when considering >\qty{50}{\kilo\bp} Ultralong reads}.
-While the theoretical minimum is calculated to be 15x without read length correction at a quality of 20, ref. \cite{sarashetti24} recommends 15-20x coverage of ONT-Ultralong (along with 10x of HiC data).\\
+While the theoretical minimum is calculated to be 15x without read length correction at a PR of 20, ref. \cite{sarashetti24} recommends 15-20x coverage of ONT-Ultralong (along with 10x of HiC data).\\
 
 % go into potato values
 To provide some concrete minima for potato, a value for the size of regions common to different haplotypes is needed.
 Two studies have investigated this in the haplotypes of a single phased potato assembly each\cite{sun22, xiao26}.
 They both report individual segments common to multiple haplotypes up to a megabase scale, but do not report exact length statistics or their frequencies;
 an analysis using the Otava genome reported in ref. \cite{sun22} of 2619 shared segments larger than \qty{10}{\kilo\bp} revealed roughly 75\% of these to be below \qty{100}{\kilo\bp}, and over 90 \% to be smaller than \qty{200}{\kilo\bp} (Craig Dent, personal communication).
-From Table \ref{table:covcalc}, we can see that phasing through \qty{100}{\kilo\bp} regions using \qty{200}{\kilo\bp} reads at a quality score of 20 would require 64x coverage.
-Given that individual reads can reach up to \qty{400}{\kilo\bp} (Craig Dent and Samija Amar, personal communication), it is conceivable that up to 90\% of large shared sequences could be successfully phased using the current approach.\\
-Phasing through the megabase-scale regions found in the potato genome reliably and economically using only ultralong reads is, however, not conceivable without an order of magnitude increase in average read length.
-While is not unprecedented in long read sequencing, the increasing maturity of the ecosystem and the challenges of plant sample preparation make this seem unlikely to happen in the near future.\\
-But ultralong reads can still contribute to phasing: by resolving regions of the genome that are easier to phase, HiC signal can be aggregated across larger blocks, potentially allowing successful phasing at lower coverages.
-They can also serve as an independent signal to confirm HiC phasing calls, particularly in repetitive parts of the genome.
+From Table \ref{table:covcalc}, we can see that phasing through \qty{100}{\kilo\bp} regions using \qty{200}{\kilo\bp} reads at a reliability of 20 would require 64x coverage with ultralong reads.
+Relaxing the reliability to 10, \qty{200}{\kilo\bp} regions could be phased with 54x coverage of \qty{300}{\kilo\bp} reads.\\
+To summarize, the full phasing of a potato genome would require phasing across megabase scale haplotype-shared regions and is not achievable with current sequencing and library preparation techniques.
+However, the majority of shared segments are much smaller, and can feasibly be resolved using high-coverage ONT ultralong sequencing.\\
+Using the distribution of common segments described above, I estimate that an assembly using 54x coverage of \qty{300}{\kilo\bp} reads would contain at least 200 breaks from large regions from regions larger than \qty{200}{\kilo\bp}, 50 from unphased regions between \qty{100}\kilo\bp} and \qty{200}{\kilo\bp}, and additional 20 from shorter regions.
+In total, this would imply an average of at least 6 phasing breaks per haplotype and chromosome.
+For some applications, particularly in plant breeding, this may already be sufficient; for applications requiring complete phasing, additional information could be used to fully phase the assemblies.
+While HiC data would be an obvious candidate, it might also be possible to use sample pedigrees or reference panels to resolve these breaks without additional sequencing.
+
 
 \section*{A multisynteny graph}
 
