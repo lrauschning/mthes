@@ -194,7 +194,7 @@ As we assume reads to be Poisson distributed, we can simply multiply our coverag
 % shout out R script
 
 To make these estimates actionable, they were implemented in an R script, given in the Appendix.
-It takes a read length, maximal length of sequences shared by all haplotypes and a required maximal phasing quality value, expressed as a Phred value.
+It takes a read length, maximal length of sequence in common to all haplotypes and a required maximal phasing quality value, expressed as a Phred value.
 The latter presents an upper bound on the likelihood for insufficient data to be available for phasing.
 The script then calculates a minimum required coverage with reads of the given length, listing the impact of each of the steps outlined above.
 It also has support for estimating the number of required flowcells, given a genome size and ultralong yields per flowcell.
@@ -202,11 +202,14 @@ Default values reflecting the potato genome are supplied for these.\\
 Notably, the quality value is interpreted as an upper bound, not as an average; that is, the sequencig requirements are calculated such that even the most challenging regions will meet the quality bound.
 In easier regions with smaller haplotype-shared regions, a significantly higher quality score may be attained.
 %Notablyi this reflects the maximal length; in regions with lower distance than that between haplo-unique sequences, it will be a pessimistic estimate% x %assumes that every 
-Values for several typical values are given in Table \ref{table:covcalc}.
+%Values for several typical values are given in Table \ref{table:covcalc}.
 
+% base requirement by haplotypes + QV
+% massively accelerated by read lengths
+To derive concrete recommendations, the 
+Using this 
 
-
-For the impact of different parameters, see also Figure \ref{fig:covcalc}. 
+For plots showing impact of different parameters, compare Figure \ref{fig:covcalc}. 
 
 % go into mutation strategy
 
