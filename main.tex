@@ -152,7 +152,7 @@ For example, following the approach given below Lemma 3.8 in \cite{mitzenmacher1
 In the first row is the ploidy of the organism.
 In the first column, the read length is given, expressed as multiples of the maximal length of sequences common across the haplotypes.
 If reads are shorter than this, no phasing can be produced.
-All values are computed with a QV bound of 20.
+All values are computed with a PR bound of 20.
 Coverage values are rounded to the nearest whole number, and refer to haploid genome size.
 }
 \label{table:covcalc}
@@ -192,7 +192,7 @@ Therefore, $d$ can be fixed as $d:=1$, and adjusted read length considered by gi
 		\textbf{Plot of required coverages in different scenarios.}\\
 		\textbf{Top,} minimal required coverage for multiple ploidies and read lengts against the maximal haplotype-shared region size.
 		While ploidy matters in determining the base sequencing depth, the effect of read length outpaces it as the limit of shared regions surpassing read length is reached.
-		All curves drawn using a QV of 20.
+		All curves drawn using a PR of 20.
 		\\
 		\textbf{Bottom,} minimal required coverage drawn against normalized read length (given in multiples of the shared region size) for different ploidies and desired reliability scores.
 		The phasing at a reliability score of 30 requires more sequencing the more haplotypes are present in the sample, but even high phasing qualities of 30 are suprisingly accessible with sufficient read length.
@@ -215,7 +215,7 @@ Notably, the reliability score is interpreted as an upper bound, not as an avera
 In easier regions with smaller haplotype-shared regions, the phasing may be siginificantly more reliable than the specified minimum. %a significantly higher quality score may be attained.
 %Notablyi this reflects the maximal length; in regions with lower distance than that between haplo-unique sequences, it will be a pessimistic estimate% x %assumes that every 
 
-% base requirement by haplotypes + QV
+% base requirement by haplotypes + PR
 % massively accelerated by read lengths
 % describe general dynamics
 Values for several representative cases are given in Table \ref{table:covcalc}.
