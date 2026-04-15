@@ -658,6 +658,12 @@ In order to recover these missing annotations, msyd includes a realignment algor
 This is performed separately for each gap between two coresyntenic regions -- as they cover all samples, there cannot be a multisyntenic region that crosses a coresyntenic region --, avoiding expensive whole-genome alignments at this step, as it can require up to $\mathcal{O}(n^2)$ alignments.
 
 
-% TODO
 % summarize, reconnect to thesis goals?
-To summarize the introduction, I have outlined the current state of the art in genomics, with genome assembly becoming more accessible by the day.
+To summarize the introduction, I have outlined the current state of the art in genome assembly, which has become routine in simple genomes, and more accessible than ever before in complex genomes.
+Phasing complex, polyploid genomes is still a significant challenge;
+in the first section of the Main, I will use modelling to show that read-based phasing is possible in principle also in polyploids, but additional information is still needed to completely phase complex genomes like the autotetraploid potato.\\
+Once we have those large datasets of high-quality phased genomes, the question is how to make them usable, which requires a suitable representation of some kind.
+I will introduce a graph genome representation based on the concept of multisynteny as well as an efficient algorithm to compute it from a set of multisynteny calls.
+Given its strong conceptual foundation, this representation provides a number of guarantees such as acyclicity, having a linear backbone, a bounded number of edges per node and not allowing edges not local in at least one sample.
+Using these guarantees, a natural coordinate system can be defined for the representation that likewise maintains certain properties by respecting the global syntenic ordering between samples.\\
+After concluding by describing a pipeline used to prepare input for the computation of the reference, I will discuss how this representation compares to the two leading sequence-based pangenome representations introduced above.
