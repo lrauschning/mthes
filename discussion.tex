@@ -90,14 +90,14 @@ Tool development efforts should also strive to integrate phasing information fro
 \label{fig:mpgcompare}
 \end{figure*}
 
-Comparing to pangenome graphs based on local alignments and variation graphs, the MPG representation differs in a number of key ways.
+Comparing to pangenome graphs based on local alignments and variation graphs, the Multisyntenic Pangenome Graph representation differs in a number of key ways.
 First, MPGs are acyclic by construction, which other leading approaches cannot guarantee.
 This dramatically simplifies the graph structure, and allows the use of more efficient algorithms for many common operation.
 %First, small variants not breaking synteny are not represented in the graph structure.
 %This is similar to a common filtering step used for variation graphs \cite{matthews24, hickey24}.
 %As the graph can be annotated with exact positions on each sample and aligments are available in the PSF file, these can be recovered in a fairly straightforward way.
 %Second, a MPG will never introduce a circle by collapsing repetitive sequences, and will also never collapse nonlocal nodes or produce nodes with many nonlocal connections.
-MPGs will also never have nonlocal connections, as all edges represent adjacency on at least one sample.
+MPGs can by construction never have nonlocal connections, as all edges represent adjacency on at least one sample.
 Incidentally, this implies that different chromosomes will always form disjoined subgraphs in the MPG, allowing graph operations to be parallelized across different subgraphs/chromosomes.
 %, as there cannot ever be adjacency across chromosomes.
 %Similarly, no connection can be made between nodes on different chromosomes, ensuring that chromosomes can always cleanly be separated out as independent subgraphs.
@@ -105,14 +105,14 @@ Incidentally, this implies that different chromosomes will always form disjoined
 This differentiates the MPG approach from other pangenome graphs that may introduce both cycles and nonlocal connections, particularly in repetitive regions or when encountering inversions.
 % to forms a stark difference to how other pangenome graph representations, which especially in repetitive sequences often introduce cycles or nonlocal connections. % choose to draw edges and collapse nodes; 
 
-An MPG conserves the genome ordering of all samples; as remarked in the proof of acyclicity, the $<$ comparator on any sample cannot be violated by the graph's successor-of relation, as $<$ is the transitive closure of the per-sample directed adjacency $\prec_i$.
-As it conserves the sample-wise ordering of all (multi-)syntenic regions, an MPG can be viewed as a datastructure storing a partial ordering.
-When comparing two nodes, if one of them occurs in the set of all children of the other, that implies that the latter node is ordered first, and vice versa.
-If neither is contained in the other's set of children, their comparison is undefined in the partial ordering.
-By construction, this partial ordering cannot violate any of the sample-wise genome orderings expressed by a $<$ comparator on genomic positions.
+An MPG conserves the genome ordering of all samples; as remarked in the proof of acyclicity, the $<$ comparator on any sample cannot be violated by the graph's child-of relation, as $<$ is the transitive closure of the per-sample directed adjacency $\prec_i$.
+As it conserves the sample-wise ordering of all pairwise or multisyntenic regions, an MPG can be viewed as a datastructure storing a partial ordering.
+When comparing two nodes, if one of them is a child of the other, that implies that the parent is ordered first.
+If neither is the other's child, their comparison is undefined in the partial ordering.
+%By construction, this partial ordering cannot violate any of the sample-wise genome orderings expressed by a $<$ comparator on genomic positions.
 %process merging different sample orderings such that the result is consistent with each of the sample orderings.
-Taking this view, the Pangenome Coordinate (PanCo) system »falls out« of the graph representation very naturally as any sorting of all multisyntenic regions along this partial ordering.
-Conceptualizing the MPG as a graph again, this corresponds to a topological ordering of the MPG, which can be efficiently computed.
+Taking this view, the Pangenome Coordinates (PanCo) »fall out« of the graph representation very naturally as any arrangement of all multisyntenic regions that is consistent with this partial ordering implied by the MPG.
+As the MPG is a directed acyclic graph, this corresponds to a topological ordering, which can be found efficiently. %as a graph again, this corresponds to a topological ordering of the MPG, which can be efficiently computed.
 
 PanCo not only reflects a practical way to navigate the MPG and efficiently compare coordinates with another, but also highlights the advantages of a pangenome representation with strong theoretical guarantees as the basis of simple, efficient algorithms.\\
 %, and allows easy navigation in the graph by maintaining some of the properties of genomic indices on linear genome references.\\
