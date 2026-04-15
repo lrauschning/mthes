@@ -369,28 +369,7 @@ While gene-based pangenome representations have been used in eukaryotes as well,
 Recently, some sequence-based pangenome graph representations originally developed for eukaryotic genomes have also made inroads into bacterial datasets\cite{noll23, canalda-baltrons25}.
 
 \subsection*{Sequence-based Pangenomes}
-\begin{figure*}[t]
-	\centering
-	\includesvg[width=0.5\textwidth]{img/approaches-nompg.svg}
-	\caption{
-		\textbf{Illustration of the graphs produced by minigraph and PGGB.}\\
-		\textbf{Top,} the input genomes used to construct the representations.
-		Blue, thick ribbons are identical segments; the light blue ribbon is inverted compared to the other segments.
-		On these ribbons, small variants are drawn in a different colour.\\
-		%Light grey thin paths represent unique sequence.\\
-		\textbf{Left,} the minigraph representation.
-		Small variants are not represented in minigraph pangenomes, though they are added at a later stage using by the minigrap-cactus pipeline, thus every segment has the allele it is first encountered with marked.
-		Minigraph collapses inversions in the same place into a single node, but does not collapse duplicated segments.
-		Note that the inversion makes this graph cyclic.\\
-		\textbf{Right,} the PGGB pangenome graph.
-		PGGB collapses identical sequences, even if they are not adjacent.
-		Small variants are represented as nodes in the graph, and are merged across identical segments.
-		This graph contains multiple cycles, and would also be cyclic if there were no inversion.
-		\\
-		Figure inspired by Extended Data Fig. 3 from ref. \cite{liao23}.
-	}
-	\label{fig:mgpggb}
-\end{figure*}
+
 Gene-based representations disregard the vast majority of the eukaryotic genome that does not code for proteins.
 This misses many variants, both neutral and affecting gene regulation.
 %, and thus cannot be used to investigate genome evolution proceeding neutrally or by changes in gene regulation, thought to be more common on a species- or family level. % TODO citation?
@@ -435,6 +414,28 @@ Different proposed approaches sit at different points along this spectrum, and i
 %In practice the most useful representations will lie somewhere between these two extremes, but it is helpful to bear this spectrum in mind when choosing or designing pangenome representations. %of pangenome representations by their containing 
 
 \subsection*{Minigraph}
+\begin{figure*}[t]
+	\centering
+	\includesvg[width=0.5\textwidth]{img/approaches-nompg.svg}
+	\caption{
+		\textbf{Illustration of the graphs produced by minigraph and PGGB.}\\
+		\textbf{Top,} the input genomes used to construct the representations.
+		Blue, thick ribbons are identical segments; the light blue ribbon is inverted compared to the other segments.
+		On these ribbons, small variants are drawn in a different colour.\\
+		%Light grey thin paths represent unique sequence.\\
+		\textbf{Left,} the minigraph representation.
+		Small variants are not represented in minigraph pangenomes, though they are added at a later stage using by the minigrap-cactus pipeline, thus every segment has the allele it is first encountered with marked.
+		Minigraph collapses inversions in the same place into a single node, but does not collapse duplicated segments.
+		Note that the inversion makes this graph cyclic.\\
+		\textbf{Right,} the PGGB pangenome graph.
+		PGGB collapses identical sequences, even if they are not adjacent.
+		Small variants are represented as nodes in the graph, and are merged across identical segments.
+		This graph contains multiple cycles, and would also be cyclic if there were no inversion.
+		\\
+		Figure inspired by Extended Data Fig. 3 from ref. \cite{liao23}.
+	}
+	\label{fig:mgpggb}
+\end{figure*}
 % minigraph
 The first modern sequence-based pangenome graph toolkit able to directly construct a graph not based on a VCF representation was \texttt{minigraph}, released in 2020 by Heng Li\cite{minigraph}.
 At its core, minigraph is a \texttt{minimap}-inspired graph aligner, that is, a software capable of aligning a query sequence to a reference sequence graph.
@@ -494,7 +495,9 @@ PGGB's nextflow implementation also scales more effectively on HPC systems, decr
 %collapses repeats
 As PGGB reports (potentially cyclic) paths for all samples, it is possible to reconstruct the input genomes from its representation.
 Compared to minigraph's representations, PGGB's output graphs tend to be much more collapsed.
-Though this depends on the exact parameters chosen during the all vs all alignment, in general PGGB collapses all repetitive elements, which can lead to many nonlocal edges in repeat-rich genomes\cite{cheng25}.\\
+Though this depends on the exact parameters chosen during the all vs all alignment, in general PGGB collapses all repetitive elements, which can lead to many nonlocal edges in repeat-rich genomes\cite{cheng25}.
+See Figure \ref{fig:mgpggb} for an illustration of how PGGB's representation collapses repeated segments, compared to minigraph's approach.
+\\
 %In general, because its graph is constructed from local all versus all alignments, PGGB can collapse nonlocal sequences if they have similar sequence and contain nonlocal edges, particularly in species with structurally complex or highly repetitive genomes\cite{cheng25}.
 PGGB graphs also frequently contain cycles, or multiple successive very small nodes that are not straightforward to untangle\cite{cheng25}. % better citation?
 
@@ -519,6 +522,7 @@ Classical tools for visualizing GFAs have been used to visualize pangenome graph
 
 However, graphical pangenomics still has some way to become established in the wider genomics field.
 In particular, many downstream applications only work with pangenomes produced by either PGGB or Minigraph(-Cactus), although they use the same file format.
+See also Figure \ref{fig:mgpggb} for a comparison of the two representations. 
 Repetitive and structurally complex regions and genomes also still present a considerable challenge, with especially PGGB introducing many nonlocal connections and producing a highly fragmented pangenome graph\cite{cheng25}.\\
 Most importantly, so far no downstream application using a graph-based representation to do something that would have been impossible or very challenging with either a linear reference or the uncollapsed haplotypes has been reported. %there has so far been a lack of downstream applications that would have not been possible or been downstream \cite{liao23}
 The HPRC's first draft release focused on improvements in short read alignment and small variant calling accuracy, and could demonstrate modest performance increases\footnote{About 1-2 percentage points for recall, less than 0.1 percentage points for precision in a medical dataset.}\cite{liao23}.

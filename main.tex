@@ -244,17 +244,6 @@ While HiC data would be an obvious candidate, it might also be possible to use s
 
 \newcommand{\aln}{\mathcal{A}}
 
-\begin{figure*}[t]
-	\centering
-	\includesvg[width=0.8\textwidth]{img/msyd-graph.svg}
-	\caption{
-		\textbf{Illustration of the Multisyntenic Pangenome Graph (MPG).}.
-		Temporary figure, to be changed.\\
-	}
-	\label{fig:mpg-concept}
-\end{figure*}
-
-
 % start: GFA file format, integrate with tooling
 % => make msyd output more useful
 Using msyd, it is possible to comprehensively characterize multisynteny in a dataset of genome assemblies.
@@ -287,6 +276,23 @@ We can further observe that it is impossible for $A$ and $B$ to »cross« each o
 Formally, this requirement can be expressed as $A_i < B_i \implies \forall j \in S(A) \cap S(B): A_j < B_j$.
 We can use this property to derive a sample-independent definition of directed adjacency: $A \prec B \iff \exists i \in S(A) \cap S(B): \nexists C: A_i < C_i < B_i$.
 This relation is similar to sample-adjacency, but is undefined if $A$ and $B$ do not share a sample.
+
+\begin{figure*}[t]
+	\centering
+	\includesvg[width=0.8\textwidth]{img/msyd-graph.svg}
+	\caption{
+		\textbf{Illustration of the Multisynteny Graph representation.}\\
+		This tube map shows an illustrative example of a multisynteny graph representation.
+		Nodes are multisyntenic regions.
+		Edges between nodes are colour-coded by the sample they occur on, allowing for multi-edges.
+		Ingoing and outcoming edges corresponding to the same sample are connected, illustrating how the multisynteny graph consists of a merged set of paths.
+		Note how coresyntenic regions induce bottlenecks in the graph, giving it an appearance like beads on a chain.
+		If private nodes are added along edges representing sequence, a multisyntenic pangenome graph can be derived from this representation.
+		Compare also Fig. \ref{fig:mpg-screenshots} for a visualization of a real multisyntenic pangenome graph.\\
+		Nodes are indexed using PanCo indices, described later in the main text.
+	}
+	\label{fig:mpg-concept}
+\end{figure*}
 
 % similarity to assembly graph? => genomes as paths
 % => acyclic
