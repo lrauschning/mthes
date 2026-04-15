@@ -151,7 +151,7 @@ In fact, even the language used to discuss this subject is not always used in a 
 % pangenomes
 
 
-
+\newpage
 \section*{Assembling Genomes}
 
 In this section, I will give a brief introduction into the process used to assemble a genome, highlighting the current state of the art.
@@ -192,6 +192,7 @@ Read length as well as error rate are primarily driven by sequencing technology,
 %State of the art long-read sequencing is dominated by 
 %Key developments in this space include:
 
+\newpage
 \subsection*{Long Read Sequencing}
 
 As outlined in the Historical Background section, modern genome assembly relies on chiefly on long reads, typically defined as sequencing technologies allowing fragments of at least \qty{10}{\kilo\bp} to be assembled.
@@ -345,7 +346,7 @@ Motivated by this gap in knowledge, I derive a set of requirements for phasing u
 % draw conclusion
 
 
-
+\newpage
 \section*{Contemporary Pangenome Representations}
 
 % motivation: lots of genomes
@@ -429,6 +430,7 @@ While the input haplotypes occupy the extreme end of collapsing nothing and pres
 Different proposed approaches sit at different points along this spectrum, and it is helpful to bear this in mind when choosing between them and setting their parameters, particularly considering that different analyses may require or prefer different degrees of collapse\cite{hickey24, sierra24, igolkina25}.
 %In practice the most useful representations will lie somewhere between these two extremes, but it is helpful to bear this spectrum in mind when choosing or designing pangenome representations. %of pangenome representations by their containing 
 
+\newpage
 \subsection*{Minigraph}
 % minigraph
 The first modern sequence-based pangenome graph toolkit able to directly construct a graph not based on a VCF representation was \texttt{minigraph}, released in 2020 by Heng Li\cite{minigraph}.
@@ -579,21 +581,6 @@ This is intended to give readers who are not familiar with either tool the neces
 The initial version of msyd is described in my Bachelor's Thesis, and in the API documentation.
 
 \subsection*{The Synteny and Rearrangement Identifier (SyRI)}
-\begin{figure*}[t]
-	\centering
-	\includesvg[width=0.8\textwidth]{img/syn.svg}\\[2\baselineskip]
-	\includesvg[width=0.8\textwidth]{img/synsvs.svg}
-	\caption{
-		\textbf{Illustration of the SyRI algorithm.}\\
-		\textbf{Top}, in the first step, SyRI identifies a syntenic backbone of conserved genome structure between the reference and query.\\
-		\textbf{Bottom}, after identifying syntenic regions, leftover regions are known to be structurally variable, and are annotated appropriately in a multi-step process (see main text).
-		Finding conserved structure first both makes the algorithmic problem tractable, and helps to avoid calling spurious similarities as structural variation.
-		This is illustrated by the translocation drawn with a dashed outline (purple): here the large, syntenic alignments including both regions are a more parsimonious annotation than inserting a translocation based on the drawn secondary alignment.\\
-		Figure inspired by \cite{goel19}.
-	}
-	\label{fig:syri}
-\end{figure*}
-
 SyRI is a tool written by Manish Goel to compare the genome structure between a reference and query assemblies\cite{goel19}.
 Its core insight is that finding \emph{syntenic}, that is structurally conserved, segments is far easier than finding rearrangements, and after all syntenic regions have been found all that is left to do is to annotate the remaining sequence as the right kind of structural rearrangement.\\
 This is reflected in the SyRI algorithm:
@@ -609,6 +596,21 @@ In a final step, cross-chromosomal translocations are identified and regions wit
 After finding genome structure, SyRI goes back to the raw alignment to identify small variants between the reference and sample.
 Both small and large variants are reported in a custom output format; small variants are also reported as a VCF file.
 SyRI's output can be visualized using the plotsr utility\cite{goel22}.
+
+\begin{figure*}[t]
+	\centering
+	\includesvg[width=0.8\textwidth]{img/syn.svg}\\[2\baselineskip]
+	\includesvg[width=0.8\textwidth]{img/synsvs.svg}
+	\caption{
+		\textbf{Illustration of the SyRI algorithm.}\\
+		\textbf{Top}, in the first step, SyRI identifies a syntenic backbone of conserved genome structure between the reference and query.\\
+		\textbf{Bottom}, after identifying syntenic regions, leftover regions are known to be structurally variable, and are annotated appropriately in a multi-step process (see main text).
+		Finding conserved structure first both makes the algorithmic problem tractable, and helps to avoid calling spurious similarities as structural variation.
+		This is illustrated by the translocation drawn with a dashed outline (purple): here the large, syntenic alignments including both regions are a more parsimonious annotation than inserting a translocation based on the drawn secondary alignment.\\
+		Figure inspired by \cite{goel19}.
+	}
+	\label{fig:syri}
+\end{figure*}
 
 \subsection*{The Multi-Synteny Detector (msyd)}
 
