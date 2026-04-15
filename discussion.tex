@@ -60,6 +60,22 @@ Tool development efforts should also strive to integrate phasing information fro
 
 \section*{Multisyntenic Pangenome Graphs as a Genome Representation}
 
+\begin{figure*}[t]
+	\centering
+	\includesvg[width=0.8\textwidth]{img/approaches.svg}
+	\caption{
+		\textbf{Illustration of graphs produced by minigraph and PGGB, and the MPG.}\\
+		\textbf{Top, Left, Middle,} as described in Fig. \ref{fig:mgpggb} (Introduction).\\
+		\textbf{Right,} the MPG representation of the haplotypes in the top.
+		Similar to minigraph, the MPG does not represent small variants.
+		It also treats inversions separately, given that they present breaks in syteny.
+		Note that it is the only graph representation that is acyclic.
+		\\
+		Figure inspired by Extended Data Fig. 3 from ref. \cite{liao23}.
+	}
+	\label{fig:mpgcompare}
+\end{figure*}
+
 Comparing to pangenome graphs based on local-alignments and variation graphs, MPG differ in a number of key ways.
 First, MPGs are acyclic by construction, which other leading approaches cannot guarantee.
 This dramatically simplifies the graph structure, and allows the use of more efficient algorithms for many common operation.
