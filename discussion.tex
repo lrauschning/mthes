@@ -4,24 +4,29 @@
 % phasing human math for human: trivial
 % => easy with UL reads
 By modelling read-based phasing systematically, estimates for minimal required coverage to phase genomes could be obtained in different scenarios.
-The impact of multiple parameters was assessed, and revealed read length compared to the length of regions common to all haplotypes to be the limiting factor for phasing to be feasilbe, with ploidy providing a floor for the minimal required coverage regardless of read length.\\
+The impact of multiple parameters was assessed, and revealed read length compared to the distance between haplo-unique sites to be the limiting factor, with ploidy providing a floor for the minimal required coverage as read length approaches infinity.\\
 In order to be economically feasible, read length should be at least twice, ideally three times or more of the maximal expected distance between haplo-unique sites.
 
-This proves that read-based phasing of polyploids is possible in principle just like in diploids, and breeding history (particularly with regards to recent introgressions and inbreeding) may determine phaseability more than ploidy.
-In potato, the presence of megabase-scale regions common to multiple haplotypes prevents complete read-based phasing at least using current sequencing technology, though partial phasing should be achievable using current approaches.
-Given that a read-based phasing can be obtained at no additional cost given that ultralong reads are required for genome assembly, it will be interesting to investigate if a partial phasing using them can relax the requirements for other approaches; in particular, it could allow complete phasing at far lower HiC coverage and with less manual intervention than required so far\cite{xiao26}. %HiC data to be sufficient for reliable complete genome phasing.
+This demonstrates that polyploidy does not pose a fundamental hurdle to read-based phasing; in fact, breeding history, particularly recent introgressions and inbreeding, may actually play a bigger role in determining phaseability than ploidy, as it can cause large regions shared by to be shared by multiple haplotypes.
+This is the case in potato, where some shared regions up to several megabasepairs in size have been reported.
+However, even in potato most shared regions are much smaller, according to an analysis communicated by Craig Dent.
+These are accessible to read-based phasing, meaning that a partial phasing containing $<10$ phasing breaks per haplotype and chromosome is likely achievable using current sequencing technology.
+%leading to the conclusion that partial phasing is well within reach while complete phasing 
+%presence of megabase-scale regions common to multiple haplotypes prevents complete read-based phasing at least using current sequencing technology, though partial phasing should be achievable using current approaches.
+Given that a read-based phasing can be obtained at no additional cost given that ultralong reads are required for genome assembly in any case, it will be interesting to investigate if a partial phasing using them can relax the requirements for other approaches; in particular, it could allow complete phasing at far lower HiC coverage and with less manual intervention than required so far\cite{xiao26}. %HiC data to be sufficient for reliable complete genome phasing.
 
-The minima provided by my modelling-based approach are concordant with recent empirical recommendations in human, considering that the read-length correction can be neglected in humans 
+The minima provided by the modelling-based approach presented in this thesis are concordant with recent empirical recommendations in human, considering that the read-length correction can be neglected in humans 
 \footnote{At an average distance of \qty{1}{\kilo\bp} between SNPs and no complex breeding history, this is a reasonable assumption when considering >\qty{100}{\kilo\bp} Ultralong reads}.
 While the theoretical minimum is calculated to be 15x without read length correction at a reliability score of 20, ref. \cite{sarashetti24} recommends 15-20x coverage of ONT-Ultralong (along with 10x of HiC data).\\
 
 % read error => limit k-mer
 % define haplo-unique
 % discuss modelling with equal IBD/read lens vs distribution
-As in any modelling approach, some idiosyncracies of real data were omitted in favour of an idealized model providing mathematical simplicity and interpretability.\\
+As in any modelling approach, some simplifications and assumptions had to be made in order to provide mathematical tractability and interpretability.\\
+%idiosyncracies of real data were omitted in favour of an idealized model providing mathematical simplicity and interpretability.\\
 First, it was assumed that haplo-unique sites can be perfectly identified in any read spanning them.
 How reasonable this assumption is depends on the nature and length of the haplo-unique site and the error profile of the sequencing technology.
-Assuming that unique $k$-mers are used as haplo-unique sites, the error rate of ONT sequencing should be sufficient to contain them with no errors for realistic values of $k$.
+Assuming that unique $k$-mers are used as haplo-unique sites, the error rate of modern ONT sequencing should be sufficiently low as to not make this a major concern for realistic values of $k$. % to contain them with no errors for realistic values of $k$.
 For example, an ONT read with a quality score of 30 has a $>90\%$ chance of containing a $1000$-mer with no errors.
 In this sense, the read error rate constrains the maximal length of probes used to detect haplo-unique sites.
 % model by additional linear correction
@@ -31,26 +36,26 @@ Second, the modelling assumed all reads to have equal length.
 This is clearly not the case in real data.
 Given the sensibility of the coverage requirements to read length, accounting for varying read length may provide significantly sharper estimates, especially  in species with large common regions at the limit of phaseability.
 %, when common regions are more than half as long as reads, though 
-As a pragmatic recommendation, the coverage calculator can be run with multiple read lengths and results compared to find an ideal way to reach the desired phasing quality, as demonstrated in assessing the phaseability of the potato genome in the Main text.
-As a more concrete example, if a single ultralong sequencing run gives 5x coverage of the target genome with >\qty{100}{\kilo\bp} reads and 2x with \qty{200}{\kilo\bp} reads, the number of flowcells that the coverage calculator estimates for each of these two sets of parameters can be computed, and the lower number chosen for sequencing.\\
+As a pragmatic recommendation, the coverage calculator can be run with multiple read lengths and results compared to find an ideal way to reach the desired phasing quality, as demonstrated in the paragraph of the Main text assessing the phaseability of the potato genome in the »Phaseability« section.
+As a more concrete example, if a single ultralong sequencing run gives 5x coverage of the target genome with >\qty{100}{\kilo\bp} reads, of which 2x are \qty{\geq200}{\kilo\bp} reads, the number of flowcells that the coverage calculator estimates for each of these two read lengths can be computed, and the lower number chosen for sequencing.\\
 From a statistics point of view, this could be modelled by a more sophisticated read length correction, by computing a per-length correction factor and applying it to the read length distribution, then reporting the expected value required to reach sufficient coverage.
-In practice, users may no always have a suitable read length distribution at hand, as it depends on library preparation and may vary between different sequencing runs.
+In practice, users may not always have a suitable read length distribution at hand, as it depends on library preparation and may vary between different sequencing runs.
 %joint probability of a a gap being phaseable by a read of any length
 %Integrating an automatic esti
 
 Finally, the modelling done in this thesis provides a minimum requirement for the dataset to contain sufficient information to phase a genome.
-To actually turn this into a phasing, this phasing signal needs to be extracted by an algorithm.
+To actually turn this into a phasing, the phasing signal needs to be extracted by an algorithm.
 In diploids, current algorithms seem to be capable of reaching this minimum, as evidenced by the success of read-based phased assembly in human\cite{sarashetti24, gross26}.\\
-Recent developments in ONT-Ultralong protocols suitable for plant samples provide an opportunity if current tooling can also reach this limit in complex, polyploid genomes\cite{lu24}.
+Recent developments in ONT-Ultralong protocols suitable for plant samples provide an opportunity to test if current tooling can also reach this limit in complex, polyploid genomes\cite{lu24}.
 %Though the impressive average read lengths reported in ref. \cite{lu24} have not been reched in potato, reads up to about \qty{400}{\kilo\bp} have been observed in potato samples (Craig Dent and Samija Amar, personal communication).
 %Using this approach, up to 4-fold coverage of potato genomes with ultralong reads > \qty{200}{\kilo\bp} per flowcell could be achieved (Craig Dent, personal communication).
 %Given the sequencing requirement minima derived in the first section in Main, this should make it feasible to generate read datasets with sufficient information to phase the majority of the potato genome, excluding several hundred large segments shared across haplotypes that can still induce breaks in the phasing.
 \\ %phase all but the largest homozygous regions of the potato genome.\\
-If this is indeed the case, it may facilitate phased plant genome assembly by either eliminating or reducing the need for additional information, such as HiC sequencing.
+If this is indeed the case, it may facilitate phased plant genome assembly by either eliminating or reducing the need for additional information such as HiC sequencing.
 %Testing whether current algorithms can successfully reach this stage, and how it interacts with HiC data will be an interesting avenue to explore, either facilitating the high-quality assembly of potato genomes or providing an opportunity for the development of such tools
-If it is not, it provides an opportunity for tool developers to design novel algorithms to accomplish this. %from the ground up with Ultralong reads in mind.
+If it is not, it provides an opportunity for tool developers to design novel algorithms. % to accomplish this. %from the ground up with Ultralong reads in mind.
 It should be noted that none of the leading phased assembly tools were designed with phased assembly or ultralong reads in mind;
-as such, there may yet be significant potential of these datasets that we are not yet able to utilize.
+as such, there may yet be significant potential of these datasets that we are not currently able to utilize.
 Tool development efforts should also strive to integrate phasing information from reads with that of orthogonal information, particularly increasingly accessible long-read chromosome conformation methods like PoreC and CiFi\cite{gross26, mcginty25, deshpande22}.
 
 % find in datasets
@@ -85,7 +90,7 @@ Tool development efforts should also strive to integrate phasing information fro
 \label{fig:mpgcompare}
 \end{figure*}
 
-Comparing to pangenome graphs based on local-alignments and variation graphs, MPG differ in a number of key ways.
+Comparing to pangenome graphs based on local alignments and variation graphs, the MPG representation differs in a number of key ways.
 First, MPGs are acyclic by construction, which other leading approaches cannot guarantee.
 This dramatically simplifies the graph structure, and allows the use of more efficient algorithms for many common operation.
 %First, small variants not breaking synteny are not represented in the graph structure.
@@ -93,26 +98,39 @@ This dramatically simplifies the graph structure, and allows the use of more eff
 %As the graph can be annotated with exact positions on each sample and aligments are available in the PSF file, these can be recovered in a fairly straightforward way.
 %Second, a MPG will never introduce a circle by collapsing repetitive sequences, and will also never collapse nonlocal nodes or produce nodes with many nonlocal connections.
 MPGs will also never have nonlocal connections, as all edges represent adjacency on at least one sample.
-This also guarantees that chromosomes will always form disjoined subgraphs in the MPG. %, as there cannot ever be adjacency across chromosomes.
+Incidentally, this implies that different chromosomes will always form disjoined subgraphs in the MPG, allowing graph operations to be parallelized across different subgraphs/chromosomes.
+%, as there cannot ever be adjacency across chromosomes.
 %Similarly, no connection can be made between nodes on different chromosomes, ensuring that chromosomes can always cleanly be separated out as independent subgraphs.
 %In fact, the emitted GFA file contains comments indicating the chromosome subgraphs.
-This forms a stark difference to how other pangenome graph representations, which especially in repetitive sequences often introduce cycles or nonlocal connections. % choose to draw edges and collapse nodes; 
+This differentiates the MPG approach from other pangenome graphs that may introduce both cycles and nonlocal connections, particularly in repetitive regions or when encountering inversions.
+% to forms a stark difference to how other pangenome graph representations, which especially in repetitive sequences often introduce cycles or nonlocal connections. % choose to draw edges and collapse nodes; 
 
-MPGs respect and merge the ordering of all samples; as remarked in the proof of acyclicity, the $<$ comparator on any sample cannot be violated by the graph's successor-of relation, as $<$ is the transitive closure of the per-sample directed adjacency $\prec_i$.\\
-By baking in these structural guarantees, the Pangenome Coordinate (PanCo) system»falls out« of the graph representation very naturally, with practically no additional overhead.
-It reflects the advantages of a pangenome representation with strong theoretical guarantees, and allows easy navigation in the graph by maintaining some of the properties of genomic indices on linear genome references.\\
+An MPG conserves the genome ordering of all samples; as remarked in the proof of acyclicity, the $<$ comparator on any sample cannot be violated by the graph's successor-of relation, as $<$ is the transitive closure of the per-sample directed adjacency $\prec_i$.
+As it conserves the sample-wise ordering of all (multi-)syntenic regions, an MPG can be viewed as a datastructure storing a partial ordering.
+When comparing two nodes, if one of them occurs in the set of all children of the other, that implies that the latter node is ordered first, and vice versa.
+If neither is contained in the other's set of children, their comparison is undefined in the partial ordering.
+By construction, this partial ordering cannot violate any of the sample-wise genome orderings expressed by a $<$ comparator on genomic positions.
+%process merging different sample orderings such that the result is consistent with each of the sample orderings.
+Taking this view, the Pangenome Coordinate (PanCo) system »falls out« of the graph representation very naturally as any sorting of all multisyntenic regions along this partial ordering.
+Conceptualizing the MPG as a graph again, this corresponds to a topological ordering of the MPG, which can be efficiently computed.
+
+PanCo not only reflects a practical way to navigate the MPG and efficiently compare coordinates with another, but also highlights the advantages of a pangenome representation with strong theoretical guarantees as the basis of simple, efficient algorithms.\\
+%, and allows easy navigation in the graph by maintaining some of the properties of genomic indices on linear genome references.\\
 %PanCos are not fully stable towards adding additional samples to the pangenome; while the coresyn part of the PanCo will not change, assuming the added sample does not break coresynteny, the merasyntenic part of the PanCo will likely require recomputing.
-Compare the ease at which a MPG can be indexed with PanCos to the difficulty of indexing nodes in a variation graph: the odgi sort command implements multiple cycle-breaking algorithms in order to then traverse the entire graph and assign a topological ordering, alongside a force-directed-layout based stochastic embedding approach\cite{guarracino22}.
-Meanwhile, I am not aware of any indexing, including via external tools, of minigraph's or minigraph-cactus' representations beside arbitrarily assigned numeric node IDs.
+Compare also the ease at which a MPG can be indexed with PanCos to the difficulty of indexing nodes in a variation graph: the odgi sort command implements multiple cycle-breaking algorithms in order to then traverse the entire graph and assign a topological ordering, alongside a force-directed-layout based stochastic embedding approach\cite{guarracino22}.
+This is necessary for variation graphs, because their construction by local alignments does not provide the same guarantees as the MPG approach does.
+I am not aware of any indexing designed for minigraph's or minigraph-cactus' graph genome representations.
+%beside arbitrarily assigned numeric node IDs.
 
 
 In general, the MPG representation has stricter criteria for collapsing parts of the raw haplotypes than other pangenome graphs.
 In order to be collapsed, regions have to not just align to another but form part of a syntenic whole-genome alignment in multiple samples.
-Taking whole-genome synteny into account during graph construction is what allows the MPG to have a linear backbone and an acyclic structure without nonlocal connections and to remain acyclic.\\
+Requiring whole-genome synteny is what allows the MPG to have a linear backbone without nonlocal connections or cycles, however it may also lead the MPG to undercollapse regions when they are mistakenly not identified as syntenic.
 While the MPG construction itself uses an exact algorithm, % However, the preprocessing steps for MPG const
-its inputs in the form of alignments and synteny calls may fall back to heuristic procedures that may sometimes miss real synteny.
+its inputs in the form of alignments and synteny calls use heuristic procedures that may miss real synteny.
 Minimap2's approximate alignment may fail in highly repetitive or significantly diverged regions, while SyRI's greedy heuristic may not always find the largest chain of alignments to call as a syntenic backbone.\\
-This underlies the anecdotal observation that the MPG sometimes appears undercollapsed, that is that it may often be possible to further collapse the MPG as produced by the preprocessing pipeline and graph construction algorithm without violating any of its guarantees.
+This underlies the anecdotal observation that some regions of the MPG seem like they could safely be collapsed further without violating any of its guarantees based on manual inspection.
+%, that is that it may often be possible to further collapse the MPG as produced by the preprocessing pipeline and graph construction algorithm without violating any of its guarantees.
 This is desirable, as it would lead to a more compact and easier-to-visualize representation, while keeping all of the MPG's strengths.
 Strategies for achieving this are discussed in the next section.
 %As outlined in more detail in the next section below, this seems to be a particular problem in the realignment step.
@@ -128,8 +146,8 @@ Another clear next step is to investigate and visualize the multisyntenic pangen
 Behaviour of the representations about regions known to be structurally variable, such as introgressed regions and regions containing NLR genes would be a particular point of interest.
 % msyd-cactus
 It would further be interesting to see whether it is possible to use the minigraph-cactus pipeline to »spikify« the MPG graph, recovering small variants\cite{hickey24}.
-As the file format is compatible and msyd graphs lack small variants similar to minigraph's output, in principle this should be possible, and may be a way to leverage the strengths of different approaches facilitated by a common ecosystem.\\
-Another approach would be to use the fact that multisyntenic regions have exact sequence positions on all of their samples as well as alignments of these regions to construct a consensus sequence for each node.
+As the file format is compatible and MPG graphs do not represent small variants similar to minigraph's output, in principle this should be possible, and may be a way to leverage the strengths of different approaches facilitated by a common software ecosystem.\\
+Another approach would be to use the fact that multisyntenic regions have exact sequence positions on all of their samples as well as alignments of these regions to their representative sample to construct a consensus sequence for each node.
 A Centre*-based approximative MSA could be computed efficiently given that the sequences are already aligned to a common reference.
 A consensus could be derived either by column-wise majority vote, or represented as a sequence profile using HMM-based alignment algorithms\cite{remmert12}.\\
 While the cactus-based approach would be faster to develop and benefit from cactus' efficient MSA approach\cite{armstrong20}, the availability of a per-node MSA may be interesting for population genetic studies, and profile-based alignments have proven very efficient and sensitive in both DNA and protein alignment\cite{tempel12, pfam20}.
@@ -137,24 +155,24 @@ While the cactus-based approach would be faster to develop and benefit from cact
 To reduce the degree of undercollapsing observed in the MPG, an improvement to the reliability of msyd's realignment functionality would likely be a major step.
 %During dataset construction, multiple cases were found where the realignment functionality of msyd sometimes does not find synteny, while manual inspection reveals clear, segregating haplotypes.
 %While processing the datasets, the realignment functionality of msyd proved unreliable, in many cases not finding any synteny.
-The main limitation during the realignment step seems to be the alignment itself; in particular, minimap2 often reports no alignments, even when manual inspection reveals sequences across different haplotypes to be almost base-level identical.
-Minimap2's minimizer approach works less well when aligning smaller sequences; additionally, spacers inserted during the extraction of sequences for realignment may disrupt minimap2's alignment\cite{minimapns}.
+The main limitation during the realignment step seems to be the alignment itself: minimap2 often reports no alignments, even when manual inspection reveals sequences across different haplotypes to be almost base-level identical.
+minimap2's minimizer approach works less well when aligning smaller sequences; additionally, spacers inserted during the extraction of sequences for realignment may disrupt minimap2's alignment\cite{minimapns}.
 %is likely not the best choice for sensitively aligning smaller regions, and has in the past also proven to not always work well with the spacers msyd inserts into already annotated regions.
 As no synteny can be called without any alignments, the regions are falsely reported as private.\\
 %In this case, the graph will annotate all regions as belonging either to the reference haplotype or private, missing shared haplotypes in non-reference sequences.
 While some degree of undercollapsing may be unavoidable while maintaining computational efficiency, it is still generally desirable to collapse regions showing multisynteny.
 %proved to not unreliable, particularly in the potato dataset.
 %This causes the multisyntenic pangenome graph to be undercollapsed in non-reference haplotypes.
-Two strategies are possible to reduce the occurence of undercollapsing.
-Either to tune the pipeline of the graph construction's inputs, or to introduce an additional step after graph induction that further collapses the graph, somewhat similar to smoothxg's function in PGGB\cite{garrison22}.\\
+Two strategies are possible to reduce the occurrence of undercollapsing.
+Either to tune the pipeline of the graph construction's inputs, or to introduce an additional step after graph induction that further collapses the graph, somewhat similar to smoothxg's role in the PGGB pipeline\cite{garrison22}.\\
 Porting the realignment step to use a Dynamic Programming-based aligner, for example Parasail, may make it more reliable\cite{daily16}.
 For short sequences, this should not significantly change runtime; for longer sequences, perhaps a fallback to minimap2 or another heuristic approach may still be desirable.
 An alternative would be a naïve, length-based merging of haplotypes, similar to that used by Jasmine\cite{jasmine}. 
 While this would be a very computationally efficient approach, it would likely fail to resolve nested variation, a key goal of modern pangenomic representations.\\
 A postprocessing solution would require more conceptual innovation, especially to ensure that all collapses introduced by the postprocessing step reflect real, global synteny and do not violate the MPG guarantees.
 %n all-against-all alignment of nodes would be a 
-A starting point could be selecting nodes sharing a predecessor and/or successor, and collapsing them if their sequences align.
-Forcing collapsed nodes to share an adjacent node would ensure that no cycles are introduced during the collapse operation -- to introduce a cycle by merging of two nodes in an acyclic graph, the two merged nodes must be successor/predecessor of another.\\
+A starting point could be selecting nodes sharing a predecessor and successor, and collapsing them if their sequences align.
+Forcing collapsed nodes to share an adjacent node would ensure that no cycles are introduced during the collapse operation -- to introduce a cycle by merging two nodes in an acyclic graph, one of the nodes must be a child of the other, which cannot be the case if they share both a predecessor and a successor. %the two merged nodes must be successor/predecessor of another.\\
 %predecessor, thus ensuring that their collapse would not break global synteny
 %An alternative could be annotating 
 
@@ -170,11 +188,16 @@ Forcing collapsed nodes to share an adjacent node would ensure that no cycles ar
 % cross-species comparison => panco
 % structural site frequency spectrum?
 
-Exploring the consequences of the MPG genome representation more broadly... \\
-Beyond an indexing scheme, the Pangenomic Coordinate system can be thought of as a linearization of the pangenome maintaining consistency with all input haplotypes as a sort of consensus genome structure of the samples.
-If the samples are representative of the wider population, this linearization could be compared with other populations, both within and across species.
-This could enable both analyses of how genome structure evolves across separated population, commonly thought to be a major driving force of speciation since early work on cryptic polymorphisms inducing reproductive incompatibility by Dobzhansky and Müller\cite{dobzhansky34, orr96}.\\
-It could also provide a novel framework to perform intra-species association studies, if the populations are chosen as samples showing or not showing a certain trait.
+%Exploring the consequences of the MPG genome representation more broadly... \\
+Given the increasing ease of assembling the genome of larger samples, %, graph genome representations 
+it becomes desirable to have approaches capable of performing comparisons at a representation level.
+One approach could be to use the Pangenomic Coordinate system as a linearization of the MPG that maintains consistency with all input haplotypes, providing a consensus genome structure of sorts.
+%If the samples are representative of the wider population, this linearization could be compared with other populations, both within and across species.
+Comparing consensus linearized genomes across populations or species could enable insight into how genome structure evolves across separated population.
+This is commonly thought to be a major driving force of speciation after early work on cryptic polymorphisms inducing reproductive incompatibility by Dobzhansky and Müller\cite{dobzhansky34, orr96}.\\
+Some structural variants have been found to be maintained polymorphic in an entire clade\cite{knief24}.
+This highlights that a principled way to account for within-species polymorphism is required also in cross-species comparisons, and provides an opportunity to study homologous alleles evolving in separation.\\
+A similar approach could also provide a novel framework to perform intra-species association studies, if the populations are chosen as samples showing or not showing a certain trait.
 To estimate the heritability of the trait, the consensus linearizations of the splits could be compared using e.g. whole-genome-alignment algorithms, and compared to random splits to account for population structure.
 If this comparison can be made locally, it could also map associations to certain regions of the MPG. %Comparing the local similarity 
 \\
