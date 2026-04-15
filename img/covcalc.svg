@@ -23,13 +23,13 @@
      inkscape:pagecheckerboard="1"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="1.0658385"
-     inkscape:cx="291.31993"
-     inkscape:cy="195.62063"
-     inkscape:window-width="1920"
-     inkscape:window-height="1080"
+     inkscape:zoom="4.263354"
+     inkscape:cx="255.19814"
+     inkscape:cy="72.712705"
+     inkscape:window-width="1916"
+     inkscape:window-height="1032"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="22"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
   <defs
@@ -589,9 +589,11 @@
          id="tspan13-0"
          style="font-size:3.52778px;fill:#000000;stroke-width:0.264583"
          x="79.360596"
-         y="10.592005">R<tspan
-   style="font-size:65%;baseline-shift:sub"
-   id="tspan19">1</tspan></tspan></text>
+         y="10.592005"><tspan
+           style="font-size:2.82222px"
+           id="tspan23">R</tspan><tspan
+           style="font-size:65%;baseline-shift:sub"
+           id="tspan19">1</tspan></tspan></text>
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:'Fira Sans';-inkscape-font-specification:'Fira Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;stroke-width:0.264583"
@@ -602,9 +604,11 @@
          id="tspan13-0-9"
          style="font-size:3.52778px;fill:#000000;stroke-width:0.264583"
          x="79.360283"
-         y="14.594208">R<tspan
-   style="font-size:65%;baseline-shift:sub"
-   id="tspan21">2</tspan></tspan></text>
+         y="14.594208"><tspan
+           style="font-size:2.82222px"
+           id="tspan24">R</tspan><tspan
+           style="font-size:65%;baseline-shift:sub"
+           id="tspan21">2</tspan></tspan></text>
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:'Fira Sans';-inkscape-font-specification:'Fira Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;stroke-width:0.264583"
@@ -615,31 +619,13 @@
          id="tspan13-0-4"
          style="font-size:3.52778px;fill:#000000;stroke-width:0.264583"
          x="79.360283"
-         y="18.596413">R<tspan
-   style="font-size:65%;baseline-shift:sub"
-   id="tspan22">3</tspan></tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:3.52778px;line-height:1.25;font-family:'Fira Sans';-inkscape-font-specification:'Fira Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;stroke-width:0.264583"
-       x="79.84465"
-       y="23.436424"
-       id="text13-2-2-7"><tspan
-         sodipodi:role="line"
-         id="tspan13-0-9-1"
-         style="font-size:3.52778px;fill:#000000;stroke-width:0.264583"
-         x="79.84465"
-         y="23.436424">...</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:3.52778px;line-height:1.25;font-family:'Fira Sans';-inkscape-font-specification:'Fira Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;stroke-width:0.264583"
-       x="79.899582"
-       y="42.890102"
-       id="text13-2-2-7-5"><tspan
-         sodipodi:role="line"
-         id="tspan13-0-9-1-6"
-         style="font-size:3.52778px;fill:#000000;stroke-width:0.264583"
-         x="79.899582"
-         y="42.890102">...</tspan></text>
+         y="18.596413"
+         rotate="0"><tspan
+           style="font-size:2.82222px"
+           id="tspan25">R</tspan><tspan
+           id="tspan28"
+           style="font-size:65%;baseline-shift:sub"
+           rotate="0 0">3</tspan></tspan></text>
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:'Fira Sans';-inkscape-font-specification:'Fira Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;stroke-width:0.264583"
@@ -650,8 +636,65 @@
          id="tspan13-0-9-9"
          style="font-size:3.52778px;fill:#000000;stroke-width:0.264583"
          x="79.359032"
-         y="46.611839">R<tspan
-   style="font-size:65%;baseline-shift:sub"
-   id="tspan20">n</tspan></tspan></text>
+         y="46.611839"><tspan
+           style="font-size:2.82222px"
+           id="tspan26">R</tspan><tspan
+           style="font-size:65%;baseline-shift:sub"
+           id="tspan20">n</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Fira Sans';-inkscape-font-specification:'Fira Sans';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="80.016296"
+       y="22.386074"
+       id="text30"><tspan
+         sodipodi:role="line"
+         id="tspan30"
+         style="font-weight:bold;stroke-width:0.264583"
+         x="80.016296"
+         y="22.386074">.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Fira Sans';-inkscape-font-specification:'Fira Sans';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="80.016296"
+       y="27.141617"
+       id="text30-3"><tspan
+         sodipodi:role="line"
+         id="tspan30-5"
+         style="font-weight:bold;stroke-width:0.264583"
+         x="80.016296"
+         y="27.141617">.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Fira Sans';-inkscape-font-specification:'Fira Sans';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="80.016296"
+       y="31.89716"
+       id="text30-2"><tspan
+         sodipodi:role="line"
+         id="tspan30-7"
+         style="font-weight:bold;stroke-width:0.264583"
+         x="80.016296"
+         y="31.89716">.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Fira Sans';-inkscape-font-specification:'Fira Sans';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="80.016296"
+       y="36.652702"
+       id="text30-0"><tspan
+         sodipodi:role="line"
+         id="tspan30-6"
+         style="font-weight:bold;stroke-width:0.264583"
+         x="80.016296"
+         y="36.652702">.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Fira Sans';-inkscape-font-specification:'Fira Sans';letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="80.016296"
+       y="41.408245"
+       id="text30-7"><tspan
+         sodipodi:role="line"
+         id="tspan30-9"
+         style="font-weight:bold;stroke-width:0.264583"
+         x="80.016296"
+         y="41.408245">.</tspan></text>
   </g>
 </svg>
