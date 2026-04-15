@@ -191,15 +191,23 @@ Forcing collapsed nodes to share an adjacent node would ensure that no cycles ar
 %Exploring the consequences of the MPG genome representation more broadly... \\
 Given the increasing ease of assembling the genome of larger samples, %, graph genome representations 
 it becomes desirable to have approaches capable of performing comparisons at a representation level.
-One approach could be to use the Pangenomic Coordinate system as a linearization of the MPG that maintains consistency with all input haplotypes, providing a consensus genome structure of sorts.
+One approach could be to use the Pangenomic Coordinate system as a linearization of the MPG that maintains consistency with all input haplotypes, providing a consensus genome structure.
 %If the samples are representative of the wider population, this linearization could be compared with other populations, both within and across species.
-Comparing consensus linearized genomes across populations or species could enable insight into how genome structure evolves across separated population.
-This is commonly thought to be a major driving force of speciation after early work on cryptic polymorphisms inducing reproductive incompatibility by Dobzhansky and Müller\cite{dobzhansky34, orr96}.\\
-Some structural variants have been found to be maintained polymorphic in an entire clade\cite{knief24}.
-This highlights that a principled way to account for within-species polymorphism is required also in cross-species comparisons, and provides an opportunity to study homologous alleles evolving in separation.\\
-A similar approach could also provide a novel framework to perform intra-species association studies, if the populations are chosen as samples showing or not showing a certain trait.
-To estimate the heritability of the trait, the consensus linearizations of the splits could be compared using e.g. whole-genome-alignment algorithms, and compared to random splits to account for population structure.
-If this comparison can be made locally, it could also map associations to certain regions of the MPG. %Comparing the local similarity 
-\\
+Comparing consensus linearized genomes across populations or species could enable insight into how genome structure evolves in separated populations.
+Structural variation is commonly thought to be a major factor in speciation after early work by Dobzhansky and Müller found cryptic polymorphisms to mediate reproductive incompatibility in Drosophila\cite{dobzhansky34, orr96}.\\
+Recently, some structural variants have been found to be maintained polymorphic across an entire clade\cite{knief24}.
+This highlights that a principled way to account for within-species polymorphism is required also in cross-species comparisons, and provides an opportunity to study natural experiments of homologous alleles evolving in isolation.\\
+A similar approach could also provide a novel framework to perform intra-species association studies, if the populations are chosen as subgroups of a sample showing or not showing a certain trait.
+To estimate the heritability of the trait, the consensus linearizations of the splits could be compared using e.g. whole-genome-alignment algorithms or $k$-mer based approaches, and compared to random splits to account for population structure.
+If this comparison can be made per locus, it could also map associations to certain regions of the MPG. %Comparing the local similarity 
 %\textit{TODO, go into ideas for SV site frequency spectrum}
 
+%\section*{Closing}
+
+In closing, the dramatic improvements in sequencing and assembly technology the last few years have seen continue to pay dividends in the form of larger and higher-quality assembly datasets.
+With efforts like the Earth Biogenome Project, genomic resources are increasingly also available in species not traditionally used as a model organism.\\
+Representing, analysing and ultimately making sense of these heterogeneous, large datasets presents many challenges, demanding innovative approaches, efficient and scalable implementations and good questions to ask of these datasets.
+All of these aspects can benefit from a strong conceptual grounding; in this thesis, I hope to have contributed to two aspects of this, by modelling when a phased genome assembly is possible from a read dataset and proposing a novel, synteny-oriented approach to graph genome representations.
+
+%and concepts both novel and old can likewise benefit from being validated by their application in large and varied datasets or proving outdated and making space for new ones.
+%It is an exciting time 
