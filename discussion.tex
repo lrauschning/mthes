@@ -58,20 +58,31 @@ Tool development efforts should also strive to integrate phasing information fro
 
 
 
-\section*{Multisyntenic Pangenome Graphs as a Genome Representation}
+\section*{Multisyntenic Pangenome Graphs}
 
 \begin{figure*}[t]
 	\centering
 	\includesvg[width=0.8\textwidth]{img/approaches.svg}
 	\caption{
 		\textbf{Illustration of graphs produced by minigraph and PGGB, and the MPG.}\\
-		\textbf{Top, Left, Middle,} as described in Fig. \ref{fig:mgpggb} (Introduction).\\
+		\textbf{Top,} the input genomes used to construct the representations.
+		Blue, thick ribbons are identical segments; the light blue ribbon is inverted compared to the other segments.
+		On these ribbons, small variants are drawn in a different colour.\\
+		%Light grey thin paths represent unique sequence.\\
+		\textbf{Left,} the minigraph representation.
+		Small variants are not represented in minigraph pangenomes, though they can be added using the minigraph-cactus pipeline.
+		Minigraph collapses inversions in the same place into a single node, but does not collapse duplicated segments.\\
+		\textbf{Middle,} the PGGB pangenome graph.
+		PGGB collapses identical sequences, even if they are not adjacent.
+		Small variants are represented as nodes in the graph, and are merged across identical segments.
+		\\
 		\textbf{Right,} the MPG representation of the haplotypes in the top.
 		Similar to minigraph, the MPG does not represent small variants.
-		It also treats inversions separately, given that they present breaks in syteny.
+		It also does not collapse inversions, given that they present breaks in syteny.
 		Note that it is the only graph representation that is acyclic.
+
 		\\
-		Figure inspired by Extended Data Fig. 3 from ref. \cite{liao23}.
+		Figure adapted from Extended Data Fig. 3 of ref. \cite{liao23}.
 	}
 	\label{fig:mpgcompare}
 \end{figure*}

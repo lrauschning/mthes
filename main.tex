@@ -37,22 +37,6 @@ One is derived from the potato assemblies mentioned above, and the other uses th
 
 \section*{Phaseability}
 
-\begin{figure*}[t]
-	\centering
-	\includesvg[width=0.5\textwidth]{img/covcalc.svg}
-	\caption{
-	\textbf{Minimum coverage requirements for genome phasing.}\\
-	\textbf{Step 1}, every haplotype needs to be covered by a read.
-	Because they are sampled randomly with replacement, more reads than haplotypes need to be drawn to be certain that all haplotypes are covered.
-	\textbf{Step 2}, the average coverage has to be adjusted as to be sufficient to fulfil step 1's requirement even in regions that randomly have lower coverage than average.
-	\textbf{Step 3}, not every read is informative for phasing.
-	In this illustration, $R_2$ and $R_3$ do not contain any information as they cover only a single haplotype.
-	$R_1$, in contrast, can be used for phasing as it covers both $u_1$ and $u_2$.\\
-	For more information on the derivation and concrete results for each step, see the main text.
-	}
-	\label{fig:covcalc}
-\end{figure*}
-
 % define min. read len as fn of heterozygosity
 % => handle polyploids: multiply heterozygous vars?
 % => account for pop structure/IBD afterwards
@@ -126,6 +110,22 @@ However, considering practical limitations, having positive evidence for every h
 Otherwise, it may be relaxed to require a read only for all except one of the haplotypes.
 %requiring a read only a read covering all adjacent haplo-unique sequences on all haplotypes can be lowered to all except one of the haplotypes.
 
+\begin{figure*}[t]
+	\centering
+	\includesvg[width=0.5\textwidth]{img/covcalc.svg}
+	\caption{
+	\textbf{Minimum coverage requirements for genome phasing.}\\
+	\textbf{Step 1}, every haplotype needs to be covered by a read.
+	Because they are sampled randomly with replacement, more reads than haplotypes need to be drawn to be certain that all haplotypes are covered.
+	\textbf{Step 2}, the average coverage has to be adjusted as to be sufficient to fulfil step 1's requirement even in regions that randomly have lower coverage than average.\\
+	\textbf{Step 3}, not every read is informative for phasing.
+	In this illustration, $R_2$ and $R_3$ do not contain any information as they cover only a single haplotype.
+	$R_1$, in contrast, can be used for phasing as it covers both $u_1$ and $u_2$.\\
+	For more information on the derivation and concrete results for each step, see the main text.
+	}
+	\label{fig:covcalc}
+\end{figure*}
+
 Using some statistical modelling, we can turn this simple minimal requirement into an estimate of the minimal sequencing coverage required to confidently resolve the phasing of a genome.
 It should be noted that limitations in read accuracy and genome assembly and phasing algorithms may in practice impose somewhat higher requirements; however, calculating a lower bound can answer if single-technology phased assembly is at all possible, and provide guidance on which parameters are limiting factors and thus should prioritized for protocol optimization.
 
@@ -198,7 +198,7 @@ Therefore, $d$ can be fixed as $d:=1$, and adjusted read length considered by gi
 		The phasing at a reliability score of 30 requires more sequencing the more haplotypes are present in the sample, but even high phasing qualities of 30 are suprisingly accessible with sufficient read length.
 		\\
 	}
-	\label{fig:covcalc}
+	\label{fig:covcalc-plot}
 \end{figure*}
 
 % add table of concrete estimated requirements, for potato
@@ -219,7 +219,7 @@ In easier regions with smaller haplotype-shared regions, the phasing may be sigi
 % massively accelerated by read lengths
 % describe general dynamics
 Values for several representative cases are given in Table \ref{table:covcalc}.
-Compare also Figure \ref{fig:covcalc} for plots of different scenarios.
+Compare also Figure \ref{fig:covcalc-plot} for plots of different scenarios.
 In general, it may be observed that the desired phasing reliability and ploidy set a floor for the required coverage, while read lengh in relation to maximal distance between haplo-unique sites acts as a multiplier on this minimum.
 Desired reliability score contributes suprisingly little to this minimum, though its contribution increases as ploidy does.
 As read length approaches this distance, required sequencing depth increases rapidly.
@@ -545,7 +545,7 @@ This not only serves a direct purpose, but also demonstrates the advantages of a
 			emit\_W\_line(\texttt{s}, path)\\
 		}
 	}
-	\caption{\textbf{Pseudocode illustrating how a MPG can be exported to GFA format, using PanCo indexes as node IDs.}\\
+	\caption{\textbf{Pseudocode illustrating the GFA export of a MPG, using PanCo indexes as node IDs.}\\
 	Note that we get the PanCo indexes »for free« from the ordering of the graph during construction.
 	In the implementation, they are computed during graph construction; this was left out in Algorithm \ref{algo:mpg} for clarity.
 	Here they are used as node IDs to make the GFA output easier to read.\\
