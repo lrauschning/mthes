@@ -147,37 +147,43 @@ I confirm that this Master's thesis is my own work and that I have documented al
 \chapter*{Abstract}
 % abstract classes cannot be instantiated
 
-PS: citations in abstract yay or nay?
+%PS: citations in abstract yay or nay?
 
-%As it is becoming 
-Assembling a complete eukaryotic genome from telomere to telomere has gone from demanding substantial efforts from a well-resourced consortium to routine work of a single lab processing many samples since the T2T project's release of the CHM13 genome in 2022. % cite T2T?
-% frame phasing problem + interpretation as two remaining challenges
-This leaves one remaining challenge in reconstructing the complete genome of an organism -- separating the different copies of the genome, also known as phased assembly.
-In human, this is now possible using the same sequencing reads used to assemble the genome, however this has so far not been demonstrated in more complex genomes.
-%It is as of yet unclear if this is impossible in principle, 
-\\ %, polyploid genomes.
-But once a genome is assembled, further challenges await: genomes need to be compared, annotated or otherwise analyzed to derive biological knowledge from them.
-Any analysis requires a suitable representation.
-Representing modern datasets of many high-quality genomes is an open problem; arguably, representing the genomes of a large dataset is now harder than assembling them.
+
+%Assembling a complete eukaryotic genome from telomere to telomere has gone from demanding substantial effort from a well-resourced consortium to routine work of a single lab processing many samples. % cite T2T?
+%% frame phasing problem + interpretation as two remaining challenges
+%This leaves one remaining challenge in reconstructing the complete genome of an organism -- separating the different copies of the genome, also known as phased assembly.
+%In human, this is now possible using the same sequencing reads used to assemble the genome, however this has so far not been demonstrated in more complex genomes.
+%%It is as of yet unclear if this is impossible in principle, 
+%, polyploid genomes.
 %and arguably we are further from a solution to it than genome assembley
 %While a single genome can be adequately represented in FASTA format, representing multiple genomes is a challenge that is far less solved 
 
+%As it is becoming 
+Recent advances in Ultralong read technology have made single-platform phased assembly possible in humans.
+What used to require a major consortium for a single haploid sample can now feasibly be done by a single lab in multiple samples.
+However, this has not yet been demonstrated in more complex, polyploid genomes.
+It is unclear if current sequencing technologies alone can produce phased assemblies, or indeed what the sequencing requirements would otherwise be.
+
+But once a genome is assembled, further challenges await: genomes need to be compared, annotated or otherwise analyzed to derive biological knowledge from them.
+Any analysis requires a suitable representation.
+Representing modern datasets of many high-quality genomes is an open problem; arguably, representing the genomes of a large dataset is now harder than assembling them.
+
 In this thesis, I present contributions to both of these open challenges in genomics.
-First, a model of read-based phasing is introduced, and used to derive requirements for a reads dataset to contain sufficient information to phase a genome.
-This proves that read-based phasing can be feasible even in polyploids, but current sequencing technology is still unable to fully phase the potato genome as an example of a particularly tough tetraploid.
+First, to address the input requirements of phased assembly, a model of read-based phasing is introduced, and used to derive requirements for a read dataset to contain sufficient information to phase a genome of arbitrary ploidy.
+This proves that read-based phasing can be feasible even in polyploids, but current sequencing technology is still unable to fully phase very complex genomes such as those of autotetraploid potato cultivars.
 
 Second, a graph genome representation termed the Multisyntenic Pangenome Graph is presented.
-%To adequately represent large assembly datasets, I propose the Multisyntenic Pangenome Graph (MPG).
-It is based on a previously developed extension of the concept of synteny to multiple genomes, and uses this to derive a representation possessing a linear backbone while avoiding cycles and nonlocal edges.
-%underlying the SyRI algorithm, and accounts for global genome structure when collapsing sequences into nodes.
-%This provides guarantees that other proposed representations do not, in particular it avoids cycles and nonlocal edges, and provides a linear backbone of shared structure across all samples.\\
-The representation is shown to have a natural index preserving some of the favourable properties of linear genome indices, demonstrating the utility of a conceptually motivated representation with strong guarantees.
-%This allows efficient description and navigation along the graph.
+It is based on an extension of the concept of synteny to multiple genomes.
+By construction, this representation has a linear backbone and can be proven to not contain any cycles or nonlocal edges, demonstrating the potential utility of such a representation.
 
-It will no doubt be exciting to watch the future of genomics unfold as genome assembly is increasingly becoming a solved problem.
-I anticipate conceptual and linguistic clarity, as well as the production of not just more data but also novel understanding to be crucial, and hope that this thesis can serve as a small step in this direction for the two areas outlined above. %will be crucialfor theory to catch up to the data.
+These two contributions lay the groundwork for producing and representing large pangenomic datasets of phased assemblies in an interpretable manner.
 
-\textit{too philosopical?}
+
+%It will no doubt be exciting to watch the future of genomics unfold as genome assembly is increasingly becoming a solved problem.
+%I anticipate conceptual and linguistic clarity, as well as the production of not just more data but also novel understanding to be crucial, and hope that this thesis can serve as a small step in this direction for the two areas outlined above. %will be crucialfor theory to catch up to the data.
+%
+%\textit{too philosopical?}
 
 
 \pagestyle{fancy}
