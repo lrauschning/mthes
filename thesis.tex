@@ -160,24 +160,28 @@ I confirm that this Master's thesis is my own work and that I have documented al
 %While a single genome can be adequately represented in FASTA format, representing multiple genomes is a challenge that is far less solved 
 
 %As it is becoming 
-Recent advances in Ultralong read technology have made single-platform phased assembly possible in humans.
-What used to require a major consortium for a single sample can now be done by a single lab in dozens of samples.
+Recent advances in Ultralong read technology have made single-platform phased genome assembly possible in humans.
+What used to require a major consortium for a single sample can now be done by a single lab in dozens.
 However, this has not yet been demonstrated in more complex, polyploid genomes.
-It is unclear if current sequencing technologies alone can produce phased assemblies, or indeed what the sequencing requirements would otherwise be.
+It is unclear if current sequencing technologies alone can produce phased assemblies in such genomes, or indeed what factors decide if a genome can be phased by a given dataset. %the sequencing requirements would otherwise be.
 
-But once a genome is assembled, further challenges await: genomes need to be compared, annotated or otherwise analysed to derive biological knowledge from them.
+But once a phased genome is assembled, further challenges await: genomes need to be compared, annotated or otherwise analysed to gain biological knowledge.
 Any analysis requires a suitable representation.
 Representing modern datasets of many high-quality genomes is an open problem; arguably, representing the genomes of a large dataset is now harder than assembling them.
 
-In this thesis, I present contributions to both of these open challenges in genomics.
-First, to address the input requirements of phased assembly, a model of read-based phasing is introduced, and used to derive requirements for a read dataset to contain sufficient information to phase a genome of arbitrary ploidy.
+In this thesis, I present contributions to both of these major open challenges in genomics.
+First, to address the input requirements of phased assembly, a model of read-based phasing is introduced.
+The model is used to derive requirements for a read dataset to contain sufficient information to phase a genome of arbitrary ploidy.
 This proves that read-based phasing can be feasible even in polyploids, but current sequencing technology is still unable to fully phase very complex genomes such as those of autotetraploid potato cultivars.
 
 Second, a graph genome representation termed the Multisyntenic Pangenome Graph is presented.
-It is based on an extension of the concept of synteny to multiple genomes.
-By construction, this representation has a linear backbone and can be proven to not contain any cycles or nonlocal edges, demonstrating the potential utility of such a representation.
+It represents the input sequences in a graph structure based on an extension of the concept of synteny to multiple genomes.
+A node in the graph represents sequences in multiple haplotypes that are syntenic to each other, i.e\@. do not just align, but also form part of a colinear backbone. % as part of a chain of colinearity/colinear backbone.
+%Contrary to other , align to each other as part of a global 
+Respecting this stricter criterion during graph induction ensures the graph has a bubbles-on-a-string architecture with regular bottlenecks induced by conserved genome structure.
+It can be proven to not contain any cycles or nonlocal edges, demonstrating the potential utility of this representation.
 
-These two contributions lay the groundwork for producing and representing large pangenomic datasets of phased assemblies in an interpretable manner.
+These two contributions lay the groundwork for producing and representing large datasets of phased assemblies in an interpretable manner, even in challenging genomes.
 
 
 %It will no doubt be exciting to watch the future of genomics unfold as genome assembly is increasingly becoming a solved problem.
