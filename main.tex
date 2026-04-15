@@ -60,7 +60,7 @@ With the recent possibility of phased assembly, some recommendations of sequenci
 %If mentioned at all, phasing is treated as an afterthought to phased genome assembly.
 A literature search failed to find any recent theory-oriented work on sequencing coverage estimation.
 The most recent work in this direction seems to be Lander and Waterman's short paper on requirements for clone-based physical mapping in the second issue of Genomics in 1988 (ref. \cite{lander88}).
-The paper introduced the use of the Poisson distribution to model random clones/sequencing reads, and its approach was later used to derive coverage requirements for the human genome project\cite{illuminaseqrecs}.\\
+The paper introduced the use of the Poisson distribution to model random clones/sequencing reads, and its approach was later used to derive coverage requirements for the Human Genome Project\cite{illuminaseqrecs}.\\
 In this section, I have a similar aim to it:
 To model the read-based phasing problem in a systematic way, and derive minimal dataset requirements for a genome to be phaseable with a certain probability.
 This depends on key parameters, in particular ploidy and the length of shared stretches, that can be systematically investigated using a theoretical model.
@@ -395,8 +395,8 @@ Using \texttt{pysam}'s FASTA class for dynamically reading from the genome files
 		The large node near the bottom is a \qty{321}{\kilo\bp} private region in the c24 sample.
 		\textbf{c, d),} smaller examples of structural variation in the graph.
 		Note the private nodes with similar length sharing both a predecessor and a successor as possibly undercollapsed (as this graph was generated from non-realigned data).
-		\textbf{a, b, d)} were visualized using GFAviz\cite{gfaviz}.
-		\textbf{c)} was visualized using BandageNG\cite{gonnella18}.
+		\textbf{a, b, d)} were visualized using GFAviz\cite{gonella18}.
+		\textbf{c)} was visualized using BandageNG\cite{wick15, bandageng}.
 		In \textbf{c)} and \textbf{d)}, the layout was manually adjusted for enhanced clarity.
 	}
 	\label{fig:mpg-screenshots}
