@@ -9,7 +9,7 @@ In order to be economically feasible, read length should be at least twice, idea
 
 This demonstrates that polyploidy does not pose a fundamental hurdle to read-based phasing; in fact, breeding history, particularly recent introgressions and inbreeding, may actually play a bigger role in determining phaseability than ploidy, as it can cause large regions shared by to be shared by multiple haplotypes.
 This is the case in potato, where some shared regions up to several megabasepairs in size have been reported.
-However, even in potato most shared regions are much smaller, according to an analysis communicated by Craig Dent.
+However, even in potato most shared regions are much smaller, (Craig Dent, unpublished). %according to an analysis communicated by Craig Dent.
 These are accessible to read-based phasing, meaning that a partial phasing containing $<10$ phasing breaks per haplotype and chromosome is likely achievable using current sequencing technology.
 %leading to the conclusion that partial phasing is well within reach while complete phasing 
 %presence of megabase-scale regions common to multiple haplotypes prevents complete read-based phasing at least using current sequencing technology, though partial phasing should be achievable using current approaches.
@@ -31,7 +31,7 @@ For example, an ONT read with a quality score of 30 has a $>90\%$ chance of cont
 In this sense, the read error rate constrains the maximal length of probes used to detect haplo-unique sites.
 % model by additional linear correction
 If this becomes a relevant constraint, probes designed to accomodate sequencing errors such as gapped $k$-mers or strobemers may be used\cite{mohammad-noori24, zentgraf25}.\\
-Modelling the impact of imperfect identification of haplo-unique sites would be fairly straightforward; similar to the read length correction described in this thesis, an additional step multiplying by the inverse of the likelyhood of misidentifying any of the two required haplo-unique sites could be added.\\
+Modelling the impact of imperfect identification of haplo-unique sites would be fairly straightforward; similar to the read length correction described in this thesis, an additional step multiplying by the inverse of the likelihood of misidentifying any of the two required haplo-unique sites could be added.\\
 Second, the modelling assumed all reads to have equal length.
 This is clearly not the case in real data.
 Given the sensibility of the coverage requirements to read length, accounting for varying read length may provide significantly sharper estimates, especially  in species with large common regions at the limit of phaseability.

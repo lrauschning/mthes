@@ -26,15 +26,15 @@ Making this data usable has, however, been a significant challenge so far.
 Genome assemblies are a large and heterogeneous kind of data.
 Making the information contained within them accessible is far from trivial, and requires carefully designed computational tools to efficiently handle large datasets and work well in HPC systems.
 
-The matter of how to represent today's genome assembly datasets is absolutely crucial to any attempt at leveraging today's plentyful data to gain understanding.
-A well-designed representation is required to design efficient algorithms, but any representation will also limit the questions we can ask a dataset. %nlimiting, enabling or focusing the questions that we ask a dataset.
+The matter of how to represent genome assembly datasets is absolutely crucial to any attempt to leverage them to gain understanding.
+A well-designed representation is required to design efficient algorithms, but any representation will also limit the questions we can ask of a dataset. %nlimiting, enabling or focusing the questions that we ask a dataset.
 Despite several recent proposals and a slowly maturing software ecosystem\cite{gfatools,garrison18}, I will argue that the representation of today's genome datasets is an unsolved question still requiring considerable conceptual contributions.
 %While for previous resequencing datasets the VCF format has emerged as a de facto standard -- despite significant limitations especially regarding storage efficiency --, there is still considerable disagreement about how to represent modern datasets of genome assemblies. 
 To inform this discussion and provide background to the approach proposed in this thesis, the two sections below give a history of how genomics got to where it is now and what kind of datasets are possible given the current state of the art.
 In the section after that, I will introduce recent proposals for pangenome representations with a focus on their conceptual underbellies and limitations.
 To close the introduction, I will introduce the core concepts of two softwares used in the genome representation proposed in this thesis.
 It is my hope that this introduction provides context and a motivation for working on genome representations, particularly for readers that consider themselves more as users than developers of genomic technology -- these are not »just« some file formats, but the foundation of any work in the field; choices or tradeoffs made in their design and implementation percolate through to tools and ultimately analyses. %, and can make or break%; and should be taken with care.
-As formats and representations tend to last a long time\footnote{Both FASTA and PDB format are nowadays older than many of its users.}, they should be designed with care and conceptually motivated, as any limitation will restrict the field at least until the next format is developed, possibly even longer.
+As formats and representations tend to last a long time\footnote{Both FASTA and PDB format are nowadays older than many of its users.}, they should be designed with care and conceptually motivated, as any limitation will restrict the field  long into the future. % at least until the next format is developed, possibly even longer.
 %to every representations can limit knowledge production in the field substantially for an extended time. % and are hard to change away from, too boot
 %tremendous downstream impacts that are hard to change.
 
@@ -282,18 +282,19 @@ Though they differ in their underlying algorithmic paradigm, this is not too sur
 %while the puzzle pieces were supposed to derive from the singular genome of the sample, most eukaryotes actually carry multiple copies of their genome in the cells that may not always be the same.
 So far, we have seen how the genome of an organism can be determined using long-read sequencing technology and genome assembly algorithms.
 However, most eukaryotes do not have a single genome to reconstruct; cells often carry multiple copies of the genome, referred to as haplotypes.
+Variation on the same haplotype is inherited together, unless recombination breaks it up; this has given haplotypes the moniker »the unit of heredity«.
+As recombination switches genomic sequence between different haplotypes in the same organism, it provides an evolutionary force preventing different haplotypes of a population from becoming too divergent from another\cite{renkawitz14, penalba20}. \\%or incompatible with each other if they occur within the same population
 The number of copies is known as the ploidy, and is typically thought of as idiosyncratic to a species, but it may also vary by individual, sex or tissue
 \footnote{Gametes and certain cancers are the most well known example, but polyploidy is also regularly observed in healthy human hepatocytes.
 In hymenoptera, the ploidy/fertilization status of the egg determines the sex of the adult.}
-.\\
+.
+
 %only carry half of the haplotypes of somatic tissue, and cancer cells can %primarily determined by the species for most cell types
 % do i need to introduce this?
-\textit{A. thaliana} has two copies of its genome, following the definition of a diploid.
-However, due to its generally selfing nature, in most samples not derived from a deliberate cross, these two copies will be almost identical save for individual \textit{de novo} mutations.
-For this reason, \textit{A. thaliana} is often referred to as a haplodiploid (rhyming haploid, the term for organisms carrying only a single copy of their genome).
-Humans and many other animals are also diploids, but generally have distinct haplotypes derived from their parents.\\ %different but compatible copies of their genome 
-Variation on the same haplotype is inherited together, unless recombination breaks it up; this has given haplotypes the moniker »the unit of heredity«.
-As recombination switches genomic sequence between different haplotypes in the same organism, it provides an evolutionary force preventing different haplotypes of a population from becoming too divergent from another\cite{renkawitz14, penalba20}. %or incompatible with each other if they occur within the same population
+Humans and many animals are diploids, having two copies of their genome. \\ %but generally have distinct haplotypes derived from their parents.\\ %different but compatible copies of their genome 
+\textit{A. thaliana} also has two copies of its genome, however it often described as a haplodiploid (rhyming haploid, meaning single-copy), as its generally selfing nature makes these almost identical save for individual \textit{de novo} mutations.
+%due to its generally selfing nature, in most samples not derived from a deliberate cross, these two copies will be almost identical save for individual \textit{de novo} mutations.
+%For this reason, \textit{A. thaliana} is often referred to as a haplodiploid (rhyming haploid, the term for organisms carrying only a single copy of their genome).
 \\
 But many organisms have more than two copies of their genome, and are then known as polyploids.
 This is the case for many crop species, with e.g. strawberries's 8 copies, Cavendish banana's 3 and sugarcane's approximately 10\cite{healey24}.
@@ -309,7 +310,7 @@ In crops, alloploidy is often the result of a (historical) cross between two div
 Separately assembling the different haplotypes of a sample is known as phased assembly.
 This is a formidable challenge, compounded by the ploidy of the sample and the length of regions where different haplotypes share the same sequence -- unfortunately, both high ploidy and long identical stretches are common in crops as a result of (in-)breeding and bottlenecks associated with domestication.
 While in allopolyploids, different subgenomes will generally have divergent haplotypes, in autopolyploids recombination can break these up, making them more challenging to phase. %\cite{sun25}. %In autopolyploids, recombination acts between all haplotypes, % causing their gradual assimilation \cite{sun25}
-\\
+
 Traditionally, separating different haplotypes during assembly has required information beyond that present in the reads.
 % additional info, highlight hic in particular
 A common approach is to sequence the parents of the sample, and use variants unique to one parent to infer the haplotype of reads or contigs.
@@ -525,9 +526,10 @@ PGGB graphs also frequently contain cycles, or multiple successive very small no
 % unclear biological/popgen interpretation
 
 The sequence-oriented pangenome ecosystem has seen rapid development in recent years.
-Spearheaded by the HPRC and the partially overlapping minigraph-cactus team, it has developed a maturing ecosystem around the GFA1 file format, comprising both tools that produce and utilize pangenome graphs in this format, as well as utilities for manipulating them\cite{garrison18, hickey20, gfatools}.
+It has been spearheaded by the HPRC, and has contributed to developing an ecosystem around the GFA1 file format.
+This includes tools that produce and utilize pangenome graphs in this format, as well as utilities for manipulating them\cite{garrison18, hickey20, gfatools}.\\
 Originally designed by Heng Li to emit hifiasm's intermediary assembly graph outputs, GFA1 in its original iteration is a graph with nodes as sequences and edges as overlaps.
-To represent pangenome graphs, a subset sometimes referred to as rGFA1 is used; it disallows overlaps, requiring all edges to report empty overlaps of length 0.
+To represent pangenome graphs, a subset sometimes referred to as rGFA1 is used; it disallows overlaps, requiring all edges to report empty overlaps of length 0.\\
 Extensions to the standard have added some pangenome-centric features to the format, such as the ability to report sample paths in the graph.
 Classical tools for visualizing GFAs have been used to visualize pangenome graphs, but the recent development of ODGI has aided visualization, particularly of PGGB's more densely connected graphs\cite{wick15, bandageng, gonella18, guarracino22, cheng25}. %, a pangenome graph-centric visualization toolkit has made the usability of the format much better, \cite{wick15, guarracino22}
 
@@ -539,14 +541,16 @@ Classical tools for visualizing GFAs have been used to visualize pangenome graph
 However, graph genome representations still have some way to go to become well-established in the wider genomics field.
 In particular, many downstream applications only work with pangenomes produced by either PGGB or Minigraph(-Cactus), although they use the same file format.
 See also Figure \ref{fig:mgpggb} for a comparison of the two representations. 
-Repetitive and structurally complex regions and genomes also still present a considerable challenge, with especially PGGB introducing many nonlocal connections and producing a highly fragmented pangenome graph\cite{cheng25}.\\
+Repetitive and structurally complex regions and genomes also still present a considerable challenge, with especially PGGB introducing many nonlocal connections and producing a highly fragmented pangenome graph\cite{cheng25}.
+
 Moreover, so far there has not been a clear case of a downstream application using a graph-based representation that would have been impossible or very challenging with either a single linear reference or all uncollapsed haplotypes.
 %has been reported.
 %there has so far been a lack of downstream applications that would have not been possible or been downstream \cite{liao23}
-The HPRC's first draft release focused on improvements in short read alignment and small variant calling accuracy, and could demonstrate modest performance increases\footnote{About 1-2 percentage points for recall, less than 0.1 percentage points for precision in a medical dataset.}\cite{liao23}.
+The HPRC's first draft release focused on improvements in short read alignment and small variant calling accuracy, and could demonstrate modest performance increases\footnote{About 1-2 percentage points for recall, less than 0.1 percentage points for precision in a medical dataset.}\cite{liao23}.\\
 Similarly, some improvements have been demonstrated for short-read structural variant calling, but this approach remains unreliable over all and increasingly seems obsolete given the accessibility of long reads\cite{hickey20}.
 Genome graphs have been used to reconstruct genomic sequence based on low coverage short- or long-read resequencing experiments\cite{sun25, siren24, wang26}.
-While these approaches manage much more complete profiling of sample genomes than traditional variant-calling based resequencing, they still cannot recover haplotypes not present in the (graph) reference, and struggle with novel recombination events; given the increasing affordability and ease of \textit{de novo} genome assembly from ONT reads, it is unclear if this approach will see community adoption.\\
+While these approaches manage much more complete profiling of sample genomes than traditional variant-calling based resequencing, they still cannot recover haplotypes not present in the (graph) reference, and struggle with novel recombination events; given the increasing affordability and ease of \textit{de novo} genome assembly from ONT reads, it is unclear if this approach will see community adoption.
+
 Graph representations have been used successfully to perform genetic associations for structural variants in cattle (genotype-phenotype association) and human (eQTL analysis) \cite{milia25, wang26}.
 This has recovered novel associations, and could present a compelling usecase for graph representations; however, especially in human, phenotypic association studies have been thought to require much larger sample sizes than are currently achievable in graph settings\cite{uffelmann21}, and it is commonly thought that SVs can be reliably tagged using small variants as markers, though this is assertion challenged by the results reported by ref. \cite{wang26}.
 Likewise, methods have been developed to use pangenome graph representation for identifying transposable elements, though they typicall still use results from traditional HMM-based approaches \cite{igolkina25, sierra24, tempel12}.
