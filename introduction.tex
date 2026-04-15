@@ -27,14 +27,14 @@ Genome assemblies are a large and heterogeneous kind of data.
 Making the information contained within them accessible is far from trivial, and requires carefully designed computational tools to efficiently handle large datasets and work well in HPC systems.
 
 The matter of how to represent today's genome assembly datasets is absolutely crucial to any attempt at leveraging today's plentyful data to gain understanding.
-A well-designed representation is required to design efficient algorithms, but any representation will also limit the questions we can ask a dataset.%nlimiting, enabling or focusing the questions that we ask a dataset.
+A well-designed representation is required to design efficient algorithms, but any representation will also limit the questions we can ask a dataset. %nlimiting, enabling or focusing the questions that we ask a dataset.
 Despite several recent proposals and a slowly maturing software ecosystem\cite{gfatools,garrison18}, I will argue that the representation of today's genome datasets is an unsolved question still requiring considerable conceptual contributions.
 %While for previous resequencing datasets the VCF format has emerged as a de facto standard -- despite significant limitations especially regarding storage efficiency --, there is still considerable disagreement about how to represent modern datasets of genome assemblies. 
 To inform this discussion and provide background to the approach proposed in this thesis, the two sections below give a history of how genomics got to where it is now and what kind of datasets are possible given the current state of the art.
 In the section after that, I will introduce recent proposals for pangenome representations with a focus on their conceptual underbellies and limitations.
 To close the introduction, I will introduce the core concepts of two softwares used in the genome representation proposed in this thesis.
-It is my hope that this introduction provides context and a motivation for working on genome representations, particularly for readers that consider themselves more as users than developers of genomic technology -- these are not »just« some file formats, but the foundation of any work in the field; choices or tradeoffs made in their design and implementation percolate through to tools and ultimately analyses.%, and can make or break%; and should be taken with care.
-As formats and representations tend to last a long time\footnote{Both FASTA and PDB format arenowadays older than many of its users.}, they should be designed with care and conceptually motivated, as any limitation will restrict the field at least until the next format is developed.
+It is my hope that this introduction provides context and a motivation for working on genome representations, particularly for readers that consider themselves more as users than developers of genomic technology -- these are not »just« some file formats, but the foundation of any work in the field; choices or tradeoffs made in their design and implementation percolate through to tools and ultimately analyses. %, and can make or break%; and should be taken with care.
+As formats and representations tend to last a long time\footnote{Both FASTA and PDB format are nowadays older than many of its users.}, they should be designed with care and conceptually motivated, as any limitation will restrict the field at least until the next format is developed.
 %to every representations can limit knowledge production in the field substantially for an extended time. % and are hard to change away from, too boot
 %tremendous downstream impacts that are hard to change.
 
@@ -74,7 +74,7 @@ Databases used a variety of file formats at the time -- often based on previous 
 This format represents sequence in an \texttt{ACGT}-encoding with nonsignificant linebreaks to fit on early computer screens, along with header lines containing the sequence identifier to differentiate different sequences in the same file. 
 Additional metadata can also be added to the header line, and gaps inserted indicating individual unknown bases or unresolved breaks in the sequence. %for each sequence containing the sequence name and additional metadata, if present. 
 FASTA's format and variants based on it are still in common use today for a variety of purposes. 
-In particular, it has become the de facto standard for representing reference genome assemblies after being chosen by major reference genome projects for distributing their references.%, and FASTQ format 
+In particular, it has become the de facto standard for representing reference genome assemblies after being chosen by major reference genome projects for distributing their references. %, and FASTQ format 
 
 % whole genome assembly projects
 Increasing throughput of Sanger sequencing opened up the possibility of obtaining the base sequence of entire genomes.
@@ -114,7 +114,7 @@ This represented a step away from genome assembly, going from the deciphering of
 % briefly state of the art: long-read based de novo assembly
 In the late 2010s, long read sequencing technology became available.
 Initially, these technologies suffered from high error rates and were costly to use\cite{wang21, mahmoud25}, making them less interesting for the large cohort sequencing projects, but they would prove pivotal in \textit{de novo} genome assembly, particularly in repeat-rich genomes.
-Using long reads and suitable assembly algorithms, much more contiguous genome assemblies could be produced, requiring less or even no scaffolding\cite{mahmoud25}.%seq to a much higher standard meassemblies could 
+Using long reads and suitable assembly algorithms, much more contiguous genome assemblies could be produced, requiring less or even no scaffolding\cite{mahmoud25}. %seq to a much higher standard meassemblies could 
 For a more in-depth discussion of long-read sequencing technologies and assembly algorithms, see the next section.
 While early long-read assemblies contained many small-scale errors due to high error rates in the underlying sequencing technology, 'polishing' algorithms using short reads from the same sample for error-correction quickly addressed this issue
 \footnote{Recent decreases in error rates and error correction algorithms have made this unnecessary. Polishing can introduce errors by over-correcting, particularly in repetitive regions.}%this has become less necessary as error rates in long-read sequ.
@@ -138,7 +138,7 @@ Developing these standards is a stated aim of the human pangenome project\cite{l
 Pangenome projects are not restricted to humans, but there are similar efforts in all major model organisms and many species of agricultural or ecological interest \cite{sun25, yang26, avni26, coronaro-zamorra22, fang26}.
 
 After going into more details about the current state of the art in sequencing and genome assembly in the following section, I will survey some proposed approaches for a pangenomic reference in the section thereafter.
-I will conclude that there is no strong consensus, and many current approaches suffer from unclear conceptualization.% approach lacks substantial conceptual 
+I will conclude that there is no strong consensus, and many current approaches suffer from unclear conceptualization. % approach lacks substantial conceptual 
 
 % pangenomes
 
@@ -168,9 +168,9 @@ Longer reads can help resolve repetitive sequences in two ways.
 First, a sufficiently long read can span the entire region containing the repeat, allowing direct reconstruction.
 Second, most repetitive regions are not exact repeats; like other regions in the genome, they accumulate point mutations as they evolve.
 %These imperfections may be sufficient to 
-As a read gets longer, it can cover more of these imperfections, and they can be used to resolve the repetitive region if the sequencing error rate is low enough to confidently identify them.% longer read can cover more 
+As a read gets longer, it can cover more of these imperfections, and they can be used to resolve the repetitive region if the sequencing error rate is low enough to confidently identify them. % longer read can cover more 
 %if the read is long enough, to span the entire repetitive region, If a long read covers an entire repet covering an 
-%Recent developments in sequencing technology have made progress toward resolving these regions, in particular the impressive read lengths achievable with ONT-ultralong protocols and their decreasing error rate.% of ONT reads improving read length and  long read sequencing
+%Recent developments in sequencing technology have made progress toward resolving these regions, in particular the impressive read lengths achievable with ONT-ultralong protocols and their decreasing error rate. % of ONT reads improving read length and  long read sequencing
 
 It comes as little surprise then that recent developments in sequencing technology have primarily focused on increasing read length and decreasing error rate in long-read sequencing.
 %Increasing throughput as well as competition has also made long-read sequencing more affordable, making higher sequencing depths economically feasible.
@@ -203,7 +203,7 @@ From this signal, the read sequence is reconstructed using a Machine Learning mo
 Modern developments in long-read sequencing technology arguably started with PacBio's announcement of HiFi sequencing in 2018, providing for the first time long reads with a low error rate\cite{pbhifi}.
 This as made possible by preparing a sequencing library containing circular instead of linear molecules of DNA with an adapter sequence, allowing the same read to be sequenced multiple times and a consensus call to be made.\\
 In 2023, PacBio released the Revio sequencing platform, drastically improving throughput and driving down sequencing costs both on release and in subsequent improvements to the platform\cite{pbrevio25, pbrevio23}.
-%This increased competition also helped drive down prices for ONT sequencing.%, and alltogether contributed to making long reads the new standard in genome assembly.
+%This increased competition also helped drive down prices for ONT sequencing. %, and alltogether contributed to making long reads the new standard in genome assembly.
 
 At the same time, ONT's sequencing platform received multiple improvements, helping to reduce its error rate and increase throughput\cite{wang21}.
 Most notable among these are the release of the R10 pore chemistry in 2020 and the Dorado basecaller in 2022\cite{doradorelease, r10.3release, sanderson23}.
@@ -279,7 +279,7 @@ However, due to its generally selfing nature, in most samples not derived from a
 For this reason, \textit{A. thaliana} is often referred to as a haplodiploid (rhyming haploid, the term for organisms carrying only a single copy of their genome).
 Humans and many other animals are also diploids, but generally have distinct haplotypes derived from their parents.\\ %different but compatible copies of their genome 
 Variation on the same haplotype is inherited together, unless recombination breaks it up; this has given haplotypes the moniker »the unit of heredity«.
-As recombination switches genomic sequence between different haplotypes in the same organism, it provides an evolutionary force preventing different haplotypes of a population from becoming too divergent from another\cite{renkawitz14, penalba20}.%or incompatible with each other if they occur within the same population
+As recombination switches genomic sequence between different haplotypes in the same organism, it provides an evolutionary force preventing different haplotypes of a population from becoming too divergent from another\cite{renkawitz14, penalba20}. %or incompatible with each other if they occur within the same population
 \\
 But many organisms have more than two copies of their genome, and are then known as polyploids.
 This is the case for many crop species, with e.g. strawberries's 8 copies, Cavendish banana's 3 and sugarcane's approximately 10\cite{healey24}.
@@ -294,7 +294,7 @@ In crops, alloploidy is often the result of a (historical) cross between two div
 
 Separately assembling the different haplotypes of a sample is known as phased assembly.
 This is a formidable challenge, compounded by the ploidy of the sample and the length of regions where different haplotypes share the same sequence -- unfortunately, both high ploidy and long identical stretches are common in crops as a result of (in-)breeding and bottlenecks associated with domestication.
-While in allopolyploids, different subgenomes will generally have divergent haplotypes, in autopolyploids recombination can break these up, making them more challenging to phase.%\cite{sun25}.%In autopolyploids, recombination acts between all haplotypes, % causing their gradual assimilation \cite{sun25}
+While in allopolyploids, different subgenomes will generally have divergent haplotypes, in autopolyploids recombination can break these up, making them more challenging to phase. %\cite{sun25}. %In autopolyploids, recombination acts between all haplotypes, % causing their gradual assimilation \cite{sun25}
 \\
 Traditionally, separating different haplotypes during assembly has required information beyond that present in the reads.
 % additional info, highlight hic in particular
@@ -351,7 +351,7 @@ Increasing throughput and falling costs have also meant that recently, medium-si
 % bacteria: gene-centred approach
 % but: wan tfull sequence for eukaryotes
 %Many projects have been started to use these technologies to obtain genomes for a representative set of the population, an effort generally termed pangenomics\cite{matthews24}. % review24?
-%This takes inspiration from bacterial genomics, where a genome has for a longer time been studied as a dynamic assembly of genes, many of which can freely be shared within or across taxon using plasmids and other non-chromosomal carries of genetic information.% interchange, particular in non-chromosomal DNA, has long been studied 
+%This takes inspiration from bacterial genomics, where a genome has for a longer time been studied as a dynamic assembly of genes, many of which can freely be shared within or across taxon using plasmids and other non-chromosomal carries of genetic information. % interchange, particular in non-chromosomal DNA, has long been studied 
 
 \subsection*{Gene-centric Pangenomes}
 % need bridge? talk about HPRC again?
@@ -365,7 +365,7 @@ Bacterial genomes can change dynamically by taking up or losing plasmids and oth
 Reflecting this genomic elasticity and a straightforward interpretation, gene-centric representations have historically been the most popular approach in bacterial genomes\cite{matthews24}.
 While there are many kinds of gene-centric pangenome representations, a common lexicon has evolved in the field, differentiating core genes found in every sample's genome and accessory genes exhibiting presence/absence variation\footnote{Occasionally also into cloud genes, used for genes found only in a single or very few samples.}\cite{matthews24}.
 This terminology ignores any variants in or changes in the relative ordering of the genes.\\
-While gene-based pangenome representations have been used in eukaryotes as well, particularly for deep phylogenetic studies\cite{lovell22, matthews24}, sequence-based representations tend to be more popular. %have been the focus of all major eukaryotic pangenome projects.% are desirable for today's datasets.
+While gene-based pangenome representations have been used in eukaryotes as well, particularly for deep phylogenetic studies\cite{lovell22, matthews24}, sequence-based representations tend to be more popular. %have been the focus of all major eukaryotic pangenome projects. % are desirable for today's datasets.
 Recently, some sequence-based pangenome graph representations originally developed for eukaryotic genomes have also made inroads into bacterial datasets\cite{noll23, canalda-baltrons25}.
 
 \subsection*{Sequence-based Pangenomes}
@@ -420,25 +420,25 @@ For example, a resequencing pipeline would need to align every read to >400 hapl
 %The current human pangenome reference's raw haplotypes  
 This also shows the conceptual limitations of this non-representational approach; what would it mean in the described experiment for a read to align only to one genome, all 400, or to some but not others -- particularly if it does not align equally well all the time?
 Treating all samples separately may not remove any feature of the samples, but it fails to represent the information gleaned from their aggregation.\\
-In my view, this is still a useful thought experiment to compare proposed representations with the raw, uncollapsed haplotypes.%, particular when considering their use in downstream analyses.
+In my view, this is still a useful thought experiment to compare proposed representations with the raw, uncollapsed haplotypes. %, particular when considering their use in downstream analyses.
 This can highlight advantages of different proposed representations and elucidate limitations, ultimately revealing allowing an informed choice of representation and providing directions for the design of future implementation.\\%limitations and highlighting desired features of a representation.
 In particular, two features emerge in this consideration.
-First, the ability to reconstruct the input haplotype sequences from a representation; this property guarantees that the representation does not lose information present in the samples, and ensures that it can be converted to any other pangenome representation via the raw data.%(as the non-representation is the starting point for all attempts at representation).
+First, the ability to reconstruct the input haplotype sequences from a representation; this property guarantees that the representation does not lose information present in the samples, and ensures that it can be converted to any other pangenome representation via the raw data. %(as the non-representation is the starting point for all attempts at representation).
 %There are two major reasons why this may not be the case in a given representation
 Reconstructing the input may be impossible either because the representation discards some genomic sequence from the input haplotypes, or because the representation is ambiguous as to the arrangement of the sequences -- i.e. keeps the pieces, but not the instruction manual for how to put them back together.
 Pangenome representations fulfilling this criterion can be conceptualized as a compression or annotation of the input haplotypes.\\ % too wishy washy?
-Second, a pangenome representation should be compact, scaling slower than the raw uncollapsed haplotypes.% and not require excessive space.
-This serves to make downstream analyses computationally more feasible given the scale of recent datasets, and to avoid excessive redundancy that would otherwise make it difficult to draw conclusions from approaches using the representation.%in the outputs of such analyses.
+Second, a pangenome representation should be compact, scaling slower than the raw uncollapsed haplotypes. % and not require excessive space.
+This serves to make downstream analyses computationally more feasible given the scale of recent datasets, and to avoid excessive redundancy that would otherwise make it difficult to draw conclusions from approaches using the representation. %in the outputs of such analyses.
 In regards to this consideration, different representations can be thought of as occupying different places along a spectrum of redundant vs. collapsed representations\cite{paten17}.
 While the input haplotypes occupy the extreme end of collapsing nothing and preserving all redundancy, an imaginary fully collapsed representation would consist only of the bases \texttt{A}, \texttt{C}, \texttt{G}, \texttt{T}, and arguably be even less useful in practice.\\
 Different proposed approaches sit at different points along this spectrum, and it is helpful to bear this in mind when choosing between them and setting their parameters, particularly considering that different analyses may require or prefer different degrees of collapse \cite{hickey24, sierra24, igolkina25}
-%In practice the most useful representations will lie somewhere between these two extremes, but it is helpful to bear this spectrum in mind when choosing or designing pangenome representations.%of pangenome representations by their containing 
+%In practice the most useful representations will lie somewhere between these two extremes, but it is helpful to bear this spectrum in mind when choosing or designing pangenome representations. %of pangenome representations by their containing 
 
 \subsection*{Minigraph}
 % minigraph
 The first modern sequence-based pangenome graph toolkit able to directly construct a graph not based on a VCF representation was \texttt{minigraph}, released in 2020 by Heng Li\cite{minigraph}.
 At its core, minigraph is a \texttt{minimap}-inspired graph aligner, that is, a software capable of aligning a query sequence to a reference sequence graph.
-It can be used to construct a pangenome graph by iteratively aligning samples to the graph.%using its sequence-to-graph alignment to iteratively construct a reference pangenome graph.
+It can be used to construct a pangenome graph by iteratively aligning samples to the graph. %using its sequence-to-graph alignment to iteratively construct a reference pangenome graph.
 Minigraph's alignment step first uses minimizers to map nodes to the query sequence.
 These are then chained into an alignment respecting the graph's structure.
 %To perform the alignment, first minimizers are extracted from each node of the reference graph.
@@ -453,7 +453,7 @@ Due to the minimizer-based heuristic approach, the resultant graph can look diff
 To recover small variants not detected by minigraph's minimizer-based approach, later efforts developed the minigraph-cactus pipeline\cite{hickey24}.
 These small variants make the graph »spiky«, hence the name.
 \\% (though, if base-level alignment was performed, some mayb be reconstructed from the reported CIGAR strings).
-But even with these small variants added, minigraph's representation cannot be used to reconstruct the input haplotypes, as minigraph does not report sample's path through the graph \cite{minigraphdoc, minigraphissue}.%The input genomes cannot be reconstructed from minigraph output.
+But even with these small variants added, minigraph's representation cannot be used to reconstruct the input haplotypes, as minigraph does not report sample's path through the graph \cite{minigraphdoc, minigraphissue}. %The input genomes cannot be reconstructed from minigraph output.
 %rGFA allows sample annotations on nodes specifying the samples they are associated with, however % nodes by their annotations, the genome % can we reconstruct initial sequence?
 %minigraph seems to only emit these annotations for the sample contributing a node to the graph with no option to change this\footnote{Though this information is available to the algorithm and could in principle be emitted.}.
 %Even if these were emitted for all samples, the fact that minigraph graphs can contain cycles would make a reconstructed genotype ambiguous as to the number of cyclic repeats it contains\cite{minigraphdoc}.
@@ -510,7 +510,7 @@ Spearheaded by the HPRC and the partially overlapping minigraph-cactus team, it 
 Originally designed by Heng Li to emit hifiasm's intermediary assembly graph outputs, GFA1 in its original iteration is a graph with nodes as sequences and edges as overlaps.
 To represent pangenome graphs, a subset sometimes referred to as rGFA1 is used; it disallows overlaps, requiring all edges to report empty overlaps of length 0.
 Extensions to the standard have added some pangenome-centric features to the format, such as the ability to report sample paths in the graph.
-Classical tools for visualizing GFAs have been used to visualize pangenome graphs, but the recent development of ODGI has aided visualization, particularly of PGGB's more densely connected graphs\cite{wick15, bandageng, gonella18, guarracino22, cheng25}.%, a pangenome graph-centric visualization toolkit has made the usability of the format much better, \cite{wick15, guarracino22}
+Classical tools for visualizing GFAs have been used to visualize pangenome graphs, but the recent development of ODGI has aided visualization, particularly of PGGB's more densely connected graphs\cite{wick15, bandageng, gonella18, guarracino22, cheng25}. %, a pangenome graph-centric visualization toolkit has made the usability of the format much better, \cite{wick15, guarracino22}
 
 %As in usual in GFA, nodes are labelled with their nucleotide sequence.
 %It uses rGFA1, a subset of the GFA1 format proposed earlier by Heng Li.
@@ -520,7 +520,7 @@ Classical tools for visualizing GFAs have been used to visualize pangenome graph
 However, graphical pangenomics still has some way to become established in the wider genomics field.
 In particular, many downstream applications only work with pangenomes produced by either PGGB or Minigraph(-Cactus), although they use the same file format.
 Repetitive and structurally complex regions and genomes also still present a considerable challenge, with especially PGGB introducing many nonlocal connections and producing a highly fragmented pangenome graph\cite{cheng25}.\\
-Most importantly, so far no downstream application using a graph-based representation to do something that would have been impossible or very challenging with either a linear reference or the uncollapsed haplotypes has been reported.%there has so far been a lack of downstream applications that would have not been possible or been downstream \cite{liao23}
+Most importantly, so far no downstream application using a graph-based representation to do something that would have been impossible or very challenging with either a linear reference or the uncollapsed haplotypes has been reported. %there has so far been a lack of downstream applications that would have not been possible or been downstream \cite{liao23}
 The HPRC's first draft release focused on improvements in short read alignment and small variant calling accuracy, and could demonstrate modest performance increases\footnote{About 1-2 percentage points for recall, less than 0.1 percentage points for precision in a medical dataset.}\cite{liao23}.
 Similarly, some improvements have been demonstrated for short-read structural variant calling, but it remains unreliable and increasingly obsolete given the accessibility of long reads\cite{hickey20}.
 Genome graphs have been used to reconstruct genomic sequence based on low coverage short- or long-read resequencing experiments\cite{sun25, siren24, wang26}.
@@ -547,7 +547,7 @@ This representation uses both conceptual advances and software outputs from two 
 % lead in to questions for this thesis
 %This representation also makes it impossible to describe a sample's genotype without referring to the reference; and combining samples using different reference genomes (or different versions/subsets of the same) is challenging, often requiring reprocessing of the raw sequencing data.
 
-%This takes inspiration from bacterial genomics, where a genome has for a longer time been studied as a dynamic assembly of genes, many of which can freely be shared within or across taxon using plasmids and other non-chromosomal carries of genetic information.% interchange, particular in non-chromosomal DNA, has long been studied 
+%This takes inspiration from bacterial genomics, where a genome has for a longer time been studied as a dynamic assembly of genes, many of which can freely be shared within or across taxon using plasmids and other non-chromosomal carries of genetic information. % interchange, particular in non-chromosomal DNA, has long been studied 
 
 \section*{SyRI and msyd}
 
@@ -581,7 +581,7 @@ First, syntenic regions are identified from a whole-genome alignment by selectin
 Two alignments are considered consistent if the regions they align occur in the same order in both genomes -- intuitively, this can be understood as two lines drawn between the aligning regions not crossing each other (compare also Fig. \ref{fig:syri}).
 Finding this longest syntenic path is a complex optimization problem;% it is harder than ordinary sequence alignment in particular, because a region can have multiple alignments 
 SyRI approaches it by representing aligned blocks reported by ordinary whole-genome aligners as nodes in a graph.
-It then finds a longest path in this graph through a divide-and-conquer algorithm, falling back to an exact solver implemented in the \texttt{longestrunsubsequence} or a greedy heuristic in the base case, depending on its size and complexity.% with an edge if they are adjacent and consistent 
+It then finds a longest path in this graph through a divide-and-conquer algorithm, falling back to an exact solver implemented in the \texttt{longestrunsubsequence} or a greedy heuristic in the base case, depending on its size and complexity. % with an edge if they are adjacent and consistent 
 Second, inverted alignments corresponding to gaps in the alignment are found, added to the syntenic path and annotated as non-translocated inversions.
 After that, alignments in remaining gaps are annotated as translocations, if available.
 Secondary inconsistent alignments of syntenic regions are likewise annotated as duplications.

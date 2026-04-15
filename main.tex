@@ -12,7 +12,7 @@
 %In this part of the thesis, I will describe a novel pangenome graph representation based on msyd's concept of multisynteny as well as its implementation, introduce a pipeline for performing the necessary preprocessing, and derive minimal sequencing requirements for phased assembly in complex genomes and introduce a pipeline for processing datal.
 %Further, an indexing strategy for navigating the representation will be introduced, and some properties of the proposed representation will be proven.
 
-As datasets of high-quality phased assemblies are required before computing any pangenome representation, I begin with the section deriving sequencing requirements for read-based genome phasing.% is obtaining a daataset of many high-quality assemblies.
+As datasets of high-quality phased assemblies are required before computing any pangenome representation, I begin with the section deriving sequencing requirements for read-based genome phasing. % is obtaining a daataset of many high-quality assemblies.
 %Our lab's genome assembly efforts have been focused on European potato cultivars, given its nature as a high-yielding staple crop that is challenging for breeders\cite{bradshaw22}.
 This is inspired by our lab's recent assembly of 10 tetraploid, high quality potato genomes \cite{sun25}.
 %This dataset and its processing are described in the last section of this thesis.
@@ -20,12 +20,12 @@ While the 10 cultivars were specifically chosen to be well-representative of the
 These are well known in potato breeding as a source of resistance genes and for their great phenotypic diversity\cite{bradshaw22}.
 %As described in the Introduction, single-platform phased assembly is now possible in humans.
 Single-platform phased assembly is now possible in humans, and would dramatically facilitate any efforts in this direction.
-To investigate whether this approach can also be applied to more complex genomes like potato, in the first section I derive minimal requirements for read-based phasing, and investigate the impact of different parameters upon these.% in different ploidy settings
+To investigate whether this approach can also be applied to more complex genomes like potato, in the first section I derive minimal requirements for read-based phasing, and investigate the impact of different parameters upon these. % in different ploidy settings
 
 After deriving the minimal sequencing requirements, I will introduce the Multisyntenic Pangenome Graph (MPG) as a novel pangenome graph representation.
 The representation is centred on multisyntenic regions, which provides some guarantees that can be leveraged to prove that the representation has some desirable properties.\\
 Using some of these properties, a straightforward and utile indexing scheme termed Pangenomic Coordinates (PanCo) can be defined in a very natural way.
-In the section, I also describe a simple and efficient algorithm for constructing a multisyntenic pangenome graph from a callset of multisyntenic regions, as well as for exporting it as a GFA file.%, using the indexing method. 
+In the section, I also describe a simple and efficient algorithm for constructing a multisyntenic pangenome graph from a callset of multisyntenic regions, as well as for exporting it as a GFA file. %, using the indexing method. 
 
 In the last section, I describe a pipeline implemented to perform the preprocessing required to obtain this representation efficiently in large datasets.
 %In the first section of this chapter, I will therefore describe 
@@ -86,7 +86,7 @@ To conclude, I will discuss the concrete situation in potato, reflecting our lab
 %for reconstructing phased potato genomes, and look at how different properties of our sequencing technology and genome characteristics affect these requirements.
 %Because of standing variation or spontaneous mutational processes, these so-called haplotypes may differ between another in minor or major ways.
 
-%We will concern ourselves with the minimal requirements for constructing a phasing from a set of long genomic sequencing reads.%, but it should be noted that HiC sequencing, a mapping population or parental or gamete sequencing may also serve to accomplish this goal.%, though less economically.
+%We will concern ourselves with the minimal requirements for constructing a phasing from a set of long genomic sequencing reads. %, but it should be noted that HiC sequencing, a mapping population or parental or gamete sequencing may also serve to accomplish this goal. %, though less economically.
 % justify why only deriving minimal estimates/can assemblers reach this?
 
 To approach this problem, some clarity on what phasing is (and is not) is required, in particular how it relates to genome assembly.\\
@@ -212,7 +212,7 @@ The script then calculates a minimum required coverage with reads of the given l
 It also has support for estimating the number of required flowcells, given a genome size and ultralong yields per flowcell.
 Default values reflecting the potato genome are supplied for these.\\
 Notably, the reliability score is interpreted as an upper bound, not as an average; that is, the sequencing requirements are calculated such that even the most challenging regions will meet the specified reliability.
-In easier regions with smaller haplotype-shared regions, the phasing may be siginificantly more reliable than the specified minimum.%a significantly higher quality score may be attained.
+In easier regions with smaller haplotype-shared regions, the phasing may be siginificantly more reliable than the specified minimum. %a significantly higher quality score may be attained.
 %Notablyi this reflects the maximal length; in regions with lower distance than that between haplo-unique sequences, it will be a pessimistic estimate% x %assumes that every 
 
 % base requirement by haplotypes + QV
@@ -269,7 +269,7 @@ It is now supported by read-based genotypers, read and graph aligners as well as
 Both \texttt{vg} and \texttt{gfatools} provide utilities for the file format\cite{garrison18, gfatools}.\\
 Given this developing software ecosystem and GFA's graph-based nature allowing greater flexibility than VCF format, finding a way to represent msyd's multisynteny calls in GFA1 format is desirable.
 In this section, I outline how multisynteny can be represented as a graph, how this was implemented efficiently in the multisynteny detector, and derive some properties of this representation that make it attractive compared to other graphical representations of pangenomic datasets.
-See the following section for how this representation can be used to define a pangenomic coordinate system, and the Discussion for its broader implications in the context of modern pangenomics and population genomics.% further development forward-looking implications 
+See the following section for how this representation can be used to define a pangenomic coordinate system, and the Discussion for its broader implications in the context of modern pangenomics and population genomics. % further development forward-looking implications 
 
 % explain construction, relation to realignment
 % figure: illustration from iggsy, bandage screenshots?
@@ -278,7 +278,7 @@ In the following, we use $S(A)$ to refer to the set of samples $A$ is present on
 $A_i$ is undefined if $i \notin S(A)$.\\
 First, no two regions can overlap each other on any organism unless $A=B$, as any overlap of two regions containing different samples would imply the overlapping region to be multisyntenic between all samples in $S(A) \cup S(B)$, violating the maximality condition.
 The same consideration makes it impossible for one multisyntenic region to contain another.
-A situation that could give rise to such an overlap would instead be annotated by msyd as separate, adjacent multisyntenic regions.% for the, along with the non-overlapping regions $a \setminus b$ and $b \setminus a$.% . containing forbidden by the 
+A situation that could give rise to such an overlap would instead be annotated by msyd as separate, adjacent multisyntenic regions. % for the, along with the non-overlapping regions $a \setminus b$ and $b \setminus a$. % . containing forbidden by the 
 Knowing that multisyntenic regions cannot overlap, we can define directed sample-adjacency.
 $A$ and $B$ are directedly $i$-adjacent, if there does not exist a multisyntenic region $C$ such that $A_i < C_i < B_i$.
 To write $i$-adjacency, we use $A \prec_i B$.
@@ -293,7 +293,7 @@ This relation is similar to sample-adjacency, but is undefined if $A$ and $B$ do
 Using our definition of adjacency, we can now define a multisynteny graph.
 We first consider with the set of all multisyntenic regions as the node set, and connect two nodes with a directed edge if they are directedly adjacent.
 The sequence assigned to the nodes corresponds to the sequence found at the sample used as reference during the identification of the multisyntenic regions; it could also be defined to be a consensus sequence derived from the alignments, though computing this would require an MSA, which may become prohibitively expensive as the number of samples grows larger.
-To include private regions in our representation, we can substitute an adjacency edge with a significant gap with a node containing the gap's sequence, and connect the target/source nodes to the new node instead.% in between representing private sequences between two adjacent nodes containing a significant gap.
+To include private regions in our representation, we can substitute an adjacency edge with a significant gap with a node containing the gap's sequence, and connect the target/source nodes to the new node instead. % in between representing private sequences between two adjacent nodes containing a significant gap.
 We call these private nodes, and other nodes multisynteny nodes, among which we can further differentiate core and merasyntenic nodes.\\
 %As msyd's internal representation 
 With this addition, the multisynteny graph becomes a pangenome graph; that is, for every sample there is an ordered set of nodes connected by directed edges such that the sequence obtained by walking along the path aligns well to the sample's genome, though small variants are not represented.
@@ -337,7 +337,7 @@ Reflecting that the addition of private regions allows the graph to represent th
 % graph construction algo, briefly explained
 % linear runtime, maybe mention sorting uses panco?
 Internally, the graph is represented as a sorted list of nodes, with each node containing an adjacency list of its predecessors and successors, labelled by the sample on which they are directedly adjacent.
-This allows efficient forward and backward traversal in a simple datastructure.%, but avoids excessive pointer chasing and fragmented memory allocation.
+This allows efficient forward and backward traversal in a simple datastructure. %, but avoids excessive pointer chasing and fragmented memory allocation.
 Private nodes are encoded implicitly in the genomic coordinates associated with each multisyntenic node.
 The graph is divided by chromosome, allowing all algorithms to be parallelized by chromosomes.\\
 Since every node in the MPG has at most as many successors as there are samples, and the path of each sample through the graph is acyclic and mutually compatible, we can construct this graph representation using a simple linear scan through the multisyntenic regions.
@@ -363,7 +363,7 @@ GFA export is performed by traversing the graph using the same order as during g
 though in the worst case as many private regions as samples need to be annotated in every traversal step.
 By default, the GFA format uses indexes introduced later in this section.
 See that section for an an overview of the GFA export procedure in Algorithm \ref{algo:gfa}.\\
-The GFA export supports using the W-line feature added in version 1.1 of the GFA standard to explicitly annotate all or a selection of sample's paths through the MPG.% , we can add the sample paths to the GFA output as W-lines.
+The GFA export supports using the W-line feature added in version 1.1 of the GFA standard to explicitly annotate all or a selection of sample's paths through the MPG. % , we can add the sample paths to the GFA output as W-lines.
 Further, the origin and samples present in a node are added to each node using the annotations defined in the rGFA extension of the GFA1 standard.
 %we can use node labels to annotate each node with its used reference, corresponding interval and all samples passing through it.
 Annotating sample paths as W-lines requires one graph traversal per sample, although only the nodes contained in the sample need to be visited at this stage.\\
@@ -371,7 +371,7 @@ Annotating sample paths as W-lines requires one graph traversal per sample, alth
 The GFA export step has the highest memory requirements of all graph construction steps, despite favourable computational complexity. 
 This derives from the need to access genomes from many samples to obtain the node sequences in the graph. 
 %In practice, this stage of the algorithm does however have the highest memory requirements, as the genomes of all organisms need to be available for annotating nodes in the GFA file with their respective sequences.
-Using \texttt{pysam}'s FASTA class for dynamically reading from the genome files as required helped reduce required memory, but demand can still be substantial in datasets with many samples and large genomes.%though in the worst case all genomes are still required to be in memory simultaneously.
+Using \texttt{pysam}'s FASTA class for dynamically reading from the genome files as required helped reduce required memory, but demand can still be substantial in datasets with many samples and large genomes. %though in the worst case all genomes are still required to be in memory simultaneously.
 
 \subsection*{Properties of the multisynteny graph}
 \begin{figure*}[t]
@@ -406,7 +406,7 @@ After having defined and introduced the multisyntenic pangenome graph, we can no
 First, we can see that the MPG is acyclic.
 Again consider two nodes in the graph $A, B$.
 Without loss of generality, we can assume both to be multisyntenic nodes, as any private node can only connect two multisyntenic nodes.
-Let $a, b$ be the samples used as a reference when aligning $A, B$, and $S(X)$ and $X_i$ describe the samples $X \in \{A, B\}$ is present on and its representative interval on sample $i$, respectively.%hen we can refer to the samples used as a reference for $A, B$ as $a, b$
+Let $a, b$ be the samples used as a reference when aligning $A, B$, and $S(X)$ and $X_i$ describe the samples $X \in \{A, B\}$ is present on and its representative interval on sample $i$, respectively. %hen we can refer to the samples used as a reference for $A, B$ as $a, b$
 This time, we will also be using the syntenic alignment $\aln_{i\to j}$of two sample genomes $i, j$.
 We will treat the alignment as a function mapping an interval on sample $i$ to the corresponding position on sample $j$.
 If the input interval does not have a syntenic alignment anywhere on sample $j$, the alignment shall map it to a zero-width interval immediately after the last interval that aligns.
@@ -473,7 +473,7 @@ This is obviously a contradiction, proving that the graph is acyclic.
 %
 %There are a few assumptions underlying this proof, some of which may be violated in practice.
 %Note that msyd's implementation of the realignment step uses \texttt{minimap2} to compute alignments.
-%Its fast minimizer-based approximative algorithm is not guaranteed to find the optimal alignment and may not always be monotonic, particularly in highly diverged or repetitive regions. % suboptimal alignments.% these conditions.
+%Its fast minimizer-based approximative algorithm is not guaranteed to find the optimal alignment and may not always be monotonic, particularly in highly diverged or repetitive regions. % suboptimal alignments. % these conditions.
 %%An additional source of alignment ambiguity is the stitching together of leftover non-multisyntenic sequence during the realignment step.\\
 %The following SyRI step is also heuristic, but should be guaranteed to return a set of monotonic syntenic alignments, upholding the conditions for the above argument despite two heuristic steps.
 %If either of the steps misses or wrongly filters a genuine alignment as suboptimal, however, the representation may be under-collapsed, falsely reporting haplotypes as distinct when they are not.
@@ -489,7 +489,7 @@ As the start/end of each node corresponds to the start/end of a syntenic alignme
 This bound on the number of edges is a useful property, as many classic graph algorithms scale linearly in the number of edges.
 %It also allows for analysing the space and runtime complexity of the representation itself runtime for the runtime analysis 
 
-In the next section, I will outline a procedure using the regular structure of the MPG to define a pangenomic coordinate system termed PanCo, allowing genomic coordinates to be compared across different samples in a principled and consistent way.%\footnote{Note that a similar procedure is in fact used to ensure consistent sorting across samples during MPG construction.}.
+In the next section, I will outline a procedure using the regular structure of the MPG to define a pangenomic coordinate system termed PanCo, allowing genomic coordinates to be compared across different samples in a principled and consistent way. %\footnote{Note that a similar procedure is in fact used to ensure consistent sorting across samples during MPG construction.}.
 This not only serves a direct purpose, but also demonstrates the advantages of a representation possessing strong structural guarantees, and illustrates how these can be used to derive efficient algorithms appropriate for modern genomics datasets.
 
 
@@ -571,7 +571,7 @@ The second number indexes merasyntenic nodes found between two core syntenic nod
 As the MPG is acyclic, its directed edges imply a partial ordering.
 The second number's are assigned to be consistent with this partial ordering; that is, $\texttt{A}=\texttt{B}$ and $\texttt{a} > \texttt{b}$ implies $\texttt{A.a} \nless \texttt{B.b}$, meaning that either $\texttt{A.a} > \texttt{B.b}$ on all shared samples, or the two do not share any samples and cannot be compared by transitive closure of intermediary nodes, either.
 %Bearing in mind that no direct comparison is possible between nodes in some subgraph configurations, these are the strongest guarantees available.
-As the preceding coresyntenic node covers all samples occurs before any merasyn, , its second number is assigned as $0$; it follows that $\texttt{A.0} < \texttt{A.x}$ for $x > 0$.% nodetopological ordering begins at the preceding coresyntenic node, 
+As the preceding coresyntenic node covers all samples occurs before any merasyn, , its second number is assigned as $0$; it follows that $\texttt{A.0} < \texttt{A.x}$ for $x > 0$. % nodetopological ordering begins at the preceding coresyntenic node, 
 In general, coresyntenic PanCos always end in $0$, and merasyntenic or private PanCos always have a non-zero number at the second position (\texttt{0.0} is undefined to avoid ambiguity).
 
 %PanCo uses the structure of the MPG to
@@ -628,16 +628,13 @@ These preprocessing steps are typically much more computationally demanding than
 % changes: parallelization, move away from pandas datastructures
 Given the aim to make the pipeline scale to today's large pangenomic datasets, several improvements were made to the implementation of msyd's core functionality, reflecting both usability and performance improvements, including improved multithreading.
 In particular, the core datastructures were rewritten to avoid SyRI-style monolithic pandas DataFrames and instead use a Cython list type per chromosome.
-This new datastructure has a more convenient API, but more importantly can be efficiently serialized and thus allows parallelization across different chromosomes without the interference of Python's Global Interpreter Lock.% causing contentions between different worker threads.
+This new datastructure has a more convenient API, but more importantly can be efficiently serialized and thus allows parallelization across different chromosomes without the interference of Python's Global Interpreter Lock. % causing contentions between different worker threads.
 In total, this allows msyd to use multiple cores, especially for steps other than the sequence alignment.
 
 To maintain it in a usable state for the pipeline as well as general use, SyRI was updated to be compatible with the 3.x version of \texttt{pandas}, and run in versions of python newer than 3.11.
 This required a partial rewrite of SyRI's internal datastructures and the way Cython's TypedMemoryView interface is used to account for pandas' change to copy-on-write behaviour in version 3.
 Along the way, some of SyRI's error handling was modernized, particularly to avoid silent errors and always return a non-zero exit code in any error state.\\
 All changes made to SyRI were upstreamed, and will be incorporated into the 1.8 release.
-%TODO realignment difficulty
-
-
 
 % link back to potato genomes
 % provide rationale? not sure

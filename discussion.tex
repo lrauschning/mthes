@@ -9,7 +9,7 @@ In order to be economically feasible, read length should be at least twice, idea
 
 This proves that read-based phasing of polyploids is possible in principle just like in diploids, and breeding history (particularly with regards to recent introgressions and inbreeding) may determine phaseability more than ploidy.
 In potato, the presence of megabase-scale regions common to multiple haplotypes prevents complete read-based phasing at least using current sequencing technology, though partial phasing should be achievable using current approaches.
-Given that a read-based phasing can be obtained at no additional cost given that ultralong reads are required for genome assembly, it will be interesting to investigate if a partial phasing using them can relax the requirements for other approaches; in particular, it could allow complete phasing at far lower HiC coverage and with less manual intervention than required so far\cite{xiao26}.%HiC data to be sufficient for reliable complete genome phasing.
+Given that a read-based phasing can be obtained at no additional cost given that ultralong reads are required for genome assembly, it will be interesting to investigate if a partial phasing using them can relax the requirements for other approaches; in particular, it could allow complete phasing at far lower HiC coverage and with less manual intervention than required so far\cite{xiao26}. %HiC data to be sufficient for reliable complete genome phasing.
 
 The minima provided by my modelling-based approach are concordant with recent empirical recommendations in human, considering that the read-length correction can be neglected in humans 
 \footnote{At an average distance of \qty{1}{\kilo\bp} between SNPs and no complex breeding history, this is a reasonable assumption when considering >\qty{100}{\kilo\bp} Ultralong reads}.
@@ -84,10 +84,10 @@ This dramatically simplifies the graph structure, and allows the use of more eff
 %As the graph can be annotated with exact positions on each sample and aligments are available in the PSF file, these can be recovered in a fairly straightforward way.
 %Second, a MPG will never introduce a circle by collapsing repetitive sequences, and will also never collapse nonlocal nodes or produce nodes with many nonlocal connections.
 MPGs will also never have nonlocal connections, as all edges represent adjacency on at least one sample.
-This also guarantees that chromosomes will always form disjoined subgraphs in the MPG.%, as there cannot ever be adjacency across chromosomes.
+This also guarantees that chromosomes will always form disjoined subgraphs in the MPG. %, as there cannot ever be adjacency across chromosomes.
 %Similarly, no connection can be made between nodes on different chromosomes, ensuring that chromosomes can always cleanly be separated out as independent subgraphs.
 %In fact, the emitted GFA file contains comments indicating the chromosome subgraphs.
-This forms a stark difference to how other pangenome graph representations, which especially in repetitive sequences often introduce cycles or nonlocal connections.% choose to draw edges and collapse nodes; 
+This forms a stark difference to how other pangenome graph representations, which especially in repetitive sequences often introduce cycles or nonlocal connections. % choose to draw edges and collapse nodes; 
 
 MPGs respect and merge the ordering of all samples; as remarked in the proof of acyclicity, the $<$ comparator on any sample cannot be violated by the graph's successor-of relation, as $<$ is the transitive closure of the per-sample directed adjacency $\prec_i$.\\
 By baking in these structural guarantees, the Pangenome Coordinate (PanCo) system»falls out« of the graph representation very naturally, with practically no additional overhead.
@@ -167,7 +167,7 @@ If the samples are representative of the wider population, this linearization co
 This could enable both analyses of how genome structure evolves across separated population, commonly thought to be a major driving force of speciation since early work on cryptic polymorphisms inducing reproductive incompatibility by Dobzhansky and Müller\cite{dobzhansky34, orr96}.\\
 It could also provide a novel framework to perform intra-species association studies, if the populations are chosen as samples showing or not showing a certain trait.
 To estimate the heritability of the trait, the consensus linearizations of the splits could be compared using e.g. whole-genome-alignment algorithms, and compared to random splits to account for population structure.
-If this comparison can be made locally, it could also map associations to certain regions of the MPG.%Comparing the local similarity 
+If this comparison can be made locally, it could also map associations to certain regions of the MPG. %Comparing the local similarity 
 \\
 %\textit{TODO, go into ideas for SV site frequency spectrum}
 
